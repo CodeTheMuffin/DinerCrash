@@ -1,0 +1,14 @@
+I added a bitmap font message box that can easily be used to display text on the screen. Some people may find this annoying and not in the spirit of the jam. Below is a list of things you'll have to delete and how to edit the prefab to remove the message box system.
+
+TO DELETE:
+	Animation folder
+	Textures folder
+	Prefabs/Extras folder
+	Scripts/ExampleScripts folder
+	Scenes folder
+	
+Modify Prefab Instructions
+	Go to prefabs folder and double click "2D Player Camera With Render Texture" or "3D Player Camera With Render Texture" to open/edit the prefab.
+	Find and Select the child "MessageBox" game object.
+	Press delete and remove it.
+	That's it! You've removed the extra message box to be a puritan in the jam!

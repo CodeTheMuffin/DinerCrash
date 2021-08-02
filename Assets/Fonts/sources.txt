@@ -1,0 +1,4 @@
+Fonts and where I got them from:
+minecraft: https://www.dafont.com/minecraft.font
+dogica: https://www.dafont.com/dogica.font
+silscreen: https://www.dafont.com/silkscreen.font
