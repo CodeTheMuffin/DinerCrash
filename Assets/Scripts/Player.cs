@@ -6,7 +6,7 @@ using GameUtility;
 
 public class Player : MonoBehaviour
 {
-    public InputMaster controls;
+    //public InputMaster controls;
 
     //public CharacterController2D controller;
     public Transform playerTransform;
@@ -20,13 +20,13 @@ public class Player : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Awake()
+    /*void Awake()
     {
-        controls = new InputMaster();
+        //controls = new InputMaster();
         //controls.Player.Movement.performed += context => Move(context.ReadValue<Vector2>());
-    }
+    }*/
 
-    private void Update()
+    /*private void Update()
     {
         // https://forum.unity.com/threads/new-input-system-how-to-use-the-hold-interaction.605587/
 
@@ -36,15 +36,15 @@ public class Player : MonoBehaviour
             Debug.Log("Space Ace.");
         }
 
+
         if (controls.Player.Movement.triggered)
-        { 
+        {
+            print("Key triggered.");
             //print(controls.Player.Movement.ReadValue<Vector2>());
             Vector2 direction = controls.Player.Movement.ReadValue<Vector2>();
             Move(direction);
-
-
         }
-    }
+    }*/
 
     /*
      Do this if you want to just grab if a certain key was pressed or not...
@@ -73,7 +73,7 @@ public class Player : MonoBehaviour
         playerTransform.Translate(new Vector3(HorizontalMove, VerticalMove, 0));
     }
 
-    private void OnEnable()
+    /*private void OnEnable()
     {
         controls.Enable();
     }
@@ -81,5 +81,5 @@ public class Player : MonoBehaviour
     private void OnDisable()
     {
         controls.Disable();
-    }
+    }*/
 }
