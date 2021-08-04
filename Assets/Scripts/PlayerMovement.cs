@@ -30,9 +30,6 @@ public class PlayerMovement : MonoBehaviour
     private void Awake()
     {
         original_position = playerTransform.position;
-
-        //OrderingMenu.SetActive(false);
-        //ui_manger.close_OrderingMenu();
     }
 
     // Update is called once per frame
@@ -54,9 +51,6 @@ public class PlayerMovement : MonoBehaviour
     {
 
         Move();
-        //controller.Move(horizontalMove * Time.fixedDeltaTime, false, false);
-        //controller.Move(horizontalMove * Time.fixedDeltaTime, crouch, jump);
-        //jump = false;
     }
 
 

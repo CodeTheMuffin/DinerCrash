@@ -23,6 +23,8 @@ public class UI_Manger : MonoBehaviour
     float discount_percentage = 0.5f;
     bool discount_applied = false;
 
+    GameObject eventSystem;
+
     public TMPro.TextMeshProUGUI cholocate_cookie_text;
     public TMPro.TextMeshProUGUI oatmeal_raisan_cookie_text;
     public TMPro.TextMeshProUGUI normal_milk_text;
@@ -34,6 +36,10 @@ public class UI_Manger : MonoBehaviour
     public Button normal_milk_button;
     public Button warm_milk_button;
 
+    public Image discount_button_image;
+    public Sprite normal_discount_sprite;
+    public Sprite pressed_discount_sprite;
+
     // since its not a scriptable object, it will not show in inspector
     // but the features of an scriptable object are not what I want
     // it still works, so Im happy with this.
@@ -41,6 +47,7 @@ public class UI_Manger : MonoBehaviour
 
     void Awake()
     {
+        eventSystem = UnityEngine.EventSystems.EventSystem.current.gameObject;
         orders = new List<OrderForm>();
         update_total();
         closeOrderingMenu();
@@ -129,7 +136,7 @@ public class UI_Manger : MonoBehaviour
         discount_applied = false;
         ToggleButtonInteractive(true);
         update_total();
-
+        discount_button_image.sprite = normal_discount_sprite;
         /*
         // proof that the orders list is working 
         foreach (OrderForm o in orders)
@@ -147,7 +154,7 @@ public class UI_Manger : MonoBehaviour
         warm_milk_button.interactable = active;
     }
 
-    public void applyDiscount()
+    public void toggleDiscount()
     {
         discount_applied = !discount_applied;
 
@@ -163,13 +170,14 @@ public class UI_Manger : MonoBehaviour
             {
                 total_amount = -9;
             }
-            
 
+            discount_button_image.sprite = pressed_discount_sprite;
             update_total_amount_text();
             ToggleButtonInteractive(false);
         }
         else
         {
+            discount_button_image.sprite = normal_discount_sprite;
             update_total();
             ToggleButtonInteractive(true);
         }    
@@ -177,11 +185,6 @@ public class UI_Manger : MonoBehaviour
 
     public void process_order()
     {
-        /*OrderForm newOrder = ScriptableObject.CreateInstance("OrderForm",
-            cholocate_cookie_counter, oatmeal_raisan_cookie_counter,
-            normal_milk_counter, warm_milk_counter,
-            total_amount, discount_applied);*/
-
         OrderForm newOrder = new OrderForm(
             cholocate_cookie_counter, oatmeal_raisan_cookie_counter,
             normal_milk_counter, warm_milk_counter,
