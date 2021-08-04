@@ -92,14 +92,13 @@ public class PlayerMovement : MonoBehaviour
         // Going to the computer and pressing E to open ordering menu
         if (canAccessMenu && !ui_manger.isOrderingMenuOpen() && Input.GetKeyDown(KeyCode.E))
         {
-            print("ACCESS");
-            ui_manger.open_OrderingMenu();
+            ui_manger.openOrderingMenu();
         }
 
         // Ordering menu is open and pressing Q to close menu
         if (canAccessMenu && ui_manger.isOrderingMenuOpen() && Input.GetKeyDown(KeyCode.Q))
         {
-            ui_manger.close_OrderingMenu();
+            ui_manger.closeOrderingMenu();
         }
 
     }

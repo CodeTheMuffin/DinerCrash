@@ -262,7 +262,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_SelectedColor: {r: 0.19215687, g: 0.25490198, b: 0.32156864, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -281,7 +281,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114906126}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1892858375}
+        m_TargetAssemblyTypeName: UI_Manger, Assembly-CSharp
+        m_MethodName: applyDiscount
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &114906126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -404,7 +416,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1892858375}
         m_TargetAssemblyTypeName: UI_Manger, Assembly-CSharp
-        m_MethodName: close_OrderingMenu
+        m_MethodName: closeOrderingMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1513,7 +1525,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 597956159}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1892858375}
+        m_TargetAssemblyTypeName: UI_Manger, Assembly-CSharp
+        m_MethodName: clearMenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &597956159
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2182,7 +2206,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1004190252}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1892858375}
+        m_TargetAssemblyTypeName: UI_Manger, Assembly-CSharp
+        m_MethodName: process_order
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1004190252
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3913,6 +3949,10 @@ MonoBehaviour:
   normal_milk_text: {fileID: 1822863407}
   warm_milk_text: {fileID: 1581707860}
   total_amount_text: {fileID: 730301428}
+  cholocate_cookie_button: {fileID: 1613952904}
+  oatmeal_raisan_cookie_button: {fileID: 1982144358}
+  normal_milk_button: {fileID: 1700361635}
+  warm_milk_button: {fileID: 379210671}
 --- !u!1 &1982144356
 GameObject:
   m_ObjectHideFlags: 0
