@@ -19,6 +19,8 @@ public class PlayerMovement : MonoBehaviour
     public Transform playerTransform;
     private Vector2 original_position;
 
+    [SerializeField]
+    private bool canAccessMenu = false;
    
 
     private void Start()
@@ -36,7 +38,20 @@ public class PlayerMovement : MonoBehaviour
         {
             Reset();
         }
+
+
+        AccessPC();
     }
+
+    private void FixedUpdate()
+    {
+
+        Move();
+        //controller.Move(horizontalMove * Time.fixedDeltaTime, false, false);
+        //controller.Move(horizontalMove * Time.fixedDeltaTime, crouch, jump);
+        //jump = false;
+    }
+
 
     private void Reset()
     {
@@ -61,13 +76,34 @@ public class PlayerMovement : MonoBehaviour
         playerTransform.Translate(new Vector3(HorizontalMove, VerticalMove, 0));
     }
 
-
-    private void FixedUpdate()
+    void AccessPC()
     {
+        if (canAccessMenu && Input.GetKeyDown(KeyCode.E))
+        {
+            print("ACCESS");
+        }
 
-        Move();
-        //controller.Move(horizontalMove * Time.fixedDeltaTime, false, false);
-        //controller.Move(horizontalMove * Time.fixedDeltaTime, crouch, jump);
-        //jump = false;
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "computer")
+        {
+            canAccessMenu = true;
+        }
+    }
+
+    /*private void OnTriggerStay2D(Collider2D collision)
+    {
+        print("Hit!" + collision.tag);
+    }*/
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if(collision.tag == "computer")
+        {
+            canAccessMenu = false;
+        }
+    }
+
 }

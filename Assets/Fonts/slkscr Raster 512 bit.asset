@@ -55,9 +55,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
   m_Name: slkscr Raster 512 bit
   m_EditorClassIdentifier: 
-  hashCode: 0
+  hashCode: 396596988
   material: {fileID: -1069497863579166238}
-  materialHashCode: 0
+  materialHashCode: 983362268
   m_Version: 1.1.0
   m_SourceFontFileGUID: e015eedcb534e85498b63ec4c5bdfcdb
   m_SourceFontFile_EditorRef: {fileID: 12800000, guid: e015eedcb534e85498b63ec4c5bdfcdb, type: 3}
