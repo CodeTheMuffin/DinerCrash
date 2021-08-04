@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using GameUtility;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -21,9 +22,12 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField]
     private bool canAccessMenu = false;
+    //public GameObject OrderingMenu;
+    
+    public UI_Manger ui_manger;
    
 
-    private void Start()
+    private void Awake()
     {
         original_position = playerTransform.position;
     }
@@ -47,9 +51,6 @@ public class PlayerMovement : MonoBehaviour
     {
 
         Move();
-        //controller.Move(horizontalMove * Time.fixedDeltaTime, false, false);
-        //controller.Move(horizontalMove * Time.fixedDeltaTime, crouch, jump);
-        //jump = false;
     }
 
 
@@ -63,24 +64,35 @@ public class PlayerMovement : MonoBehaviour
     }
     void Move()
     {
-        // Since a unit can be considered 8 pixels, for example, you want to move a pixel at a time rather an whole unit (8 pixels)
-        HorizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed * 1 / PixelsPerUnit;
-        VerticalMove = Input.GetAxisRaw("Vertical") * runSpeed * 1 / PixelsPerUnit;
-        
-        /*print("Horz: " + HorizontalMove);
-        print("Vert: " + VerticalMove);*/
+        // Only move when the ordering menu is closed
+        if (!ui_manger.isOrderingMenuOpen())
+        {
+            // Since a unit can be considered 8 pixels, for example, you want to move a pixel at a time rather an whole unit (8 pixels)
+            HorizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed * 1 / PixelsPerUnit;
+            VerticalMove = Input.GetAxisRaw("Vertical") * runSpeed * 1 / PixelsPerUnit;
+
+            /*print("Horz: " + HorizontalMove);
+            print("Vert: " + VerticalMove);*/
 
 
-        //controller.Move(HorizontalMove * Time.fixedDeltaTime, false, false);
+            //controller.Move(HorizontalMove * Time.fixedDeltaTime, false, false);
 
-        playerTransform.Translate(new Vector3(HorizontalMove, VerticalMove, 0));
+            playerTransform.Translate(new Vector3(HorizontalMove, VerticalMove, 0));
+        }
     }
 
     void AccessPC()
     {
-        if (canAccessMenu && Input.GetKeyDown(KeyCode.E))
+        // Going to the computer and pressing E to open ordering menu
+        if (canAccessMenu && !ui_manger.isOrderingMenuOpen() && Input.GetKeyDown(KeyCode.E))
         {
-            print("ACCESS");
+            ui_manger.openOrderingMenu();
+        }
+
+        // Ordering menu is open and pressing Q to close menu
+        if (canAccessMenu && ui_manger.isOrderingMenuOpen() && Input.GetKeyDown(KeyCode.Q))
+        {
+            ui_manger.closeOrderingMenu();
         }
 
     }
