@@ -17,4 +17,28 @@ https://www.youtube.com/watch?v=dwcT-Dch0bA&list=PLPV2KyIb3jR6TFcFuzI2bB7TMNIIBp
 
 
 
+- Pixel Perfect Camera:
+A Unity package. Go to main camera. Add component -> Pixel Perfect Camera. 
+In the newly added component, make PPU (pixel per unit) the desired amount (ie 8 to represent 8 pixels per unit) 
+Change reference resolution to 64 pixels by 64 pixels or desired resolution
+CHECK the check box for 'Upscale Render Texture'.
+CHECK the check boxes for 'Crop Frame' for BOTH X and Y
+UNCHECK the check box for STRETCH FILL (this would leave weird blurring effect when screen is upscaled)
+Can press 'Run in Edit Mode' to see how it would look in a given resolution/ratio (ie. 16:9 or 1920 x 1080)
 
+Additonal tip:
+- Edit Grid snap settings:
+	- Goto Edit -> Grid and Snap settings (last item in drop down)
+	- As stated in the link below, change the Increment Snap Move X and Y to 1/ your game's PPU
+		- For example, my PPU is 8. So my Increment Snap Move for X and Y would be 1/8 = 0.125
+	- You could do the same for the World Grid Size value or leave at 1 for X/Y/Z
+- Crisp Pixel sprites (apply to each sprite):
+	- Click desired pixel sprite. Change PPU from 100 (default) to desired amount (ie. 8).
+	- Change Filter Mode from Bilinear '(default)' to 'Point (no filter)'.
+	- All the way at the bottom, it would show 'Default' then all the different platforms you are building towards.
+		- Go to the 'Default' tab, and change Compression from 'Normal Quality' (default) to 'None'
+	- Once you have done all the above, press 'Apply'.
+	- And now your pixel art would be sharp and crisp!!
+	- Unforunately you have to do this for ALL sprites... wish there was a way to default this....
+
+http://docs.unity3d.com/Packages/com.unity.2d.pixel-perfect@4.0/manual/index.html
