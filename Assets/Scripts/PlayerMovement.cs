@@ -47,6 +47,13 @@ public class PlayerMovement : MonoBehaviour
             Reset();
         }
 
+        //ESC
+        if (Input.GetKey("escape"))
+        {
+            Application.Quit();
+        }
+
+
 
         AccessPC();
     }
