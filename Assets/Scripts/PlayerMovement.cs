@@ -25,7 +25,11 @@ public class PlayerMovement : MonoBehaviour
     //public GameObject OrderingMenu;
     
     public UI_Manger ui_manger;
-   
+
+    public Transform left_side;
+    public Transform right_side;
+    bool canPickUpOrder = false;
+    bool holdingOrder = false;
 
     private void Awake()
     {
@@ -97,11 +101,26 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
+    void AccessOrder()
+    {
+        // If Im within range to pick up order and not already holding an order and press E
+        // then pick up order
+        if (canPickUpOrder && !holdingOrder && Input.GetKeyDown(KeyCode.E))
+        {
+            holdingOrder = false;
+        }
+    }
+
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "computer")
         {
             canAccessMenu = true;
+        }
+        else if (collision.tag == "order_box")
+        {
+            canPickUpOrder = true;
         }
     }
 
@@ -115,6 +134,10 @@ public class PlayerMovement : MonoBehaviour
         if(collision.tag == "computer")
         {
             canAccessMenu = false;
+        }
+        else if (collision.tag == "order_box")
+        {
+            canPickUpOrder = false;
         }
     }
 
