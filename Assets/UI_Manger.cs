@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class UI_Manger : MonoBehaviour
 {
     public GameObject OrderingMenu;
+    public OrderManager orderManager;
 
     const int MAX_AMOUNT = 10;
 
@@ -185,15 +186,22 @@ public class UI_Manger : MonoBehaviour
 
     public void process_order()
     {
-        OrderForm newOrder = new OrderForm(
+        OrderForm newOrderForm = new OrderForm(
             cholocate_cookie_counter, oatmeal_raisan_cookie_counter,
             normal_milk_counter, warm_milk_counter,
             total_amount, discount_applied);
 
-        orders.Add(newOrder);
+        orders.Add(newOrderForm);
 
         clearMenu();
         closeOrderingMenu();
+
+        int nextOrderBoxIndex = orderManager.get_next_available_order_index();
+
+        if (nextOrderBoxIndex >= 0)
+        {
+            orderManager.setOrderForm(orderManager.orderBoxes[nextOrderBoxIndex], newOrderForm);
+        }
     }
 
 

@@ -4688,6 +4688,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   OrderingMenu: {fileID: 155613611}
+  orderManager: {fileID: 1710291595}
   cholocate_cookie_text: {fileID: 208017527}
   oatmeal_raisan_cookie_text: {fileID: 139367759}
   normal_milk_text: {fileID: 1822863407}
@@ -4962,7 +4963,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.375, y: 0}
@@ -4992,12 +4993,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   order_index: 0
   order_box: {fileID: 1967326958}
+  order_background: {fileID: 1519381297}
   order_options:
   - {fileID: 919396564}
   - {fileID: 145143735}
   - {fileID: 718145668}
   - {fileID: 1869170655}
-  order_available: 0
+  order_spot_available: 1
 --- !u!1 &2060831155
 GameObject:
   m_ObjectHideFlags: 0
