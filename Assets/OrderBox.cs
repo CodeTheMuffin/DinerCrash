@@ -154,7 +154,6 @@ public class OrderBox : MonoBehaviour
         {
             obj.SetActive(false);
         }
-        print("Done hiding all options");
     }
     
     
