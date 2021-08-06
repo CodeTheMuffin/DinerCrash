@@ -33,6 +33,7 @@ public class PlayerMovement : MonoBehaviour
 
     bool canPickUpOrder = false;
     bool holdingOrder = false;
+    bool canThrowAwayOrder = false;
 
     //bool looking_left = true; // determines whether or not to place the order of left side or right side of the player's body
     //bool looking_up = false;
@@ -41,7 +42,8 @@ public class PlayerMovement : MonoBehaviour
     GameObject orderboxParent; // for when the user picks up an order box
     OrderBox orderBoxInRange; // for when the user gets close to an OrderBox.
     Transform orderboxBeingHeld;
-
+    List<GameObject> orderBoxInRangeCollision = new List<GameObject>();
+    
     enum LookingDirection { 
         UP = 0,
         DOWN = 1,
@@ -142,25 +144,45 @@ public class PlayerMovement : MonoBehaviour
 
     void AccessOrder()
     {
+        AttemptToPickUpOrder();
+        AttemptToUpdateOrderDirectionBasedOnMovement();
+        AttemptToThrowAwayOrder();
+
+    }
+
+    void AttemptToPickUpOrder()
+    {
         // If Im within range to pick up order and not already holding an order and press E
         // then pick up order
         if (canPickUpOrder && !holdingOrder && Input.GetKeyDown(KeyCode.E))
         {
             holdingOrder = true;
 
-            // reassigning the orderbox to the players as a child gameobject
-            foreach (Transform child in orderboxParent.transform)
+            if (!orderBoxInRange.canOrderBePickedUp())
             {
-                if (child.tag == "order_box")
+                findNextOrderReadyForPickUp();
+            }
+
+            if (orderBoxInRange.canOrderBePickedUp())
+            {
+                // reassigning the orderbox to the players as a child gameobject
+                foreach (Transform child in orderboxParent.transform)
                 {
-                    child.SetParent(gameObject.transform);
-                    orderboxBeingHeld = child;
-                    break;
+                    if (child.tag == "order_box")
+                    {
+                        child.SetParent(gameObject.transform);
+                        orderBoxInRange.order_spot_available = true;
+                        orderboxBeingHeld = child;
+                        break;
+                    }
                 }
             }
         }
+    }
 
-        // Update each movement
+    void AttemptToUpdateOrderDirectionBasedOnMovement()
+    {
+        // Update the direction of the order the playe is holding
         if (holdingOrder && orderboxBeingHeld)
         {
             switch (looking_direction)
@@ -181,6 +203,37 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    void AttemptToThrowAwayOrder()
+    {
+        if (canThrowAwayOrder && holdingOrder && orderboxBeingHeld && Input.GetKeyDown(KeyCode.E))
+        {
+            emptyHands();
+        }
+    }
+
+    void findNextOrderReadyForPickUp()
+    {
+        // search from back to front of list
+        for(int index = orderBoxInRangeCollision.Count-1; index >= 0; index-- )
+        {
+            print(index.ToString());
+            if (orderBoxInRangeCollision[index].GetComponent<OrderBox>().canOrderBePickedUp())
+            {
+                orderboxParent = orderBoxInRangeCollision[index];
+                orderBoxInRange = orderboxParent.GetComponent<OrderBox>();
+                break;
+            }
+                //canOrderBePickedUp
+        }
+    }
+
+    //AKA throw away the order
+    public void emptyHands()
+    {
+        holdingOrder = false;
+        Destroy(orderboxBeingHeld.gameObject, 0.1f); //destroy in X time
+        orderboxBeingHeld = null;
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -194,7 +247,16 @@ public class PlayerMovement : MonoBehaviour
         {
             canPickUpOrder = true;
             orderboxParent = collision.gameObject;
+
+            if (!orderBoxInRangeCollision.Contains(orderboxParent))
+            {
+                orderBoxInRangeCollision.Add(orderboxParent);
+            }
             orderBoxInRange = orderboxParent.GetComponent<OrderBox>();
+        }
+        else if (collision.tag == "trash can")
+        {
+            canThrowAwayOrder = true;
         }
     }
 
@@ -213,8 +275,25 @@ public class PlayerMovement : MonoBehaviour
         else if (collision.tag == "order_box_parent")
         {
             canPickUpOrder = false;
-            orderboxParent = null;
             orderBoxInRange = null;
+            
+            if (orderBoxInRangeCollision.Contains(collision.gameObject))
+            {
+                orderBoxInRangeCollision.Remove(collision.gameObject);
+                orderboxParent = null;
+            }
+
+            // Get the last collided orderbox
+            if (orderBoxInRangeCollision.Count > 0 && orderboxParent == null)
+            {
+                orderboxParent = orderBoxInRangeCollision[orderBoxInRangeCollision.Count - 1];
+                orderBoxInRange = orderboxParent.GetComponent<OrderBox>();
+            }
+            
+        }
+        else if (collision.tag == "trash can")
+        {
+            canThrowAwayOrder = false;
         }
     }
 

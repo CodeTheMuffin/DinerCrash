@@ -32,7 +32,7 @@ public class OrderBox : MonoBehaviour
 
     public GameObject[] order_options = new GameObject[4];
 
-    // if the order is ready to used for another order
+    // if the order location is ready to used for another order
     public bool order_spot_available = true;
 
     Transform order_box_original_transform;
@@ -62,6 +62,16 @@ public class OrderBox : MonoBehaviour
     public bool isOrderBoxSet()
     {
         return order_box != null;
+    }
+
+    public bool isFormSet()
+    { return orderForm != null; }
+
+    public bool canOrderBePickedUp()
+    {
+        print("box id: " +order_index.ToString() + "___isOrderSet: " + isOrderBoxSet().ToString() + "___isFormSet: "+ isFormSet().ToString() + "___spot avail: " +(!order_spot_available).ToString());
+        print("Combined: " + (isOrderBoxSet() && isFormSet() && !order_spot_available).ToString());
+        return isOrderBoxSet() && isFormSet() && !order_spot_available;
     }
 
     public void setOrderBox(GameObject orderbox)
@@ -149,6 +159,7 @@ public class OrderBox : MonoBehaviour
         if (orderForm.warm_milk_counter > 0)
         { optionVisibility( (int)Options.warm_milk, true); }
 
+        order_spot_available = false;
         print("Done");
     }
 
