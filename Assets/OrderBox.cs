@@ -43,6 +43,7 @@ public class OrderBox : MonoBehaviour
     void Awake()
     {
         order_box_original_transform = order_background.transform;
+        turnOffAnimatedBackground();
     }
 
 
@@ -225,5 +226,19 @@ public class OrderBox : MonoBehaviour
         orderBackgroundVisibility(false);
         hideAllOptions();
         order_spot_available = true;
+    }
+
+    // This is for when the player gets close to the order box
+    // Mimics highlighting
+    public void turnOnAnimatedBackground()
+    {
+        // mimics the red in my color pallate #9f294e
+        order_background.GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(159, 41, 78, 255);
+    }
+
+    public void turnOffAnimatedBackground()
+    {
+        //mimics the white in my color pallate #fdf7ed
+        order_background.GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(253, 247, 237, 255);
     }
 }

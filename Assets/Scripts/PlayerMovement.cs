@@ -144,10 +144,28 @@ public class PlayerMovement : MonoBehaviour
 
     void AccessOrder()
     {
+        turnAnimationOffForAllCollisions();
+        AttemptToAnimateSelectedPickUpOrder();
         AttemptToPickUpOrder();
         AttemptToUpdateOrderDirectionBasedOnMovement();
         AttemptToThrowAwayOrder();
 
+    }
+
+    void AttemptToAnimateSelectedPickUpOrder()
+    {
+        if (canPickUpOrder && !holdingOrder)
+        {
+            if (!orderBoxInRange.canOrderBePickedUp())
+            {
+                findNextOrderReadyForPickUp();
+            }
+
+            if (orderBoxInRange.canOrderBePickedUp())
+            {
+                orderBoxInRange.turnOnAnimatedBackground();
+            }
+        }
     }
 
     void AttemptToPickUpOrder()
@@ -156,8 +174,6 @@ public class PlayerMovement : MonoBehaviour
         // then pick up order
         if (canPickUpOrder && !holdingOrder && Input.GetKeyDown(KeyCode.E))
         {
-            holdingOrder = true;
-
             if (!orderBoxInRange.canOrderBePickedUp())
             {
                 findNextOrderReadyForPickUp();
@@ -165,6 +181,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (orderBoxInRange.canOrderBePickedUp())
             {
+                holdingOrder = true;
                 // reassigning the orderbox to the players as a child gameobject
                 foreach (Transform child in orderboxParent.transform)
                 {
@@ -227,6 +244,15 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    void turnAnimationOffForAllCollisions()
+    {
+        foreach (GameObject box in orderBoxInRangeCollision)
+        {
+            box.GetComponent<OrderBox>().turnOffAnimatedBackground();
+        }
+    }
+
+
     //AKA throw away the order
     public void emptyHands()
     {
@@ -275,6 +301,7 @@ public class PlayerMovement : MonoBehaviour
         else if (collision.tag == "order_box_parent")
         {
             canPickUpOrder = false;
+            orderBoxInRange.turnOffAnimatedBackground();
             orderBoxInRange = null;
             
             if (orderBoxInRangeCollision.Contains(collision.gameObject))
