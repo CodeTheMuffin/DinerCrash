@@ -34,8 +34,8 @@ public class PlayerMovement : MonoBehaviour
     bool canPickUpOrder = false;
     bool holdingOrder = false;
 
-    bool looking_left = true; // determines whether or not to place the order of left side or right side of the player's body
-    bool looking_up = false;
+    //bool looking_left = true; // determines whether or not to place the order of left side or right side of the player's body
+    //bool looking_up = false;
     int looking_direction = (int)LookingDirection.LEFT;
 
     GameObject orderboxParent; // for when the user picks up an order box
@@ -184,6 +184,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        print("Entering: " + collision.name);
+
         if (collision.tag == "computer")
         {
             canAccessMenu = true;
@@ -203,7 +205,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if(collision.tag == "computer")
+        print("Leaving: " + collision.name);
+        if (collision.tag == "computer")
         {
             canAccessMenu = false;
         }

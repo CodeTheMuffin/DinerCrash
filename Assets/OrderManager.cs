@@ -6,6 +6,8 @@ public class OrderManager : MonoBehaviour
 {
     static int orders = 7;
 
+    public GameObject order_box_prefab;
+
     public OrderBox[] orderBoxes = new OrderBox[orders];
 
     private void Start()
@@ -44,6 +46,12 @@ public class OrderManager : MonoBehaviour
 
     public void setOrderForm(OrderBox box, OrderForm form)
     {
+        // if there is no order box, then create one using a prefab!
+        if (!box.isOrderBoxSet())
+        {
+            box.setOrderBox(GameObject.Instantiate(order_box_prefab, box.transform));
+        }
+
         box.setOrderForm(form);
     }
 

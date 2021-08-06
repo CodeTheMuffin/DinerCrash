@@ -14,6 +14,14 @@ public class OrderBox : MonoBehaviour
         warm_milk = 3
     }
 
+
+    public static Dictionary<string, int> option_names_to_index = new Dictionary<string, int>() {
+        {"opt 01", (int)Options.cholocate_cookie},
+        {"opt 02", (int)Options.oatmeal_raisan_cookie},
+        {"opt 03", (int)Options.normal_milk},
+        {"opt 04", (int)Options.warm_milk}
+    };
+
     /*enum Status { 
         empty = 0,
         ready_for_pick_up = 1,
@@ -23,12 +31,6 @@ public class OrderBox : MonoBehaviour
     public GameObject order_background;
 
     public GameObject[] order_options = new GameObject[4];
-
-    // to represent the different cookies and milk options
-    /*public GameObject option01; // represents cholocate_cookie
-    public GameObject option02; // represents oatmeal_raisan_cookie
-    public GameObject option03; // represents normal_milk
-    public GameObject option04; // represents warm_milk*/
 
     // if the order is ready to used for another order
     public bool order_spot_available = true;
@@ -40,7 +42,7 @@ public class OrderBox : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        order_box_original_transform = order_box.transform;
+        order_box_original_transform = order_background.transform;
     }
 
 
@@ -49,7 +51,7 @@ public class OrderBox : MonoBehaviour
     {
         bool isAvailable = false;
 
-        if (orderForm == null && order_spot_available)
+        if ( !isOrderBoxSet() || (orderForm == null && order_spot_available))
         {
             isAvailable = true;
         }
@@ -57,20 +59,70 @@ public class OrderBox : MonoBehaviour
         return isAvailable;
     }
 
+    public bool isOrderBoxSet()
+    {
+        return order_box != null;
+    }
+
+    public void setOrderBox(GameObject orderbox)
+    {
+        order_box = orderbox;
+        reassignAllOrderOptions();
+    }
+
+    
+    public void reassignAllOrderOptions()
+    {
+        if (order_box)
+        {
+            //Clears the order_options[]
+            System.Array.Clear(order_options, 0, order_options.Length);
+
+            // look at all the children and if there is a child's name that matches the key-value pair and can be used in the Options enum
+            // then assign that child's gameobject to the respected index
+            foreach (Transform child in order_box.transform)
+            {
+                if (option_names_to_index.ContainsKey(child.name))
+                {
+                    int index = option_names_to_index[child.name];
+
+                    // if the child's name exists as a value in the Options enum
+                    if (System.Enum.IsDefined(typeof(Options), index))
+                    {
+                        order_options[index] = child.gameObject;
+                    }
+                    else
+                    {
+                        Debug.LogError("ERROR [Order Box]>> Index value of : { " + index.ToString() + " } was not found in Options enum. Cannot set order_options.");
+                    }
+
+                }
+                else
+                {
+                    Debug.LogError("ERROR [Order Box]>> Child name: { " + child.name + " } was not found. Cannot set order_options.");
+                }
+
+            }
+        }
+    }
     
 
     public void resetPosition()
     {
-        order_box.GetComponent<Transform>().position = order_box_original_transform.position;
-        order_box.GetComponent<Transform>().localPosition = order_box_original_transform.localPosition;
-        order_box.GetComponent<Transform>().rotation = order_box_original_transform.rotation;
-        order_box.GetComponent<Transform>().localScale = order_box_original_transform.localScale;
+        if (isOrderBoxSet())
+        {
+            order_box.GetComponent<Transform>().position = order_box_original_transform.position;
+            order_box.GetComponent<Transform>().localPosition = order_box_original_transform.localPosition;
+            order_box.GetComponent<Transform>().rotation = order_box_original_transform.rotation;
+            order_box.GetComponent<Transform>().localScale = order_box_original_transform.localScale;
+        }
     }
 
     public void setOrderForm(OrderForm form)
     {
         print("Setting orderform");
         orderForm = form;
+
         hideAllOptions();
         /*
          cholocate_cookie
@@ -78,14 +130,6 @@ public class OrderBox : MonoBehaviour
          normal_milk
          warm_milk
          */
-        /*if (orderForm.cholocate_cookie_counter > 0)
-        { option01_visibility(true); }
-        if (orderForm.oatmeal_raisan_cookie_counter > 0)
-        { option02_visibility(true); }
-        if (orderForm.normal_milk_counter > 0)
-        { option03_visibility(true); }
-        if (orderForm.warm_milk_counter > 0)
-        { option04_visibility(true); }*/
 
 
         orderBoxVisibility(true);
@@ -94,16 +138,16 @@ public class OrderBox : MonoBehaviour
         print("Starting to set option visible");
 
         if (orderForm.cholocate_cookie_counter > 0)
-        { optionVisibility((int)Options.cholocate_cookie, true); }
+        { optionVisibility( (int)Options.cholocate_cookie, true); }
 
         if (orderForm.oatmeal_raisan_cookie_counter > 0)
-        { optionVisibility((int)Options.oatmeal_raisan_cookie, true); }
+        { optionVisibility( (int)Options.oatmeal_raisan_cookie, true); }
 
         if (orderForm.normal_milk_counter > 0)
-        { optionVisibility((int)Options.normal_milk, true); }
+        { optionVisibility( (int)Options.normal_milk, true); }
 
         if (orderForm.warm_milk_counter > 0)
-        { optionVisibility((int)Options.warm_milk, true); }
+        { optionVisibility( (int)Options.warm_milk, true); }
 
         print("Done");
     }
@@ -114,9 +158,17 @@ public class OrderBox : MonoBehaviour
         orderForm = null;
     }
 
+    public void clearOrderBox()
+    {
+        order_box = null;
+    }
+
     public void orderBoxVisibility(bool visible)
     {
-        order_box.SetActive(visible);
+        if (isOrderBoxSet())
+        {
+            order_box.SetActive(visible);
+        }
     }
 
     public void orderBackgroundVisibility(bool visible)
@@ -132,11 +184,6 @@ public class OrderBox : MonoBehaviour
 
     public void showAllOptions()
     {
-        /*option01_visibility(true);
-        option02_visibility(true);
-        option03_visibility(true);
-        option04_visibility(true);*/
-
         foreach (GameObject obj in order_options)
         {
             obj.SetActive(true);
@@ -145,14 +192,15 @@ public class OrderBox : MonoBehaviour
 
     public void hideAllOptions()
     {
-        /*option01_visibility(false);
-        option02_visibility(false);
-        option03_visibility(false);
-        option04_visibility(false);*/
-
-        foreach (GameObject obj in order_options)
+        if (order_options.Length > 0)
         {
-            obj.SetActive(false);
+            foreach (GameObject obj in order_options)
+            {
+                if (obj)
+                {
+                    obj.SetActive(false);
+                }
+            }
         }
     }
     
@@ -167,25 +215,4 @@ public class OrderBox : MonoBehaviour
         hideAllOptions();
         order_spot_available = true;
     }
-    /*
-        public void option01_visibility(bool visible)
-        {
-            option01.SetActive(visible);
-        }
-
-        public void option02_visibility(bool visible)
-        {
-            option02.SetActive(visible);
-        }
-
-        public void option03_visibility(bool visible)
-        {
-            option03.SetActive(visible);
-        }
-
-        public void option04_visibility(bool visible)
-        {
-            option04.SetActive(visible);
-        }
-    */
 }
