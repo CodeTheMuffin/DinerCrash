@@ -43,7 +43,7 @@ public class OrderBox : MonoBehaviour
     void Awake()
     {
         order_box_original_transform = order_background.transform;
-        turnOffAnimatedBackground();
+        //turnOffAnimatedBackground();
     }
 
 
@@ -52,7 +52,7 @@ public class OrderBox : MonoBehaviour
     {
         bool isAvailable = false;
 
-        if ( !isOrderBoxSet() || (orderForm == null && order_spot_available))
+        if ( !isOrderBoxSet() || (!isFormSet() && order_spot_available))
         {
             isAvailable = true;
         }
@@ -61,9 +61,7 @@ public class OrderBox : MonoBehaviour
     }
 
     public bool isOrderBoxSet()
-    {
-        return order_box != null;
-    }
+    { return order_box != null; }
 
     public bool isFormSet()
     { return orderForm != null; }
@@ -228,12 +226,28 @@ public class OrderBox : MonoBehaviour
         order_spot_available = true;
     }
 
-    // This is for when the player gets close to the order box
-    // Mimics highlighting
-    public void turnOnAnimatedBackground()
+    // like makeAvailabile(), but assumed that the player is holding the order
+    public void pickUpOrder()
     {
-        // mimics the red in my color pallate #9f294e
+        clearForm();
+        clearOrderBox();
+        order_spot_available = true;
+    }
+
+    // This is for when the player gets close to the order box
+    // Mimics highlighting and able to pickup order box
+    public void turnOnAnimatedPickUpBackground()
+    {
+        // mimics the red in my color pallate #9f294e a deep red color
         order_background.GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(159, 41, 78, 255);
+    }
+
+    // This is for when the player gets close to the order box
+    // Mimics highlighting and able to put down an order box (if one is being held)
+    public void turnOnAnimatedPutDownBackground()
+    {
+        // mimics the red in my color pallate #49a790 a dark blue-green color
+        order_background.GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(73, 167, 144, 255);
     }
 
     public void turnOffAnimatedBackground()
