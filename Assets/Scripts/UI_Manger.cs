@@ -46,6 +46,8 @@ public class UI_Manger : MonoBehaviour
     // it still works, so Im happy with this.
     public List<OrderForm> orders;
 
+    public TextSystem text_sys;
+
     void Awake()
     {
         eventSystem = UnityEngine.EventSystems.EventSystem.current.gameObject;

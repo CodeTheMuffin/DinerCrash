@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using SimpleJSON;
+using System.IO;
 
 public class TextSystem : MonoBehaviour
 {
@@ -15,12 +17,14 @@ public class TextSystem : MonoBehaviour
 
     const char NEWLINE = '`';// If this is present, then place a new line in string.
 
+    JSONNode warningJSON;
+
     public void Start()
     {
         textBox = new List<string>();
 
         string xx = "Hello     World!Thisis my game!!!";
-        string xy = "Warning:  Your handsare full!";
+        string xy = "Just for show!";
         //print(xx.ToString());
 
         //print(adjustText(xx).ToString());
@@ -30,8 +34,38 @@ public class TextSystem : MonoBehaviour
         //Debug.Log("dumb");
 
         // load file from the path
-        string warningjsonPath = Application.streamingAssetsPath + "/Texts/en-warning_text.json";
+        /*TextAsset warningjsonPath = Resources.Load<TextAsset>("Text/en-warning_text");
+        print(warningjsonPath);
+        print(warningjsonPath.text);*/
+
+        /*string json = LoadJson(warningjsonPath);
+       print(json);*/
+
+        //must not contain extension!
+        string jsontext = LoadJson("Text/en-warning_text");
+        warningJSON = JSON.Parse(jsontext);
     }
+
+    /*public string LoadJson(string json_path)
+    {
+        TextAsset jsonPath = Resources.Load<TextAsset>(json_path);
+
+        string json = "";
+        using (StreamReader r = new StreamReader(json_path))
+        {
+            json = r.ReadToEnd();
+            //List<Item> items = JsonConvert.DeserializeObject<List<Item>>(json);
+        }
+        return json;
+    }*/
+
+    public string LoadJson(string json_path)
+    {
+        // This MUST be in folder: Asset/Resources/ and the JSON path must NOT include extension (.json)
+        TextAsset jsontext = Resources.Load<TextAsset>(json_path);
+        return jsontext ? jsontext.text : "";
+    }
+
 
     public string adjustText(string text)
     {
@@ -119,6 +153,28 @@ public class TextSystem : MonoBehaviour
         }
         //print_text_boxes();
     }
+
+    public void printWarningText(string warningKey)
+    {
+        if (warningJSON != null)
+        {
+            if (warningJSON.HasKey(warningKey))
+            {
+                string text = warningJSON[warningKey];
+                string adjusted_text = adjustText(text);
+                update_text(adjusted_text);
+            }
+            else
+            {
+                Debug.LogError("ERROR>> The warning key: { " + warningKey + " } does not exist.");
+            }
+        }
+        else 
+        {
+            Debug.LogError("ERROR>> The warning JSON file either was not loaded or does not exist.");
+        }
+    }
+
 
     // For debugging purposes
     void print_text_boxes()

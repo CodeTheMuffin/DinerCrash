@@ -15,6 +15,14 @@ https://www.youtube.com/watch?v=Pzd8NhcRzVo
 https://www.youtube.com/watch?v=dwcT-Dch0bA&list=PLPV2KyIb3jR6TFcFuzI2bB7TMNIIBpKMQ&index=2
 
 
+JSON parsing
+Directions came from:
+https://stackoverflow.com/questions/36239705/serialize-and-deserialize-json-and-json-array-in-unity
+
+SimpleJSON unity wiki page: http://wiki.unity3d.com/index.php/SimpleJSON
+SimpleJSON github repo (from wiki page): https://github.com/Bunny83/SimpleJSON
+
+
 
 
 - Pixel Perfect Camera:

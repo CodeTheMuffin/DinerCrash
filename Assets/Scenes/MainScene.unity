@@ -5400,6 +5400,7 @@ MonoBehaviour:
   discount_button_image: {fileID: 114906126}
   normal_discount_sprite: {fileID: 4540217912784389246, guid: d61a0b926d39f3a49b5d3b7373d2fa47, type: 3}
   pressed_discount_sprite: {fileID: 4016242800060772666, guid: d61a0b926d39f3a49b5d3b7373d2fa47, type: 3}
+  text_sys: {fileID: 1442281601}
 --- !u!1 &1982144356
 GameObject:
   m_ObjectHideFlags: 0

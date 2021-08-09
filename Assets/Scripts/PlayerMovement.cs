@@ -133,11 +133,21 @@ public class PlayerMovement : MonoBehaviour
             // Going to the computer and pressing E to open ordering menu
             if (!ui_manger.isOrderingMenuOpen() && Input.GetKeyDown(KeyCode.E))
             {
-                if (!holdingOrder && ui_manger.haveCapacityToOrder())
+                bool capacityToOrder = ui_manger.haveCapacityToOrder();
+
+                if (!holdingOrder && capacityToOrder)
                 { ui_manger.openOrderingMenu(); }
                 else
                 {
                     audio_manager.playUI_denied();
+                    if (holdingOrder)
+                    {
+                        ui_manger.text_sys.printWarningText("WARNING_NoPC_NoFreeHands");
+                    }
+                    else if (!capacityToOrder)
+                    {
+                        ui_manger.text_sys.printWarningText("WARNING_NoPC_NoRoom");
+                    }
                 }
             }
             // Ordering menu is open and pressing Q to close menu
