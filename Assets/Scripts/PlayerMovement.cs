@@ -181,11 +181,6 @@ public class PlayerMovement : MonoBehaviour
         // then pick up order
         if (canPickUpOrder && !holdingOrder && orderBoxInRange &&  Input.GetKeyDown(KeyCode.E))
         {
-            /*if (!orderBoxInRange.canOrderBePickedUp())
-            {
-                findNextOrderReadyForPickUp();
-            }*/
-
             if (orderBoxInRange.canOrderBePickedUp())
             {
                 GameObject newOrderBox = orderBoxInRange.pickUpOrder(gameObject.transform);
@@ -193,21 +188,6 @@ public class PlayerMovement : MonoBehaviour
                 holdingOrder = (newOrderBox != null);
                 canPickUpOrder = !holdingOrder;
                 orderboxBeingHeld = holdingOrder ? newOrderBox.transform : null;
-
-                /*holdingOrder = true;
-                // reassigning the orderbox to the players as a child gameobject
-                foreach (Transform child in orderboxParent.transform)
-                {
-                    if (child.tag == "order_box")
-                    {
-                        //child.SetParent(gameObject.transform);
-                        canPickUpOrder = false;
-                        orderBoxInRange.pickUpOrder(gameObject.transform);
-                        orderboxBeingHeld = child;
-                        successfullyPickedUp = true;
-                        break;
-                    }
-                }*/
             }
         }
     }
@@ -222,12 +202,13 @@ public class PlayerMovement : MonoBehaviour
         {
             if (orderBoxInRange.isOrderAvailable())
             {
-                orderboxBeingHeld.SetParent(orderboxParent.transform);
-                orderboxBeingHeld.transform.localPosition = Vector3.zero;
+                orderBoxInRange.placeOrderOnCounter(orderboxBeingHeld);
+                //orderboxBeingHeld.SetParent(orderboxParent.transform);
+                //orderboxBeingHeld.transform.localPosition = Vector3.zero;
                 canPickUpOrder = true;
                 holdingOrder = false;
                 orderboxBeingHeld = null;
-                orderBoxInRange.turnOnAnimatedPickUpBackground();
+                //orderBoxInRange.turnOnAnimatedPickUpBackground();
             }
         }
     }

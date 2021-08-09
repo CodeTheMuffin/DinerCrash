@@ -72,7 +72,6 @@ public class OrderBoxManager : MonoBehaviour
         order_spot_available = false;
     }
 
-
     public void clearOrderBox()
     {
         order_box_game_obj = null;
@@ -125,8 +124,15 @@ public class OrderBoxManager : MonoBehaviour
             order_spot_available = true;
             return order_box;
         }
-        
         return null;
+    }
+
+    public void placeOrderOnCounter(Transform orderBox)
+    {
+        orderBox.SetParent(gameObject.transform);
+        orderBox.localPosition = Vector3.zero;
+        order_spot_available = false;
+        turnOnAnimatedPickUpBackground();
     }
 
     // This is for when the player gets close to the order box
