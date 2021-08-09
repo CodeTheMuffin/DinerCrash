@@ -114,10 +114,19 @@ public class OrderBoxManager : MonoBehaviour
     }
 
     // like makeAvailabile(), but assumed that the player is holding the order
-    public void pickUpOrder()
+    public GameObject pickUpOrder(Transform newParent)
     {
-        clearOrderBox();
-        order_spot_available = true;
+        if (isOrderBoxSet())
+        {
+            GameObject order_box = order_box_game_obj;
+            order_box_game_obj.transform.SetParent(newParent);
+            clearOrderBox();
+            turnOnAnimatedPutDownBackground();
+            order_spot_available = true;
+            return order_box;
+        }
+        
+        return null;
     }
 
     // This is for when the player gets close to the order box

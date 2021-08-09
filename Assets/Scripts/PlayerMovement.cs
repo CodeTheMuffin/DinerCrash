@@ -169,7 +169,7 @@ public class PlayerMovement : MonoBehaviour
 
     bool AttemptToPickUpOrder()
     {
-        bool successfullyPickedUp = false;
+        //bool successfullyPickedUp = false;
         // If Im within range to pick up order and not already holding an order and press E
         // then pick up order
         if (canPickUpOrder && !holdingOrder && orderBoxInRange &&  Input.GetKeyDown(KeyCode.E))
@@ -181,25 +181,28 @@ public class PlayerMovement : MonoBehaviour
 
             if (orderBoxInRange.canOrderBePickedUp())
             {
-                holdingOrder = true;
+                GameObject newOrderBox = orderBoxInRange.pickUpOrder(gameObject.transform);
+
+                holdingOrder = (newOrderBox != null);
+                orderboxBeingHeld = holdingOrder ? newOrderBox.transform : null;
+
+                /*holdingOrder = true;
                 // reassigning the orderbox to the players as a child gameobject
                 foreach (Transform child in orderboxParent.transform)
                 {
                     if (child.tag == "order_box")
                     {
-                        child.SetParent(gameObject.transform);
+                        //child.SetParent(gameObject.transform);
                         canPickUpOrder = false;
-                        orderBoxInRange.pickUpOrder();
-                        orderBoxInRange.turnOnAnimatedPutDownBackground();
-                        orderBoxInRange.order_spot_available = true;
+                        orderBoxInRange.pickUpOrder(gameObject.transform);
                         orderboxBeingHeld = child;
                         successfullyPickedUp = true;
                         break;
                     }
-                }
+                }*/
             }
         }
-        return successfullyPickedUp;
+        return holdingOrder;
     }
 
     void AttemptToPutDownOrder()
@@ -520,6 +523,13 @@ public class PlayerMovement : MonoBehaviour
             {
                 orderBoxInCloseRangeCollision.Remove(collision.gameObject);
                 collision.gameObject.GetComponent<OrderBoxManager>().turnOffAnimatedBackground();
+
+                if (orderBoxInCloseRangeCollision.Count == 0)
+                {
+                    orderboxParent = null;
+                    orderBoxInRange = null;
+                }
+
                 collisionDetectionChange = true;
             }
         }
