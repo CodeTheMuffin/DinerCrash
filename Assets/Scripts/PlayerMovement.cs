@@ -42,7 +42,6 @@ public class PlayerMovement : MonoBehaviour
     GameObject orderboxParent; // for when the user picks up an order box
     OrderBoxManager orderBoxInRange; // for when the user gets close to an OrderBox.
     Transform orderboxBeingHeld;
-    List<GameObject> orderBoxInRangeCollision = new List<GameObject>();
     List<GameObject> orderBoxInCloseRangeCollision = new List<GameObject>();
     bool collisionDetectionChange = false; // used so we dont go through the list each frame. set to true if a collision was added/removed
 
@@ -126,27 +125,35 @@ public class PlayerMovement : MonoBehaviour
 
     void AccessPC()
     {
-        // Going to the computer and pressing E to open ordering menu
-        if (canAccessMenu && !ui_manger.isOrderingMenuOpen() && Input.GetKeyDown(KeyCode.E))
+        if (canAccessMenu && !holdingOrder)
         {
-            ui_manger.openOrderingMenu();
-        }
+            // Going to the computer and pressing E to open ordering menu
+            if (!ui_manger.isOrderingMenuOpen() && Input.GetKeyDown(KeyCode.E))
+            {
+                ui_manger.openOrderingMenu();
+            }
 
-        // Ordering menu is open and pressing Q to close menu
-        if (canAccessMenu && ui_manger.isOrderingMenuOpen() && Input.GetKeyDown(KeyCode.Q))
-        {
-            ui_manger.closeOrderingMenu();
+            // Ordering menu is open and pressing Q to close menu
+            if (canAccessMenu && ui_manger.isOrderingMenuOpen() && Input.GetKeyDown(KeyCode.Q))
+            {
+                ui_manger.closeOrderingMenu();
+            }
         }
-
     }
 
     void AccessOrder()
     {
         UpdateOrderSelection();
-        if (!AttemptToPickUpOrder())
+
+        if (orderboxBeingHeld)
         {
             AttemptToPutDownOrder();
         }
+        else
+        {
+            AttemptToPickUpOrder();
+        }
+
         AttemptToUpdateOrderDirectionBasedOnMovement();
         AttemptToThrowAwayOrder();
     }
@@ -167,7 +174,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }*/
 
-    bool AttemptToPickUpOrder()
+    void AttemptToPickUpOrder()
     {
         //bool successfullyPickedUp = false;
         // If Im within range to pick up order and not already holding an order and press E
@@ -184,6 +191,7 @@ public class PlayerMovement : MonoBehaviour
                 GameObject newOrderBox = orderBoxInRange.pickUpOrder(gameObject.transform);
 
                 holdingOrder = (newOrderBox != null);
+                canPickUpOrder = !holdingOrder;
                 orderboxBeingHeld = holdingOrder ? newOrderBox.transform : null;
 
                 /*holdingOrder = true;
@@ -202,13 +210,13 @@ public class PlayerMovement : MonoBehaviour
                 }*/
             }
         }
-        return holdingOrder;
     }
 
     void AttemptToPutDownOrder()
     {
         // If Im within range to pick up order and already holding an order and press E
         // then put down order
+        print("Can Put down: " + (holdingOrder && orderboxBeingHeld && orderboxParent && orderBoxInRange).ToString());
 
         if (holdingOrder && orderboxBeingHeld && orderboxParent && orderBoxInRange && Input.GetKeyDown(KeyCode.E))
         {
