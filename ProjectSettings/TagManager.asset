@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - computer
+  - order_box_parent
+  - order_box
+  - trash can
   layers:
   - Default
   - TransparentFX
