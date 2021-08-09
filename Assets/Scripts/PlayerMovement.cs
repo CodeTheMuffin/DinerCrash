@@ -44,6 +44,7 @@ public class PlayerMovement : MonoBehaviour
     Transform orderboxBeingHeld;
     List<GameObject> orderBoxInRangeCollision = new List<GameObject>();
     List<GameObject> orderBoxInCloseRangeCollision = new List<GameObject>();
+    bool collisionDetectionChange = false; // used so we dont go through the list each frame. set to true if a collision was added/removed
 
     enum LookingDirection {
         UP = 0,
@@ -115,11 +116,8 @@ public class PlayerMovement : MonoBehaviour
             else if (HorizontalMove < 0)
             { looking_direction = (int)LookingDirection.LEFT; }
 
-
-
             /*print("Horz: " + HorizontalMove);
             print("Vert: " + VerticalMove);*/
-
 
             //controller.Move(HorizontalMove * Time.fixedDeltaTime, false, false);
 
@@ -147,6 +145,7 @@ public class PlayerMovement : MonoBehaviour
     {
         //turnAnimationOffForAllCollisions();
         //AttemptToAnimateSelectedPickUpOrder();
+        UpdateOrderSelection();
         AttemptToPickUpOrder();
         AttemptToUpdateOrderDirectionBasedOnMovement();
         AttemptToThrowAwayOrder();
@@ -201,6 +200,61 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    // Determines which parent box gets animated.
+    void UpdateOrderSelection()
+    {
+        if (collisionDetectionChange)
+        {
+            turnAnimationOffForAllCollisions();
+            collisionDetectionChange = false;
+            GameObject newBox = null;
+            print("Turned off stuff");
+
+            if (holdingOrder && orderboxBeingHeld)
+            {
+                // find the new box that is closer to the player
+                foreach (GameObject box in orderBoxInCloseRangeCollision)
+                {
+                    OrderBox order_box = box.GetComponent<OrderBox>();
+
+                    if (order_box.isOrderAvailable() && isNewBoxCloserCompare(newBox, box))
+                    {
+                        newBox = box;
+                    }
+                }
+
+                if (newBox != null)
+                {
+                    orderboxParent = newBox;
+                    orderBoxInRange = orderboxParent.GetComponent<OrderBox>();
+                    orderBoxInRange.turnOnAnimatedPutDownBackground();
+                }
+            }
+            else // if not holdiing an order
+            {
+                // find the new box that is closer to the player
+                foreach (GameObject box in orderBoxInCloseRangeCollision)
+                {
+                    OrderBox order_box = box.GetComponent<OrderBox>();
+
+                    if (order_box.canOrderBePickedUp() && isNewBoxCloserCompare(newBox, box))
+                    {
+                        newBox = box;
+                    }
+                }
+
+                if (newBox != null)
+                {
+                    Debug.Log("Setting new box!!");
+                    orderboxParent = newBox;
+                    orderBoxInRange = orderboxParent.GetComponent<OrderBox>();
+                    orderBoxInRange.turnOnAnimatedPickUpBackground();
+                    canPickUpOrder = true;
+                }
+            }
+        }       
+    }
+
     void AttemptToUpdateOrderDirectionBasedOnMovement()
     {
         // Update the direction of the order the playe is holding
@@ -250,7 +304,7 @@ public class PlayerMovement : MonoBehaviour
 
     void turnAnimationOffForAllCollisions()
     {
-        foreach (GameObject box in orderBoxInRangeCollision)
+        foreach (GameObject box in orderBoxInCloseRangeCollision)
         {
             box.GetComponent<OrderBox>().turnOffAnimatedBackground();
         }
@@ -259,10 +313,25 @@ public class PlayerMovement : MonoBehaviour
     // For on trigger enter
     bool isNewBoxCloser(GameObject newBox)
     {
-        if (!orderboxParent)
+        if (orderboxParent == null)
         { return true; }
 
         float old_distance = Vector2.Distance(transform.position, orderboxParent.transform.position);
+        float new_distance = Vector2.Distance(transform.position, newBox.transform.position);
+
+        if (new_distance < old_distance)
+            return true;
+
+        return false;
+    }
+
+    // For comparing two boxes distances from player
+    bool isNewBoxCloserCompare(GameObject oldBox, GameObject newBox)
+    {
+        if (oldBox == null)
+        { return true; }
+
+        float old_distance = Vector2.Distance(transform.position, oldBox.transform.position);
         float new_distance = Vector2.Distance(transform.position, newBox.transform.position);
 
         if (new_distance < old_distance)
@@ -311,7 +380,8 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (collision.tag == "order_box_parent")
         {
-            /*canPickUpOrder = true;
+            /*ATTTEMPT 1
+            canPickUpOrder = true;
             orderboxParent = collision.gameObject;
 
             if (!orderBoxInRangeCollision.Contains(orderboxParent))
@@ -320,6 +390,9 @@ public class PlayerMovement : MonoBehaviour
             }
             orderBoxInRange = orderboxParent.GetComponent<OrderBox>();*/
 
+
+
+            /*ATTEMPT 2
             OrderBox boxParent = collision.gameObject.GetComponent<OrderBox>();
 
             if (boxParent.canOrderBePickedUp() && !holdingOrder)
@@ -350,6 +423,12 @@ public class PlayerMovement : MonoBehaviour
                     orderBoxInRange = boxParent;//orderboxParent.GetComponent<OrderBox>();
                     orderBoxInRange.turnOnAnimatedPutDownBackground();
                 }
+            }*/
+
+            if (!orderBoxInCloseRangeCollision.Contains(collision.gameObject))
+            {
+                orderBoxInCloseRangeCollision.Add(collision.gameObject);
+                collisionDetectionChange = true;
             }
         }
         else if (collision.tag == "trash can")
@@ -372,7 +451,8 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (collision.tag == "order_box_parent")
         {
-            /*canPickUpOrder = false;
+            /* ATTEMPT 1
+            canPickUpOrder = false;
             orderBoxInRange.turnOffAnimatedBackground();
             orderBoxInRange = null;
             
@@ -389,6 +469,7 @@ public class PlayerMovement : MonoBehaviour
                 orderBoxInRange = orderboxParent.GetComponent<OrderBox>();
             }*/
 
+            /* ATTEMPT 2
             if (orderBoxInCloseRangeCollision.Contains(collision.gameObject))
             {
                 orderBoxInCloseRangeCollision.Remove(collision.gameObject);
@@ -418,8 +499,13 @@ public class PlayerMovement : MonoBehaviour
                         }
                     }
                 }
+            }*/
+            if (orderBoxInCloseRangeCollision.Contains(collision.gameObject))
+            {
+                orderBoxInCloseRangeCollision.Remove(collision.gameObject);
+                collision.gameObject.GetComponent<OrderBox>().turnOffAnimatedBackground();
+                collisionDetectionChange = true;
             }
-
         }
         else if (collision.tag == "trash can")
         {

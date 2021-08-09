@@ -43,7 +43,7 @@ public class OrderBox : MonoBehaviour
     void Awake()
     {
         order_box_original_transform = order_background.transform;
-        //turnOffAnimatedBackground();
+        turnOffAnimatedBackground();
     }
 
 
@@ -221,7 +221,8 @@ public class OrderBox : MonoBehaviour
         resetPosition();
         clearForm();
         orderBoxVisibility(false);
-        orderBackgroundVisibility(false);
+        orderBackgroundVisibility(true);
+        turnOffAnimatedBackground();
         hideAllOptions();
         order_spot_available = true;
     }
