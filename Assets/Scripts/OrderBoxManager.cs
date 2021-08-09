@@ -129,6 +129,8 @@ public class OrderBoxManager : MonoBehaviour
 
     public void placeOrderOnCounter(Transform orderBox)
     {
+        order_box_game_obj = orderBox.gameObject;
+        order_box = order_box_game_obj.GetComponent<OrderBox>();
         orderBox.SetParent(gameObject.transform);
         orderBox.localPosition = Vector3.zero;
         order_spot_available = false;
