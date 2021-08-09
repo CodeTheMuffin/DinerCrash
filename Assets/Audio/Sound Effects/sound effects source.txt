@@ -1,0 +1,15 @@
+=================================
+Below are from Itch.io bundle:
+https://itch.io/b/520/bundle-for-racial-justice-and-equality
+=================================
+
+
+From 8-bit-sfx-pack
+Link: https://beepyeah.itch.io/8-bit-sfx-pack
+By: Beep Yeah!
+License: Personal or Commerical. Royalty Free.
+=================================================
+* cancel-1_deny_pc_access 		(originally 'cancel-1.wav')  	// Denying PC access to place order if player has hands full or no room to place order
+* hit-6_put_order_down			(originally hit-6.wav) 			// placing down order on counter ONLY
+* hit-6-reversed_pick_order_up 	(originally hit-6-reversed.wav) // when picking up order (the reverse sound of hit-6.wav)
+* footstep_throw_away_order 	(originally footstep.wav) 		// when the player throws away the order in the trash

@@ -45,6 +45,8 @@ public class PlayerMovement : MonoBehaviour
     List<GameObject> orderBoxInCloseRangeCollision = new List<GameObject>();
     bool collisionDetectionChange = false; // used so we dont go through the list each frame. set to true if a collision was added/removed
 
+    AudioManager audio_manager;
+
     enum LookingDirection {
         UP = 0,
         DOWN = 1,
@@ -55,6 +57,7 @@ public class PlayerMovement : MonoBehaviour
     private void Awake()
     {
         original_position = playerTransform.position;
+        audio_manager = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<AudioManager>();
     }
 
     // Update is called once per frame
@@ -125,16 +128,20 @@ public class PlayerMovement : MonoBehaviour
 
     void AccessPC()
     {
-        if (canAccessMenu && !holdingOrder)
+        if (canAccessMenu)
         {
             // Going to the computer and pressing E to open ordering menu
             if (!ui_manger.isOrderingMenuOpen() && Input.GetKeyDown(KeyCode.E))
             {
-                ui_manger.openOrderingMenu();
+                if (!holdingOrder && ui_manger.haveCapacityToOrder())
+                { ui_manger.openOrderingMenu(); }
+                else
+                {
+                    audio_manager.playUI_denied();
+                }
             }
-
             // Ordering menu is open and pressing Q to close menu
-            if (canAccessMenu && ui_manger.isOrderingMenuOpen() && Input.GetKeyDown(KeyCode.Q))
+            else if (ui_manger.isOrderingMenuOpen() && Input.GetKeyDown(KeyCode.Q))
             {
                 ui_manger.closeOrderingMenu();
             }
@@ -188,6 +195,11 @@ public class PlayerMovement : MonoBehaviour
                 holdingOrder = (newOrderBox != null);
                 canPickUpOrder = !holdingOrder;
                 orderboxBeingHeld = holdingOrder ? newOrderBox.transform : null;
+
+                if (orderboxBeingHeld)
+                {
+                    audio_manager.playPlayerPickOrderUp();
+                }
             }
         }
     }
@@ -196,7 +208,6 @@ public class PlayerMovement : MonoBehaviour
     {
         // If Im within range to pick up order and already holding an order and press E
         // then put down order
-        print("Can Put down: " + (holdingOrder && orderboxBeingHeld && orderboxParent && orderBoxInRange).ToString());
 
         if (holdingOrder && orderboxBeingHeld && orderboxParent && orderBoxInRange && Input.GetKeyDown(KeyCode.E))
         {
@@ -209,6 +220,7 @@ public class PlayerMovement : MonoBehaviour
                 holdingOrder = false;
                 orderboxBeingHeld = null;
                 //orderBoxInRange.turnOnAnimatedPickUpBackground();
+                audio_manager.playPlayerPutOrderOnCounter();
             }
         }
     }
@@ -293,6 +305,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (canThrowAwayOrder && holdingOrder && orderboxBeingHeld && Input.GetKeyDown(KeyCode.E))
         {
+            audio_manager.playPlayerThrowOrderAway();
             emptyHands();
         }
     }

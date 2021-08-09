@@ -202,6 +202,12 @@ public class UI_Manger : MonoBehaviour
     /*
      ORDERING MENU
      */
+    public bool haveCapacityToOrder()
+    {
+        int next_index = orderManager.get_next_available_order_index();
+        return next_index != -1;
+    }
+
     public bool isOrderingMenuOpen()
     {
         return OrderingMenu.activeSelf;
