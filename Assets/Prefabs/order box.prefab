@@ -338,6 +338,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4251786676256145063}
   - component: {fileID: 6123023328220765700}
+  - component: {fileID: 3257631787909796956}
   m_Layer: 0
   m_Name: order box
   m_TagString: order_box
@@ -414,3 +415,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &3257631787909796956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8932244287358175604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49d39c6c636c40b40b36ec3a53e15d04, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  order_options:
+  - {fileID: 3331967122691972183}
+  - {fileID: 4836961148056119070}
+  - {fileID: 3677314564388382741}
+  - {fileID: 8928350345288764762}

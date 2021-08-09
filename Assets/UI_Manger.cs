@@ -54,12 +54,6 @@ public class UI_Manger : MonoBehaviour
         closeOrderingMenu();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     /*
      INCREMENTING COUNTERS
      */
@@ -200,7 +194,7 @@ public class UI_Manger : MonoBehaviour
 
         if (nextOrderBoxIndex >= 0)
         {
-            orderManager.setOrderForm(orderManager.orderBoxes[nextOrderBoxIndex], newOrderForm);
+            orderManager.setOrderForm(orderManager.orderBoxManagers[nextOrderBoxIndex], newOrderForm);
         }
     }
 

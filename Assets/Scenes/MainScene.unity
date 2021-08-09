@@ -1030,13 +1030,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   order_index: 3
-  order_box: {fileID: 0}
   order_background: {fileID: 1837643532}
-  order_options:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  order_box_game_obj: {fileID: 0}
+  order_box: {fileID: 0}
   order_spot_available: 1
 --- !u!61 &327687035
 BoxCollider2D:
@@ -1324,13 +1320,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   order_index: 4
-  order_box: {fileID: 0}
   order_background: {fileID: 717431161}
-  order_options:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  order_box_game_obj: {fileID: 0}
+  order_box: {fileID: 0}
   order_spot_available: 1
 --- !u!61 &502016763
 BoxCollider2D:
@@ -2449,13 +2441,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   order_index: 1
-  order_box: {fileID: 0}
   order_background: {fileID: 390045231}
-  order_options:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  order_box_game_obj: {fileID: 0}
+  order_box: {fileID: 0}
   order_spot_available: 1
 --- !u!61 &762929679
 BoxCollider2D:
@@ -3623,13 +3611,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   order_index: 2
-  order_box: {fileID: 0}
   order_background: {fileID: 1139712258}
-  order_options:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  order_box_game_obj: {fileID: 0}
+  order_box: {fileID: 0}
   order_spot_available: 1
 --- !u!61 &1314838887
 BoxCollider2D:
@@ -3785,13 +3769,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   order_index: 5
-  order_box: {fileID: 0}
   order_background: {fileID: 1848704015}
-  order_options:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  order_box_game_obj: {fileID: 0}
+  order_box: {fileID: 0}
   order_spot_available: 1
 --- !u!61 &1399336809
 BoxCollider2D:
@@ -4789,7 +4769,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   order_box_prefab: {fileID: 8932244287358175604, guid: df6fca1b36e16344ab25ae7e96a4d4af, type: 3}
-  orderBoxes:
+  orderBoxManagers:
   - {fileID: 2050735285}
   - {fileID: 762929678}
   - {fileID: 1314838886}
@@ -5650,13 +5630,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   order_index: 6
-  order_box: {fileID: 0}
   order_background: {fileID: 1088682754}
-  order_options:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  order_box_game_obj: {fileID: 0}
+  order_box: {fileID: 0}
   order_spot_available: 1
 --- !u!61 &2006550653
 BoxCollider2D:
@@ -5756,13 +5732,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   order_index: 0
-  order_box: {fileID: 0}
   order_background: {fileID: 1519381297}
-  order_options:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  order_box_game_obj: {fileID: 0}
+  order_box: {fileID: 0}
   order_spot_available: 1
 --- !u!1 &2060831155
 GameObject:

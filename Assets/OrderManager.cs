@@ -8,7 +8,7 @@ public class OrderManager : MonoBehaviour
 
     public GameObject order_box_prefab;
 
-    public OrderBox[] orderBoxes = new OrderBox[orders];
+    public OrderBoxManager[] orderBoxManagers = new OrderBoxManager[orders];
 
     private void Start()
     {
@@ -20,9 +20,9 @@ public class OrderManager : MonoBehaviour
     {
         int order_index = -1;  // no spots available
 
-        for (int orderbox_index = 0; orderbox_index < orderBoxes.Length; orderbox_index++)
+        for (int orderbox_index = 0; orderbox_index < orderBoxManagers.Length; orderbox_index++)
         {
-            if (orderBoxes[orderbox_index] != null && orderBoxes[orderbox_index].isOrderAvailable())
+            if (orderBoxManagers[orderbox_index] != null && orderBoxManagers[orderbox_index].isOrderAvailable())
             {
                 order_index = orderbox_index;
                 break;
@@ -35,16 +35,16 @@ public class OrderManager : MonoBehaviour
     // Manly used at the start() or a new level
     public void resetALLOrderBoxesAndHide()
     {
-        for (int orderbox_index = 0; orderbox_index < orderBoxes.Length; orderbox_index++)
+        for (int orderbox_index = 0; orderbox_index < orderBoxManagers.Length; orderbox_index++)
         {
-            if (orderBoxes[orderbox_index] != null)
+            if (orderBoxManagers[orderbox_index] != null)
             {
-                orderBoxes[orderbox_index].makeAvailabile();
+                orderBoxManagers[orderbox_index].makeAvailabile();
             }
         }
     }
 
-    public void setOrderForm(OrderBox box, OrderForm form)
+    public void setOrderForm(OrderBoxManager box, OrderForm form)
     {
         // if there is no order box, then create one using a prefab!
         if (!box.isOrderBoxSet())

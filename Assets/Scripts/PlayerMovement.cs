@@ -40,7 +40,7 @@ public class PlayerMovement : MonoBehaviour
     int looking_direction = (int)LookingDirection.LEFT;
 
     GameObject orderboxParent; // for when the user picks up an order box
-    OrderBox orderBoxInRange; // for when the user gets close to an OrderBox.
+    OrderBoxManager orderBoxInRange; // for when the user gets close to an OrderBox.
     Transform orderboxBeingHeld;
     List<GameObject> orderBoxInRangeCollision = new List<GameObject>();
     List<GameObject> orderBoxInCloseRangeCollision = new List<GameObject>();
@@ -52,7 +52,6 @@ public class PlayerMovement : MonoBehaviour
         LEFT = 2,
         RIGHT = 3
     }
-
 
     private void Awake()
     {
@@ -143,16 +142,16 @@ public class PlayerMovement : MonoBehaviour
 
     void AccessOrder()
     {
-        //turnAnimationOffForAllCollisions();
-        //AttemptToAnimateSelectedPickUpOrder();
         UpdateOrderSelection();
-        AttemptToPickUpOrder();
+        if (!AttemptToPickUpOrder())
+        {
+            AttemptToPutDownOrder();
+        }
         AttemptToUpdateOrderDirectionBasedOnMovement();
         AttemptToThrowAwayOrder();
-
     }
 
-    void AttemptToAnimateSelectedPickUpOrder()
+    /*void AttemptToAnimateSelectedPickUpOrder()
     {
         if (canPickUpOrder && !holdingOrder && orderBoxInRange)
         {
@@ -166,18 +165,19 @@ public class PlayerMovement : MonoBehaviour
                 orderBoxInRange.turnOnAnimatedPickUpBackground();
             }
         }
-    }
+    }*/
 
-    void AttemptToPickUpOrder()
+    bool AttemptToPickUpOrder()
     {
+        bool successfullyPickedUp = false;
         // If Im within range to pick up order and not already holding an order and press E
         // then pick up order
         if (canPickUpOrder && !holdingOrder && orderBoxInRange &&  Input.GetKeyDown(KeyCode.E))
         {
-            if (!orderBoxInRange.canOrderBePickedUp())
+            /*if (!orderBoxInRange.canOrderBePickedUp())
             {
                 findNextOrderReadyForPickUp();
-            }
+            }*/
 
             if (orderBoxInRange.canOrderBePickedUp())
             {
@@ -193,9 +193,30 @@ public class PlayerMovement : MonoBehaviour
                         orderBoxInRange.turnOnAnimatedPutDownBackground();
                         orderBoxInRange.order_spot_available = true;
                         orderboxBeingHeld = child;
+                        successfullyPickedUp = true;
                         break;
                     }
                 }
+            }
+        }
+        return successfullyPickedUp;
+    }
+
+    void AttemptToPutDownOrder()
+    {
+        // If Im within range to pick up order and already holding an order and press E
+        // then put down order
+
+        if (holdingOrder && orderboxBeingHeld && orderboxParent && orderBoxInRange && Input.GetKeyDown(KeyCode.E))
+        {
+            if (orderBoxInRange.isOrderAvailable())
+            {
+                orderboxBeingHeld.SetParent(orderboxParent.transform);
+                orderboxBeingHeld.transform.localPosition = Vector3.zero;
+                canPickUpOrder = true;
+                holdingOrder = false;
+                orderboxBeingHeld = null;
+                orderBoxInRange.turnOnAnimatedPickUpBackground();
             }
         }
     }
@@ -208,14 +229,13 @@ public class PlayerMovement : MonoBehaviour
             turnAnimationOffForAllCollisions();
             collisionDetectionChange = false;
             GameObject newBox = null;
-            print("Turned off stuff");
 
             if (holdingOrder && orderboxBeingHeld)
             {
                 // find the new box that is closer to the player
                 foreach (GameObject box in orderBoxInCloseRangeCollision)
                 {
-                    OrderBox order_box = box.GetComponent<OrderBox>();
+                    OrderBoxManager order_box = box.GetComponent<OrderBoxManager>();
 
                     if (order_box.isOrderAvailable() && isNewBoxCloserCompare(newBox, box))
                     {
@@ -226,7 +246,7 @@ public class PlayerMovement : MonoBehaviour
                 if (newBox != null)
                 {
                     orderboxParent = newBox;
-                    orderBoxInRange = orderboxParent.GetComponent<OrderBox>();
+                    orderBoxInRange = orderboxParent.GetComponent<OrderBoxManager>();
                     orderBoxInRange.turnOnAnimatedPutDownBackground();
                 }
             }
@@ -235,7 +255,7 @@ public class PlayerMovement : MonoBehaviour
                 // find the new box that is closer to the player
                 foreach (GameObject box in orderBoxInCloseRangeCollision)
                 {
-                    OrderBox order_box = box.GetComponent<OrderBox>();
+                    OrderBoxManager order_box = box.GetComponent<OrderBoxManager>();
 
                     if (order_box.canOrderBePickedUp() && isNewBoxCloserCompare(newBox, box))
                     {
@@ -245,9 +265,8 @@ public class PlayerMovement : MonoBehaviour
 
                 if (newBox != null)
                 {
-                    Debug.Log("Setting new box!!");
                     orderboxParent = newBox;
-                    orderBoxInRange = orderboxParent.GetComponent<OrderBox>();
+                    orderBoxInRange = orderboxParent.GetComponent<OrderBoxManager>();
                     orderBoxInRange.turnOnAnimatedPickUpBackground();
                     canPickUpOrder = true;
                 }
@@ -286,27 +305,27 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    void findNextOrderReadyForPickUp()
+    /*void findNextOrderReadyForPickUp()
     {
         // search from back to front of list
         for (int index = orderBoxInRangeCollision.Count - 1; index >= 0; index--)
         {
             print(index.ToString());
-            if (orderBoxInRangeCollision[index].GetComponent<OrderBox>().canOrderBePickedUp())
+            if (orderBoxInRangeCollision[index].GetComponent<OrderBoxManager>().canOrderBePickedUp())
             {
                 orderboxParent = orderBoxInRangeCollision[index];
-                orderBoxInRange = orderboxParent.GetComponent<OrderBox>();
+                orderBoxInRange = orderboxParent.GetComponent<OrderBoxManager>();
                 break;
             }
             //canOrderBePickedUp
         }
-    }
+    }*/
 
     void turnAnimationOffForAllCollisions()
     {
         foreach (GameObject box in orderBoxInCloseRangeCollision)
         {
-            box.GetComponent<OrderBox>().turnOffAnimatedBackground();
+            box.GetComponent<OrderBoxManager>().turnOffAnimatedBackground();
         }
     }
 
@@ -388,12 +407,12 @@ public class PlayerMovement : MonoBehaviour
             {
                 orderBoxInRangeCollision.Add(orderboxParent);
             }
-            orderBoxInRange = orderboxParent.GetComponent<OrderBox>();*/
+            orderBoxInRange = orderboxParent.GetComponent<OrderBoxManager>();*/
 
 
 
             /*ATTEMPT 2
-            OrderBox boxParent = collision.gameObject.GetComponent<OrderBox>();
+            OrderBox boxParent = collision.gameObject.GetComponent<OrderBoxManager>();
 
             if (boxParent.canOrderBePickedUp() && !holdingOrder)
             {
@@ -406,7 +425,7 @@ public class PlayerMovement : MonoBehaviour
                 {
                     canPickUpOrder = true;
                     orderboxParent = collision.gameObject;
-                    orderBoxInRange = boxParent;//orderboxParent.GetComponent<OrderBox>();
+                    orderBoxInRange = boxParent;//orderboxParent.GetComponent<OrderBoxManager>();
                     orderBoxInRange.turnOnAnimatedPickUpBackground();
                 }
             }
@@ -420,7 +439,7 @@ public class PlayerMovement : MonoBehaviour
                 if (isNewBoxCloser(collision.gameObject))
                 {
                     orderboxParent = collision.gameObject;
-                    orderBoxInRange = boxParent;//orderboxParent.GetComponent<OrderBox>();
+                    orderBoxInRange = boxParent;//orderboxParent.GetComponent<OrderBoxManager>();
                     orderBoxInRange.turnOnAnimatedPutDownBackground();
                 }
             }*/
@@ -434,13 +453,10 @@ public class PlayerMovement : MonoBehaviour
         else if (collision.tag == "trash can")
         {
             canThrowAwayOrder = true;
+            collision.gameObject.GetComponent<SpriteRenderer>().color = new Color32(170, 170, 170, 255);
+            print("Entered trash can");
         }
     }
-
-    /*private void OnTriggerStay2D(Collider2D collision)
-    {
-        print("Hit!" + collision.tag);
-    }*/
 
     private void OnTriggerExit2D(Collider2D collision)
     {
@@ -466,14 +482,14 @@ public class PlayerMovement : MonoBehaviour
             if (orderBoxInRangeCollision.Count > 0 && orderboxParent == null)
             {
                 orderboxParent = orderBoxInRangeCollision[orderBoxInRangeCollision.Count - 1];
-                orderBoxInRange = orderboxParent.GetComponent<OrderBox>();
+                orderBoxInRange = orderboxParent.GetComponent<OrderBoxManager>();
             }*/
 
             /* ATTEMPT 2
             if (orderBoxInCloseRangeCollision.Contains(collision.gameObject))
             {
                 orderBoxInCloseRangeCollision.Remove(collision.gameObject);
-                collision.gameObject.GetComponent<OrderBox>().turnOffAnimatedBackground();
+                collision.gameObject.GetComponent<OrderBoxManager>().turnOffAnimatedBackground();
 
                 if (GameObject.ReferenceEquals(orderboxParent, collision.gameObject))
                 {
@@ -487,7 +503,7 @@ public class PlayerMovement : MonoBehaviour
 
                     if (orderboxParent != null)
                     {
-                        orderBoxInRange = orderboxParent.GetComponent<OrderBox>();
+                        orderBoxInRange = orderboxParent.GetComponent<OrderBoxManager>();
 
                         if (holdingOrder)
                         {
@@ -503,13 +519,15 @@ public class PlayerMovement : MonoBehaviour
             if (orderBoxInCloseRangeCollision.Contains(collision.gameObject))
             {
                 orderBoxInCloseRangeCollision.Remove(collision.gameObject);
-                collision.gameObject.GetComponent<OrderBox>().turnOffAnimatedBackground();
+                collision.gameObject.GetComponent<OrderBoxManager>().turnOffAnimatedBackground();
                 collisionDetectionChange = true;
             }
         }
         else if (collision.tag == "trash can")
         {
             canThrowAwayOrder = false;
+            collision.gameObject.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 255);
+            print("leaving trash can");
         }
     }
 
