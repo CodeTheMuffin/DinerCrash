@@ -20,13 +20,17 @@ public class TextSystem : MonoBehaviour
         textBox = new List<string>();
 
         string xx = "Hello     World!Thisis my game!!!";
+        string xy = "Warning:  Your handsare full!";
         //print(xx.ToString());
 
         //print(adjustText(xx).ToString());
-        xx = adjustText(xx);
+        xx = adjustText(xy);
         update_text(xx);
         //print_text_boxes();
         //Debug.Log("dumb");
+
+        // load file from the path
+        string warningjsonPath = Application.streamingAssetsPath + "/Texts/en-warning_text.json";
     }
 
     public string adjustText(string text)
