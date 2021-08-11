@@ -415,6 +415,9 @@ public class TextSystem : MonoBehaviour
          6. Return (completeTextFinal, textBoxFinal) as tuple                       6. Return (completeTextFinal, textBoxFinal) as tuple
          */
 
+        //TODO: Fix these issues:   
+        //		completeTextFinal = "\n<color=\"red\">Warning:</color> \nYourhands are full!"	        text starts with newline and "Yourhands" are not split up!
+        // 
 
         string[] allWords = getAllWords(text);
 
