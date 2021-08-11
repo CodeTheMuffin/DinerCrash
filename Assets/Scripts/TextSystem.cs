@@ -355,7 +355,9 @@ public class TextSystem : MonoBehaviour
         return breakDownTuple;
     }
 
-    public string adjustTextRegex(string text)
+    //Returns a tuple(string, [string]) where the string contians the full string
+    // and the [string] is intended for the textBox to be used in the UI chatbox
+    public Tuple<string, List<string>> adjustTextRegex(string text)
     {
         /*MatchCollection allSpaces = Regex.Matches(text, " ");
 
@@ -363,7 +365,57 @@ public class TextSystem : MonoBehaviour
         {
             print("found one: " + m);
         }*/
-        textBox.Clear();
+
+
+        /*
+         Breakdown on how this works::
+         ===============================
+         1. Start out with an argument string called 'text'
+         
+         2. Grab all words from 'text' into a list of strings called 'allWords' (a word is considered anything with a space after it)
+         
+         3. Go through each word and determine if it contains regex. If it does, determine the subword (part of string without regex) and gets it length.
+                If no regex, then subword is the word itself, along with the subword's length is the word's lenth.
+                Tuple: (full word with regex (if applicable), subword's length)
+                Call this list of tuples as 'word_textbox'
+         
+         4. Go through each list of tuples and determine if it can be grouped into one row where the sum of all subword's length of that row is <= MAX_CHARS_PER_ROW
+                Considers adding a space tuple at the end of adding each word to the list
+                Each element/item in the outer list represents a row of text that will be displayed on the chatbox
+                Call this lists of lists of tuples as 'complete_textbox'
+         
+         5. Go to each row of 'complete_textbox' and convert it to a string! Constantly appending the compiled string to a list of strings called 'textBoxFinal' 
+                and the full string with newline char '\n' at end of each row called 'completeTextFinal'.
+                If last row, exclude the newline char '\n' of last row and exclude the space char if its the last char.
+         
+         6. Return a Tuple of the complete text and a list of the complete text for the chatbox
+                Tuple : (completeTextFinal , textBoxFinal)
+         
+         Diagram of breakdown                                                                                   Example
+         =====================================================================================================================================
+         1.         text                                                   |        1.  "<color=\"red\">Warning:</color> Your hands are full!"
+                      |                                                    |                                        |
+                      v                                                                                             v
+         2.  [word1, word2, word3, ...]                                             2.  ["<color=\"red\">Warning:</color>", "Your", "hands", "are", "full!"]
+                      |                                                                                             |
+                      v                                                                                             v
+         3.  [ (word1, subword1.len), (word2, subword2.len),                        3.  [("<color=\"red\">Warning:</color>", 8), ("Your", 4), ("hands", 5), 
+                                        (word3, subword3.len), ... ]                                                    ("are", 3), ("full!", 5)] 
+                      |                                                                                             |
+                      v                                                                                             v 
+         4. [ [(word1, subword1.len), (" ", 1), (word2, subword2.len)],             4. [ [("<color=\"red\">Warning:</color>", 8), (" ", 1)], 
+                                [(word3, subword3.len)], ...]                                          [("Your", 4), ("hands", 5), (" ",1)],
+                                                                                              [("are", 3), (" ", 1), ("full!", 5), (" ",1)] ]
+                      |                                                                                             |
+                      v                                                                                             v
+         5. completeTextFinal: "word1 word2\nword3"                                 5. completeTextFinal: "\n<color=\"red\">Warning:</color> \nYourhands are full!"
+            textBoxFinal: ["word1 word2", "word3"]                                      textBoxFinal: ["<color=\"red\">Warning:</color> ", "Yourhands ", "are full!"]
+                      |                                                                                             |
+                      v                                                                                             v
+         6. Return (completeTextFinal, textBoxFinal) as tuple                       6. Return (completeTextFinal, textBoxFinal) as tuple
+         */
+
+
         string[] allWords = getAllWords(text);
 
         print(allWords.Length.ToString());
@@ -387,13 +439,36 @@ public class TextSystem : MonoBehaviour
 
         for (int index = 0; index < completeTextLength; index++)
         {
-            if (index + 1 > completeTextLength)
-            { 
-                
+            string completeLineText = convertListOfTuplesToString(complete_textbox[index]);
+
+            //If NOT last row, then add new line
+            if (index + 1 < completeTextLength)
+            {
+
+
+                completeTextFinal = completeTextFinal + "\n";
             }
+            else // if last row
+            {
+                //if last char is a space, remove it.
+                if (completeLineText.Substring(completeLineText.Length - 1) == " ")
+                {
+                    completeLineText = completeLineText.Substring(0, completeLineText.Length - 1);
+                }
+            }
+
+            textBoxFinal.Add(completeLineText);
+            completeTextFinal += completeLineText;
         }
 
-        return completeTextFinal;
+        return Tuple.Create(completeTextFinal, textBoxFinal);
+    }
+
+    public string convertListOfTuplesToString(List<Tuple<string, int>> row_list)
+    {
+        List<string> all_strings = (from aTuple in row_list select aTuple.Item1).ToList();
+        string complete_string = string.Join("", all_strings);
+        return complete_string;
     }
 
     // Last list of lists of tuples might consists of an unneeded spaceTuple!!
@@ -657,7 +732,13 @@ public class TextSystem : MonoBehaviour
                 print("original warning text: " + text);
                 //string adjusted_text = adjustText(text);
                 //update_text(adjusted_text);
-                text = adjustTextRegex(text);
+                Tuple<string, List<string>> adjustedText = adjustTextRegex(text);
+                text = adjustedText.Item1;
+
+
+                textBox.Clear();
+                textBox.AddRange(adjustedText.Item2);
+
                 //scroll_up();
                 update_text(text);
             }
