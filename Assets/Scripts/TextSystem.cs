@@ -4,8 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using SimpleJSON;
 using System.IO;
+using System;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Linq;
 
 public class TextSystem : MonoBehaviour
 {
@@ -216,11 +218,15 @@ public class TextSystem : MonoBehaviour
         return breakDown;
     }
 
-    public static List<string> breakDownWordWithRegex(string text)
+    //public static List<string> breakDownWordWithRegex(string text)
+    public static List<Tuple<string, int>> breakDownWordWithRegex(string text)
     {
         string[] colorRegexTextToIgnore = new string[] { "<color=\".*\">(.*)</color>", "<color=\".*\">", "</color>" };
         string subword = text;
         List<string> breakDown = new List<string>();
+
+        // Tuple (full word, length of the parts of the word excluding regex)
+        List<Tuple<string, int>> breakDownTuple = new List<Tuple<string, int>>();
 
         Match match_both = Regex.Match(text, colorRegexTextToIgnore[0]);
         Match match_left = Regex.Match(text, colorRegexTextToIgnore[1]);
@@ -295,6 +301,7 @@ public class TextSystem : MonoBehaviour
         {
             print("No regex found for word: "+ text);
             breakDown.Add(text);
+            breakDownTuple.Add(Tuple.Create(text, text.Length));
         }
         else
         {
@@ -334,6 +341,7 @@ public class TextSystem : MonoBehaviour
                         addMe = addMe + rightText;
                     }
                     breakDown.Add(addMe);
+                    breakDownTuple.Add(Tuple.Create(addMe, results[i].Length));
                 }
 
             }
@@ -344,7 +352,7 @@ public class TextSystem : MonoBehaviour
             }*/
         }
 
-        return breakDown;
+        return breakDownTuple;
     }
 
     public string adjustTextRegex(string text)
@@ -360,7 +368,133 @@ public class TextSystem : MonoBehaviour
 
         print(allWords.Length.ToString());
 
-        string lineText = "";
+        List<List<Tuple<string, int>>> complete_textbox = new List<List<Tuple<string, int>>>();
+        List<Tuple<string, int>> word_textbox = new List<Tuple<string, int>>();
+
+
+        // convert the list of strings (words) to a list of tuples (where the string is the full word, int is the length of the string without regex)
+        word_textbox = convertWordsToComplexWordsList(allWords);
+        complete_textbox = convertComplexWordsListToAListOfComplexWordsLists(word_textbox);
+
+
+        // Now convert that complex lists of lists into a list of strings and a long string with "\n" for each line
+        // Excludes last space char and newline char
+        // AND each list/row should already include spaces
+
+        int completeTextLength = complete_textbox.Count;
+        List<string> textBoxFinal = new List<string>();
+        string completeTextFinal = "";
+
+        for (int index = 0; index < completeTextLength; index++)
+        {
+            if (index + 1 > completeTextLength)
+            { 
+                
+            }
+        }
+
+        return completeTextFinal;
+    }
+
+    // Last list of lists of tuples might consists of an unneeded spaceTuple!!
+    public List<List<Tuple<string, int>>> convertComplexWordsListToAListOfComplexWordsLists(List<Tuple<string, int>> word_textbox)
+    {
+        List<List<Tuple<string, int>>> complete_textbox = new List<List<Tuple<string, int>>>();
+        int complete_textbox_index = 1; // subtract 1 to get actual index; done this as a counting trick for lists
+
+        Tuple<string, int> spaceTuple = Tuple.Create(" ", 1);
+        int spaceTupleLength = spaceTuple.Item2;
+
+
+        // convert the list of tuples into a list of lists of tuples; each outer item/element represents a row
+        // ASSUMES that word is <= MAX_CHARS_PER_ROW (broken down in above command)
+        foreach (Tuple<string, int> word in word_textbox)
+        {
+            int wordLength = word.Item2;
+
+            // If there is no list at current index; then create one and add the current word to it!
+            if (complete_textbox.Count < complete_textbox_index)
+            {
+                List<Tuple<string, int>> newList = new List<Tuple<string, int>>();
+                newList.Add(word);
+
+                if (wordLength >= MAX_CHARS_PER_ROW)
+                {
+                    complete_textbox_index++;
+                }
+                else if (wordLength + spaceTupleLength <= MAX_CHARS_PER_ROW)
+                {
+                    newList.Add(spaceTuple);
+
+                    if (wordLength + spaceTupleLength == MAX_CHARS_PER_ROW)
+                    { complete_textbox_index++; }
+                }
+
+                complete_textbox.Add(newList);
+            }
+            else
+            {
+                //At this point it is ASSUMED that complete_textbox[complete_textbox_index-1] contains at least a list of one tuple.
+                // And ASSUMED THAT total_length_complete_textbox_at_index should be < MAX_CHARS_PER_ROW
+                int total_length_complete_textbox_at_index = 0;
+
+                if (complete_textbox.Count > 0 && complete_textbox[complete_textbox_index - 1].Count > 0)
+                {
+                    total_length_complete_textbox_at_index = totalLengthOfTupleList(complete_textbox[complete_textbox_index - 1]);
+                }
+
+                //combined theorical row length (aka if the word is added to the current row; this would be it's length)
+                int totalLength = wordLength + total_length_complete_textbox_at_index;
+
+                if (totalLength > MAX_CHARS_PER_ROW)
+                {
+                    //then add word to a new row
+                    List<Tuple<string, int>> newList = new List<Tuple<string, int>>();
+                    newList.Add(word);
+                    complete_textbox.Add(newList);
+                    complete_textbox_index++;
+                }
+                else if (totalLength == MAX_CHARS_PER_ROW)
+                {
+                    //if last item in list is space, then add to list, otherwise, add word to new row
+                    List<Tuple<string, int>> currentList = complete_textbox[complete_textbox_index - 1];
+                    if (currentList[currentList.Count - 1].Item1 == spaceTuple.Item1)
+                    {
+                        complete_textbox[complete_textbox_index - 1].Add(word);
+                        complete_textbox_index++;
+                    }
+                    else
+                    {
+                        List<Tuple<string, int>> newList = new List<Tuple<string, int>>();
+                        newList.Add(word);
+                        complete_textbox.Add(newList);
+                        complete_textbox_index++;
+                    }
+                }
+                else if (totalLength < MAX_CHARS_PER_ROW)
+                {
+                    complete_textbox[complete_textbox_index - 1].Add(word);
+
+                    // If you can add a space, determine if complete_textbox_index should be moved to new row
+                    // theorically can never have totalLength + spaceTupleLength > MAX_CHARS_PER_ROW
+                    if (totalLength + spaceTupleLength <= MAX_CHARS_PER_ROW)
+                    {
+
+                        complete_textbox[complete_textbox_index - 1].Add(spaceTuple);
+
+                        if (totalLength + spaceTupleLength == MAX_CHARS_PER_ROW)
+                        { complete_textbox_index++; }
+                    }
+                }
+            }
+        }
+
+        return complete_textbox;
+    }
+
+    public List<Tuple<string, int>> convertWordsToComplexWordsList(string[] allWords)
+    {
+        List<Tuple<string, int>> word_textbox = new List<Tuple<string, int>>();
 
         foreach (string word in allWords)
         {
@@ -374,13 +508,53 @@ public class TextSystem : MonoBehaviour
             }*/
             // TODO: NEED TO UPDATE THIS SECTION. NOT PROPERLY GETTING word joining!!
 
-            List<string> results = breakDownWordWithRegex(word);
-            print("Results: "+results.ToString());
-            print("Results Count: " + results.Count.ToString());
+            //List<string> results = breakDownWordWithRegex(word);
+
+
+            /*int total_length_complete_textbox_at_index = 0;
+
+            if (complete_textbox.Count > 0 && complete_textbox[complete_textbox_index].Count > 0)
+            {
+                total_length_complete_textbox_at_index = totalLengthOfTupleList(complete_textbox[complete_textbox_index]);
+            }*/
+
+            List<Tuple<string, int>> results = breakDownWordWithRegex(word);
+            /*print("Results: " + results.ToString());
+            int results_count = results.Count;
+            print("Results Count: " + results_count.ToString());
+
+            int total_length_in_results = totalLengthOfTupleList(results);
+            print($"Total Length: {total_length_in_results.ToString()}");*/
+
+            word_textbox.AddRange(results);
+
+            /*if (total_length_complete_textbox_at_index + total_length_in_results < MAX_CHARS_PER_ROW)
+            {
+                // keep complete index the same
+                complete_textbox.Insert(complete_textbox_index, results);
+
+                continue;// move to next word
+            }
+            else if (total_length_complete_textbox_at_index + total_length_in_results == MAX_CHARS_PER_ROW)
+            {
+                complete_textbox.Insert(complete_textbox_index, results);
+                complete_textbox_index++;
+
+                continue;
+            }
+
+            List<Tuple<string, int>> lineResults = new List<Tuple<string, int>>();
 
             for(int index = 0;  index< results.Count; index++)
             {
-                string result = results[index];
+                //string result = results[index];
+                int total_length_for_lineResults = totalLengthOfTupleList(lineResults);
+
+                string result = results[index].Item1;
+                int subwordLength = results[index].Item2;
+
+                
+
                 textBox.Add(result);
 
                 lineText += result;
@@ -390,13 +564,17 @@ public class TextSystem : MonoBehaviour
                 {
                     lineText +="\n";
                 }
-            }
+            }*/
         }
-
-
-        return lineText;
+        return word_textbox;
     }
 
+    public int totalLengthOfTupleList(List<Tuple<string, int>> row_list)
+    {
+        List<int> all_lengths = (from aTuple in row_list select aTuple.Item2).ToList();
+        int total_lengths = all_lengths.Sum();
+        return total_lengths;
+    }
 
     // for when you want to fill the rest of the line
     public string fillLineBuffer(int quantity)
