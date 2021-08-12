@@ -404,22 +404,18 @@ public class TextSystem : MonoBehaviour
                       |                                                                                             |
                       v                                                                                             v 
          4. [ [(word1, subword1.len), (" ", 1), (word2, subword2.len)],             4. [ [("<color=\"red\">Warning:</color>", 8), (" ", 1)], 
-                                [(word3, subword3.len)], ...]                                          [("Your", 4), ("hands", 5), (" ",1)],
-                                                                                              [("are", 3), (" ", 1), ("full!", 5), (" ",1)] ]
+                                [(word3, subword3.len)], ...]                                          [("Your", 4), (" ",1), ("hands", 5)],
+                                                                                              [("are", 3), (" ", 1), ("full!", 5)] ]
                       |                                                                                             |
                       v                                                                                             v
-         5. completeTextFinal: "word1 word2\nword3"                                 5. completeTextFinal: "\n<color=\"red\">Warning:</color> \nYourhands are full!"
-            textBoxFinal: ["word1 word2", "word3"]                                      textBoxFinal: ["<color=\"red\">Warning:</color> ", "Yourhands ", "are full!"]
+         5. completeTextFinal: "word1 word2\nword3"                                 5. completeTextFinal: "<color=\"red\">Warning:</color> \nYour hands\nare full!"
+            textBoxFinal: ["word1 word2", "word3"]                                      textBoxFinal: ["<color=\"red\">Warning:</color> ", "Your hands ", "are full!"]
                       |                                                                                             |
                       v                                                                                             v
          6. Return (completeTextFinal, textBoxFinal) as tuple                       6. Return (completeTextFinal, textBoxFinal) as tuple
          */
 
-        //TODO: Fix these issues:   
-        //		completeTextFinal = "\n<color=\"red\">Warning:</color> \nYourhands are full!"	        text starts with newline and "Yourhands" are not split up!
-        // 
-
-        // Step 2.
+        // Step 1 and Step 2.
         string[] allWords = getAllWords(text);
 
         print(allWords.Length.ToString());
