@@ -419,6 +419,7 @@ public class TextSystem : MonoBehaviour
         //		completeTextFinal = "\n<color=\"red\">Warning:</color> \nYourhands are full!"	        text starts with newline and "Yourhands" are not split up!
         // 
 
+        // Step 2.
         string[] allWords = getAllWords(text);
 
         print(allWords.Length.ToString());
@@ -428,13 +429,16 @@ public class TextSystem : MonoBehaviour
 
 
         // convert the list of strings (words) to a list of tuples (where the string is the full word, int is the length of the string without regex)
+        //Step 3
         word_textbox = convertWordsToComplexWordsList(allWords);
+        //Step 4
         complete_textbox = convertComplexWordsListToAListOfComplexWordsLists(word_textbox);
 
 
         // Now convert that complex lists of lists into a list of strings and a long string with "\n" for each line
         // Excludes last space char and newline char
         // AND each list/row should already include spaces
+        // Step 5
 
         int completeTextLength = complete_textbox.Count;
         List<string> textBoxFinal = new List<string>();
@@ -445,18 +449,20 @@ public class TextSystem : MonoBehaviour
             string completeLineText = convertListOfTuplesToString(complete_textbox[index]);
 
             //If NOT last row, then add new line
-            if (index + 1 < completeTextLength)
+            // don't want to add in front of empty string (first index)
+           
+            if (index > 0) 
             {
-
-
+                // Since this statement occurs BEFORE adding the word, add newline to seperate rows
                 completeTextFinal = completeTextFinal + "\n";
-            }
-            else // if last row
-            {
-                //if last char is a space, remove it.
-                if (completeLineText.Substring(completeLineText.Length - 1) == " ")
+
+                if (index + 1 == completeTextLength)// if last row
                 {
-                    completeLineText = completeLineText.Substring(0, completeLineText.Length - 1);
+                    //if last char is a space, remove it.
+                    if (completeLineText.Substring(completeLineText.Length - 1) == " ")
+                    {
+                        completeLineText = completeLineText.Substring(0, completeLineText.Length - 1);
+                    }
                 }
             }
 
@@ -464,6 +470,7 @@ public class TextSystem : MonoBehaviour
             completeTextFinal += completeLineText;
         }
 
+        //Step 6
         return Tuple.Create(completeTextFinal, textBoxFinal);
     }
 
@@ -483,11 +490,14 @@ public class TextSystem : MonoBehaviour
         Tuple<string, int> spaceTuple = Tuple.Create(" ", 1);
         int spaceTupleLength = spaceTuple.Item2;
 
+        int word_textbox_count = word_textbox.Count;
 
         // convert the list of tuples into a list of lists of tuples; each outer item/element represents a row
         // ASSUMES that word is <= MAX_CHARS_PER_ROW (broken down in above command)
-        foreach (Tuple<string, int> word in word_textbox)
+        //foreach (Tuple<string, int> word in word_textbox)
+        for (int word_index = 0; word_index < word_textbox.Count; word_index++)
         {
+            Tuple<string, int> word = word_textbox[word_index];
             int wordLength = word.Item2;
 
             // If there is no list at current index; then create one and add the current word to it!
@@ -500,7 +510,8 @@ public class TextSystem : MonoBehaviour
                 {
                     complete_textbox_index++;
                 }
-                else if (wordLength + spaceTupleLength <= MAX_CHARS_PER_ROW)
+                // last part of else if is to ensure space doesn't get added to the last word)
+                else if (wordLength + spaceTupleLength <= MAX_CHARS_PER_ROW && word_index +1 < word_textbox_count)
                 {
                     newList.Add(spaceTuple);
 
@@ -529,6 +540,20 @@ public class TextSystem : MonoBehaviour
                     //then add word to a new row
                     List<Tuple<string, int>> newList = new List<Tuple<string, int>>();
                     newList.Add(word);
+
+                    if (wordLength >= MAX_CHARS_PER_ROW)
+                    {
+                        complete_textbox_index++;
+                    }
+                    // last part of else if is to ensure space doesn't get added to the last word)
+                    else if (wordLength + spaceTupleLength <= MAX_CHARS_PER_ROW && word_index + 1 < word_textbox_count)
+                    {
+                        newList.Add(spaceTuple);
+
+                        if (wordLength + spaceTupleLength == MAX_CHARS_PER_ROW)
+                        { complete_textbox_index++; }
+                    }
+
                     complete_textbox.Add(newList);
                     complete_textbox_index++;
                 }
@@ -555,9 +580,9 @@ public class TextSystem : MonoBehaviour
 
                     // If you can add a space, determine if complete_textbox_index should be moved to new row
                     // theorically can never have totalLength + spaceTupleLength > MAX_CHARS_PER_ROW
-                    if (totalLength + spaceTupleLength <= MAX_CHARS_PER_ROW)
+                    // last part of else if is to ensure space doesn't get added to the last word)
+                    if (totalLength + spaceTupleLength <= MAX_CHARS_PER_ROW && word_index + 1 < word_textbox_count)
                     {
-
                         complete_textbox[complete_textbox_index - 1].Add(spaceTuple);
 
                         if (totalLength + spaceTupleLength == MAX_CHARS_PER_ROW)
@@ -725,8 +750,6 @@ public class TextSystem : MonoBehaviour
 
     public void printWarningText(string warningKey)
     {
-        
-
         if (warningJSON != null)
         {
             if (warningJSON.HasKey(warningKey))
