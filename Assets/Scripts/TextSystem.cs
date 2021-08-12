@@ -73,8 +73,15 @@ public class TextSystem : MonoBehaviour
     // excludes the spaces
     public string[] getAllWords(string text)
     {
-        string[] results = Regex.Split(text, " ");
-        return results;
+        //char[] delimiters = {' '};
+        string pattern = "(\n)|(\t)| "; // put character in () if you want to consider it as a seperate word. Use vertical pipe | as an OR statement
+        string[] results = Regex.Split(text, pattern);
+        //string[] results_delimited = text.Split(delimiters);
+
+        // exclude blank elements
+        string[] final_results = (from word in results where (word != "" && word != null) select word).ToArray();
+
+        return final_results;
     }
 
     public static string excludeRegexFromText(string text)
@@ -435,7 +442,24 @@ public class TextSystem : MonoBehaviour
         // Excludes last space char and newline char
         // AND each list/row should already include spaces
         // Step 5
+        Tuple<string,List<string>> finalStrings=  convertListOfTuplesToString(complete_textbox);
 
+        string completeTextFinal = finalStrings.Item1;
+        List<string> textBoxFinal = finalStrings.Item2;
+        
+        //Step 6
+        return Tuple.Create(completeTextFinal, textBoxFinal);
+    }
+
+    public string convertListOfTuplesToString(List<Tuple<string, int>> row_list)
+    {
+        List<string> all_strings = (from aTuple in row_list select aTuple.Item1).ToList();
+        string complete_string = string.Join("", all_strings);
+        return complete_string;
+    }
+
+    public Tuple<string, List<String>> convertListOfTuplesToString(List<List<Tuple<string, int>>> complete_textbox)
+    {
         int completeTextLength = complete_textbox.Count;
         List<string> textBoxFinal = new List<string>();
         string completeTextFinal = "";
@@ -446,8 +470,8 @@ public class TextSystem : MonoBehaviour
 
             //If NOT last row, then add new line
             // don't want to add in front of empty string (first index)
-           
-            if (index > 0) 
+
+            if (index > 0)
             {
                 // Since this statement occurs BEFORE adding the word, add newline to seperate rows
                 completeTextFinal = completeTextFinal + "\n";
@@ -466,15 +490,7 @@ public class TextSystem : MonoBehaviour
             completeTextFinal += completeLineText;
         }
 
-        //Step 6
         return Tuple.Create(completeTextFinal, textBoxFinal);
-    }
-
-    public string convertListOfTuplesToString(List<Tuple<string, int>> row_list)
-    {
-        List<string> all_strings = (from aTuple in row_list select aTuple.Item1).ToList();
-        string complete_string = string.Join("", all_strings);
-        return complete_string;
     }
 
     // Last list of lists of tuples might consists of an unneeded spaceTuple!!
@@ -484,6 +500,8 @@ public class TextSystem : MonoBehaviour
         int complete_textbox_index = 1; // subtract 1 to get actual index; done this as a counting trick for lists
 
         Tuple<string, int> spaceTuple = Tuple.Create(" ", 1);
+        Tuple<string, int> newlineTuple = Tuple.Create("\n", 1);
+        Tuple<string, int> emptyTuple = Tuple.Create("", 0);
         int spaceTupleLength = spaceTuple.Item2;
 
         int word_textbox_count = word_textbox.Count;
@@ -495,6 +513,17 @@ public class TextSystem : MonoBehaviour
         {
             Tuple<string, int> word = word_textbox[word_index];
             int wordLength = word.Item2;
+
+            // If word is a newline  cahr then force a new in textbox
+            if (word.Item1 == "\n")
+            {
+                List<Tuple<string, int>> newList = new List<Tuple<string, int>>();
+                newList.Add(emptyTuple);
+                complete_textbox.Add(newList);
+                complete_textbox_index += 2;
+                continue;
+            }
+
 
             // If there is no list at current index; then create one and add the current word to it!
             if (complete_textbox.Count < complete_textbox_index)
