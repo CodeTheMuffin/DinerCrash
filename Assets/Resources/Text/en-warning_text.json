@@ -1,4 +1,4 @@
 {
 	"WARNING_NoPC_NoFreeHands": "<color=\"red\">Warning:</color> Your hands are full!",
-	"WARNING_NoPC_NoRoom":"Warning: The counter is full!"
+	"WARNING_NoPC_NoRoom":"<color=\"red\">Warning:</color> The counter is full!"
 }
