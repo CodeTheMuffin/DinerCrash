@@ -1,0 +1,10 @@
+The json files are intended to be used as inputs to the text system.
+And is designed for localized text (based on filename (ie. en for english)) and using a key value pair, 
+	where the key is in english and the value is the translated text (default is english).
+
+Nested dialogues are for conversations.
+
+
+{language}_warning_text.json : For warnings/alerts to notifiy the user of issues.
+
+TEXT is spaced and designed to be about 10 characters per line.

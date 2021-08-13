@@ -47,6 +47,8 @@ public class PlayerMovement : MonoBehaviour
 
     AudioManager audio_manager;
 
+    public bool testCollision = false;
+
     enum LookingDirection {
         UP = 0,
         DOWN = 1,
@@ -133,17 +135,34 @@ public class PlayerMovement : MonoBehaviour
             // Going to the computer and pressing E to open ordering menu
             if (!ui_manger.isOrderingMenuOpen() && Input.GetKeyDown(KeyCode.E))
             {
-                if (!holdingOrder && ui_manger.haveCapacityToOrder())
+                bool capacityToOrder = ui_manger.haveCapacityToOrder();
+
+                if (!holdingOrder && capacityToOrder)
                 { ui_manger.openOrderingMenu(); }
                 else
                 {
                     audio_manager.playUI_denied();
+                    if (holdingOrder)
+                    {
+                        ui_manger.text_sys.printWarningText("WARNING_NoPC_NoFreeHands");
+                    }
+                    else if (!capacityToOrder)
+                    {
+                        ui_manger.text_sys.printWarningText("WARNING_NoPC_NoRoom");
+                    }
                 }
             }
-            // Ordering menu is open and pressing Q to close menu
-            else if (ui_manger.isOrderingMenuOpen() && Input.GetKeyDown(KeyCode.Q))
+            // Ordering menu is open 
+            else if (ui_manger.isOrderingMenuOpen())
             {
-                ui_manger.closeOrderingMenu();
+                if (Input.GetKeyDown(KeyCode.Q)) //pressing Q to close menu
+                {
+                    ui_manger.closeOrderingMenu();
+                }
+                else if (Input.GetButtonDown("Jump"))//space bar to process order
+                {
+                    ui_manger.process_order();
+                }
             }
         }
     }
@@ -396,7 +415,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        print("Entering: " + collision.name);
+        if (testCollision)
+        {
+            print("Entering: " + collision.name);
+        }
 
         if (collision.tag == "computer")
         {
@@ -459,13 +481,20 @@ public class PlayerMovement : MonoBehaviour
         {
             canThrowAwayOrder = true;
             collision.gameObject.GetComponent<SpriteRenderer>().color = new Color32(170, 170, 170, 255);
-            print("Entered trash can");
+            if (testCollision)
+            {
+                print("Entered trash can");
+            }
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        print("Leaving: " + collision.name);
+        if (testCollision)
+        {
+            print("Leaving: " + collision.name);
+        }
+
         if (collision.tag == "computer")
         {
             canAccessMenu = false;
@@ -539,7 +568,10 @@ public class PlayerMovement : MonoBehaviour
         {
             canThrowAwayOrder = false;
             collision.gameObject.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 255);
-            print("leaving trash can");
+            if (testCollision)
+            {
+                print("leaving trash can");
+            }
         }
     }
 
