@@ -180,6 +180,13 @@ public class UI_Manger : MonoBehaviour
         }    
     }
 
+    public float getEstimatePreparingTime()
+    {
+        float estimated_prepare_time = 0f;
+        estimated_prepare_time = OrderForm.get_estimated_prepare_time(cholocate_cookie_counter, oatmeal_raisan_cookie_counter, normal_milk_counter, warm_milk_counter);
+        return estimated_prepare_time;
+    }
+
     public void process_order()
     {
         OrderForm newOrderForm = new OrderForm(

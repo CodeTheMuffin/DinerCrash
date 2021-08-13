@@ -339,6 +339,7 @@ GameObject:
   - component: {fileID: 4251786676256145063}
   - component: {fileID: 6123023328220765700}
   - component: {fileID: 3257631787909796956}
+  - component: {fileID: 8274616244930770376}
   m_Layer: 0
   m_Name: order box
   m_TagString: order_box
@@ -432,3 +433,20 @@ MonoBehaviour:
   - {fileID: 4836961148056119070}
   - {fileID: 3677314564388382741}
   - {fileID: 8928350345288764762}
+  processing_timer: {fileID: 8274616244930770376}
+  orderBox_sprite_renderer: {fileID: 6123023328220765700}
+--- !u!114 &8274616244930770376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8932244287358175604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53022a5774f918d4e975b9d4dc5ce1d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  max_time_in_seconds: 2
+  time: 0
+  timer_stopped: 0
