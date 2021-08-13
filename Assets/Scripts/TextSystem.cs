@@ -15,42 +15,55 @@ public class TextSystem : MonoBehaviour
     const int MAX_ROWS = 2; // X rows to show on screen at a time
 
     public TMPro.TextMeshProUGUI chat_box_text;
+    public Button scroll_UP_button;
+    public Button scroll_DOWN_button;
 
     List<string> textBox;
     int scroll_page = 0;
 
     const char NEWLINE = '`';// If this is present, then place a new line in string.
 
+    string warning_string = "";
     JSONNode warningJSON;
+
+    string NPC_string = "";
+    JSONNode NPC_JSON;
+
+    string system_string = "";
+    JSONNode system_JSON;
+
+    string buffer_line = "";
+
+    //used as keys in JSON Nodes
+    static string RAW_TEXT = "RAW_TEXT";
+    static string FORMATTED_TEXT = "FORMATTED_TEXT";
+    static string TEXTBOX_TEXT = "TEXTBOX_TEXT";
 
     public void Start()
     {
         textBox = new List<string>();
 
-        string xx = "Hello     World!Thisis my game!!!";
-        string xy = "Just for show!";
-        //print(xx.ToString());
+        //string xx = "Quick test\nfun!";
+        NPC_string = "Quick test\nfun!";
 
-        //print(adjustText(xx).ToString());
-        xx = adjustText(xy);
-        update_text(xx);
-        //print_text_boxes();
-        //Debug.Log("dumb");
+        //Tuple<string,List<string>> result = adjustTextRegex(xx);
+        //NPC_string = result.Item1;
 
-        // load file from the path
-        /*TextAsset warningjsonPath = Resources.Load<TextAsset>("Text/en-warning_text");
-        print(warningjsonPath);
-        print(warningjsonPath.text);*/
+        //update_text(result.Item1);
+        //textBox.AddRange(result.Item2);
+        update_textbox();
 
-        /*string json = LoadJson(warningjsonPath);
-       print(json);*/
+        buffer_line = fillLineBuffer(MAX_CHARS_PER_ROW, "-");
 
         //must not contain extension!
-        string jsontext = LoadJson("Text/en-warning_text");
+        string jsontext = LoadJSON("Text/en-warning_text");
         warningJSON = JSON.Parse(jsontext);
+        ProcessJSONs();
+
+        adjust_scroll_availability();
     }
 
-    /*public string LoadJson(string json_path)
+    /*public string LoadJSON(string json_path)
     {
         TextAsset jsonPath = Resources.Load<TextAsset>(json_path);
 
@@ -63,12 +76,37 @@ public class TextSystem : MonoBehaviour
         return json;
     }*/
 
-    public string LoadJson(string json_path)
+    public string LoadJSON(string json_path)
     {
+        // load file from the path
+        //TextAsset warningjsonPath = Resources.Load<TextAsset>("Text/en-warning_text");
+        //string json = LoadJSON(warningjsonPath);
+
         // This MUST be in folder: Asset/Resources/ and the JSON path must NOT include extension (.json)
         TextAsset jsontext = Resources.Load<TextAsset>(json_path);
         return jsontext ? jsontext.text : "";
     }
+
+    /*
+     For each Node, add keys/values for formatted text for faster processing in future(???)
+     */
+    public void ProcessJSONs()
+    {
+        //print($"{warningJSON.GetType().ToString()}");
+
+        foreach (KeyValuePair<string, JSONNode> kvp in warningJSON)
+        {
+            string raw_text = kvp.Value[RAW_TEXT];
+            Tuple<string, List<string>> adjustedText = adjustTextRegex(raw_text);
+
+            warningJSON[kvp.Key][FORMATTED_TEXT] = adjustedText.Item1;
+            warningJSON[kvp.Key][TEXTBOX_TEXT] = adjustedText.Item2;
+
+            //print($"{kvp.GetType().ToString()}");
+            //print($"Key: {kvp.Key} {kvp.Key.GetType().ToString()} and Value {kvp.Value} type: {kvp.Value.GetType().ToString()}");
+        }
+    }
+
 
     // excludes the spaces
     public string[] getAllWords(string text)
@@ -816,6 +854,15 @@ public class TextSystem : MonoBehaviour
         return word_textbox;
     }
 
+    // for when you want to concatenate two strings (ie. warning and NPC text)
+    // ASSUMES the text has already been processed and a newline char indicates a new line/row
+    public List<string> convertStringToListOfStrings(string text)
+    {
+        string[] rows = text.Split('\n');
+        List<string> results = rows.ToList();
+        return results;
+    }
+
     public int totalLengthOfTupleList(List<Tuple<string, int>> row_list)
     {
         List<int> all_lengths = (from aTuple in row_list select aTuple.Item2).ToList();
@@ -824,13 +871,13 @@ public class TextSystem : MonoBehaviour
     }
 
     // for when you want to fill the rest of the line
-    public string fillLineBuffer(int quantity)
+    public string fillLineBuffer(int quantity, string bufferChar = " ")
     {
         string bufferString = "";
 
         for (int i = 0; i < quantity; i++)
         {
-            bufferString += " ";
+            bufferString += bufferChar;
         }
 
         return bufferString;
@@ -859,6 +906,7 @@ public class TextSystem : MonoBehaviour
                 s += textBox[i] + "\n";
             }
             update_text(s);
+            adjust_scroll_availability();
         }
         //print_text_boxes();
     }
@@ -889,9 +937,62 @@ public class TextSystem : MonoBehaviour
             }
 
             update_text(s);
+            adjust_scroll_availability();
         }
         //print_text_boxes();
     }
+
+    public void adjust_scroll_availability()
+    {
+        scroll_UP_button.interactable = true;
+        scroll_DOWN_button.interactable = true;
+
+        if (textBox.Count == 0) //if nothing to show then disable buttons!
+        {
+            scroll_UP_button.interactable = false;
+            scroll_DOWN_button.interactable = false;
+            return;
+        }
+
+
+        if (scroll_page == 0)
+        {
+            //can't scroll up+
+            scroll_UP_button.interactable = false;
+        }
+
+        if ((scroll_page + 1) * MAX_ROWS >= textBox.Count)
+        {
+            scroll_DOWN_button.interactable = false;
+        }
+    }
+
+    public void update_textbox()
+    {
+        string message = "";
+        if (warning_string.Length > 0 && NPC_string.Length > 0)
+        {
+            message = warning_string + "\n" + buffer_line + "\n" + NPC_string;
+        }
+        else if (warning_string.Length > 0)
+        {
+            message = warning_string;
+        }
+        else if (NPC_string.Length > 0)
+        {
+            message = NPC_string;
+        }
+
+        if (message.Length > 0)
+        {
+            List<string> newTextbox = convertStringToListOfStrings(message);
+
+            textBox.Clear();
+            textBox.AddRange(newTextbox);
+            update_text(message);
+            adjust_scroll_availability();
+        }
+    }    
 
     public void printWarningText(string warningKey)
     {
@@ -899,17 +1000,20 @@ public class TextSystem : MonoBehaviour
         {
             if (warningJSON.HasKey(warningKey))
             {
-                string text = warningJSON[warningKey];
+                warning_string = warningJSON[warningKey][FORMATTED_TEXT];
+
+                update_textbox();
                 //string adjusted_text = adjustText(text);
                 //update_text(adjusted_text);
+
+                /*string text = warningJSON[warningKey];
                 Tuple<string, List<string>> adjustedText = adjustTextRegex(text);
                 text = adjustedText.Item1;
-
                 textBox.Clear();
                 textBox.AddRange(adjustedText.Item2);
 
                 //scroll_up();
-                update_text(text);
+                update_text(text);*/
             }
             else
             {

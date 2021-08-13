@@ -1930,7 +1930,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.2784314, g: 0.20784315, b: 0.47450984, a: 1}
     m_PressedColor: {r: 0.34901962, g: 0.3372549, b: 0.7411765, a: 1}
     m_SelectedColor: {r: 0.5058824, g: 0.3372549, b: 0.6666667, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.19215687, g: 0.25490198, b: 0.32156864, a: 0.9019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -3679,6 +3679,7 @@ MonoBehaviour:
   right_side: {fileID: 1068511828}
   top_side: {fileID: 989518617}
   bottom_side: {fileID: 1057387769}
+  testCollision: 0
 --- !u!1 &1314838884
 GameObject:
   m_ObjectHideFlags: 0
@@ -4017,6 +4018,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chat_box_text: {fileID: 2060831157}
+  scroll_UP_button: {fileID: 1796500048}
+  scroll_DOWN_button: {fileID: 600609374}
 --- !u!1 &1519381297
 GameObject:
   m_ObjectHideFlags: 0
@@ -4790,7 +4793,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.2784314, g: 0.20784315, b: 0.47450984, a: 1}
     m_PressedColor: {r: 0.34901962, g: 0.3372549, b: 0.7411765, a: 1}
     m_SelectedColor: {r: 0.5058824, g: 0.3372549, b: 0.6666667, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.19215687, g: 0.25490198, b: 0.32156864, a: 0.9019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
