@@ -1,0 +1,16 @@
+{
+	"OPTIONS":{
+		"OPTION_01" : {"RAW_TEXT" : "Chocolate chip cookie"},
+		"OPTION_02" : {"RAW_TEXT" : "Oatmeal raisan cookie"},
+		"OPTION_03" : {"RAW_TEXT" : "Cold milk"},
+		"OPTION_04" : {"RAW_TEXT" : "Warm milk"},
+	},
+	"REQUESTS":{
+		"REQUEST_01"	: {"RAW_TEXT" : "I would like {quantity} {option}"},
+		"REQUEST_02"	: {"RAW_TEXT" : "and I would like {quantity} {option}"},
+		"REQUEST_03"	: {"RAW_TEXT" : "Can I have {quantity} {option}?"},
+	},
+	"ISSUES":{
+		"ISSUE_01"		: {"RAW_TEXT" : "That isn't what I ordered!"},
+	}
+}

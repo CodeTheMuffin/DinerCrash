@@ -58,6 +58,10 @@ public class TextSystem : MonoBehaviour
         //must not contain extension!
         string jsontext = LoadJSON("Text/en-warning_text");
         warningJSON = JSON.Parse(jsontext);
+
+        jsontext = LoadJSON("Text/en-npc_text");
+        NPC_JSON = JSON.Parse(jsontext);
+
         ProcessJSONs();
 
         adjust_scroll_availability();
@@ -104,6 +108,49 @@ public class TextSystem : MonoBehaviour
 
             //print($"{kvp.GetType().ToString()}");
             //print($"Key: {kvp.Key} {kvp.Key.GetType().ToString()} and Value {kvp.Value} type: {kvp.Value.GetType().ToString()}");
+        }
+
+
+
+        /*foreach (KeyValuePair<string, JSONNode> kvp in NPC_JSON)
+        {
+            //each kvp.Value is a another set of key value pairs
+            *//*foreach (KeyValuePair<string, JSONNode> keys in kvp.Value)
+            {
+                print($"{keys.GetType().ToString()}");
+                print($"Key: {keys.Key} Value {keys.Value} type: {keys.Value.GetType().ToString()}");
+            }*//*
+
+            foreach (JSONObject child in kvp.Value.DeepChildren)
+            {
+                print($"{child.GetType().ToString()}");
+                *//*print($"Key: {child.Key} Value {keys.Value} type: {keys.Value.GetType().ToString()}");*//*
+            }
+        }*/
+
+        recursiveNPC(NPC_JSON);
+    }
+
+    public void recursiveNPC(JSONNode node)
+    {
+        if (node.HasKey(RAW_TEXT))
+        {
+            string raw_text = node[RAW_TEXT];
+            Tuple<string, List<string>> adjustedText = adjustTextRegex(raw_text);
+
+            node[FORMATTED_TEXT] = adjustedText.Item1;
+            //node[TEXTBOX_TEXT] = adjustedText.Item2;
+        }
+        else
+        {
+            if (node.IsString)
+                return;
+
+            //assumes JSON object
+            foreach (JSONNode child in node.Children)
+            {
+                recursiveNPC(child);
+            }
         }
     }
 
