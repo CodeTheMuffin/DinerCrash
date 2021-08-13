@@ -763,7 +763,8 @@ public class TextSystem : MonoBehaviour
             }*/
 
             // Since we are coming from a lower page to a higher page, we know there are atleast MAX_ROWS worth of lines to print
-            for (int i = scroll_page* MAX_ROWS; i <= MAX_ROWS; i++)
+            //for (int i = scroll_page* MAX_ROWS; i <= MAX_ROWS; i++)
+            for (int i = scroll_page* MAX_ROWS; i < (scroll_page + 1) * MAX_ROWS && i < textBox.Count; i++)
             {
                 s += textBox[i] + "\n";
             }
