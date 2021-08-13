@@ -21,6 +21,21 @@ public class OrderBox : MonoBehaviour
 
     public OrderForm orderForm;
     public GameObject[] order_options = new GameObject[4];
+
+    public Timer processing_timer;
+    public SpriteRenderer orderBox_sprite_renderer;
+
+    // for evaulating the range the alpha level can be
+    const int LOWEST_ALPHA = 100;
+    const int HIGHEST_ALPHA = 255;
+
+    Color32 lowest_color = new Color32(255, 255, 255, LOWEST_ALPHA);
+    Color32 highest_color = new Color32(255, 255, 255, HIGHEST_ALPHA);
+    Color32 lerped_color = new Color32(255, 255, 255, LOWEST_ALPHA);
+
+    AudioManager audio_manager;
+    OrderBoxManager orderbox_manager;
+
     public bool isFormSet()
     { return orderForm != null; }
 
@@ -28,6 +43,12 @@ public class OrderBox : MonoBehaviour
     {
         orderForm = form;
         hideAllOptions();
+        processing_timer.max_time_in_seconds = orderForm.prepare_time;
+        processing_timer.reset_timer();
+        orderBox_sprite_renderer.color = lowest_color;
+        audio_manager = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<AudioManager>();
+        orderbox_manager = transform.parent.gameObject.GetComponent<OrderBoxManager>();
+        //orderBox_sprite_renderer = gameObject.GetComponent<SpriteRenderer>();
 
         if (orderForm.cholocate_cookie_counter > 0)
         { optionVisibility((int)Options.cholocate_cookie, true); }
@@ -40,6 +61,38 @@ public class OrderBox : MonoBehaviour
 
         if (orderForm.warm_milk_counter > 0)
         { optionVisibility((int)Options.warm_milk, true); }
+    }
+
+    public bool isOrderProcessed()
+    {
+        return processing_timer.isTimerDone();
+    }
+
+    public void preparing_order(float delta_time)
+    {
+        bool isTimerDown = processing_timer.tick_n_check(delta_time);
+
+        lerped_color = Color32.Lerp(lowest_color, highest_color, processing_timer.getTimerCompletionPercentage());
+        orderBox_sprite_renderer.color = lerped_color;
+    }
+
+    public void Update()
+    {
+        if (!processing_timer.isTimerDone())
+        {
+            preparing_order(Time.deltaTime);
+
+            if (processing_timer.isTimerDone())
+            {
+                showOrderIsReady();
+            }
+        }
+    }
+
+    public void showOrderIsReady()
+    {
+        audio_manager.playOrderReadyForPickUp();
+        orderbox_manager.turnOnAnimatedReadyForPickUp();
     }
 
     public void reassignAllOrderOptions()

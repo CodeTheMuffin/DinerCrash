@@ -9,6 +9,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip puttingOrderDown; //For when the player places an order down on counter ONLY
     public AudioClip pickingOrderUp; //For when the player picks up an order
     public AudioClip throwOrderAway; //For when the player throws away an order in the trash
+    public AudioClip orderReadyForPickUp; // For when the order is done being processed
 
     private void Start()
     {
@@ -29,5 +30,8 @@ public class AudioManager : MonoBehaviour
     public void playPlayerPickOrderUp()
     { audioSource.PlayOneShot(pickingOrderUp); }
     public void playPlayerThrowOrderAway()
-    { audioSource.PlayOneShot(throwOrderAway); }
+    { audioSource.PlayOneShot(throwOrderAway, 0.01f); }
+
+    public void playOrderReadyForPickUp()
+    { audioSource.PlayOneShot(orderReadyForPickUp); }
 }

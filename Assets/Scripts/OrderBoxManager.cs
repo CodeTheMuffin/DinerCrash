@@ -8,7 +8,7 @@ public class OrderBoxManager : MonoBehaviour
     public GameObject order_background;
     public GameObject order_box_game_obj;
     public OrderBox order_box; // the OrderBox object in order_box_game_obj
-
+    
     // if the order location is ready to used for another order
     public bool order_spot_available = true;
 
@@ -17,7 +17,6 @@ public class OrderBoxManager : MonoBehaviour
     {
         turnOffAnimatedBackground();
     }
-
 
     // Used to determine if a new order can be placed at this order box location
     public bool isOrderAvailable()
@@ -42,7 +41,7 @@ public class OrderBoxManager : MonoBehaviour
     {
         //print("box id: " +order_index.ToString() + "___isOrderSet: " + isOrderBoxSet().ToString() + "___isFormSet: "+ isFormSet().ToString() + "___spot avail: " +(!order_spot_available).ToString());
         //print("Combined: " + (isOrderBoxSet() && isFormSet() && !order_spot_available).ToString());
-        return isOrderBoxSet() && isFormSet() && !order_spot_available;
+        return isOrderBoxSet() && isFormSet() && !order_spot_available && order_box.isOrderProcessed();
     }
 
     public void setOrderBox(GameObject orderbox)
@@ -149,8 +148,14 @@ public class OrderBoxManager : MonoBehaviour
     // Mimics highlighting and able to put down an order box (if one is being held)
     public void turnOnAnimatedPutDownBackground()
     {
-        // mimics the red in my color pallate #49a790 a dark blue-green color
+        // mimics in my color pallate #49a790 a dark blue-green color
         order_background.GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(73, 167, 144, 255);
+    }
+
+    public void turnOnAnimatedReadyForPickUp()
+    {
+        // mimics in my color pallate #97da3f a light green color
+        order_background.GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(151, 218, 63, 255);
     }
 
     public void turnOffAnimatedBackground()

@@ -1598,6 +1598,7 @@ MonoBehaviour:
   puttingOrderDown: {fileID: 8300000, guid: 733ad0f6a2663cd438e44c058c52f10d, type: 3}
   pickingOrderUp: {fileID: 8300000, guid: 6e3881c13f9f0234eaf6151644f76462, type: 3}
   throwOrderAway: {fileID: 8300000, guid: 07d0e9d8bec3c80438dd3b2b7503169d, type: 3}
+  orderReadyForPickUp: {fileID: 8300000, guid: 501611e2b28e5c64aba42a78881856cb, type: 3}
 --- !u!1 &586946059
 GameObject:
   m_ObjectHideFlags: 0
