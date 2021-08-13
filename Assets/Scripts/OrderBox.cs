@@ -34,6 +34,7 @@ public class OrderBox : MonoBehaviour
     Color32 lerped_color = new Color32(255, 255, 255, LOWEST_ALPHA);
 
     AudioManager audio_manager;
+    OrderBoxManager orderbox_manager;
 
     public bool isFormSet()
     { return orderForm != null; }
@@ -46,6 +47,7 @@ public class OrderBox : MonoBehaviour
         processing_timer.reset_timer();
         orderBox_sprite_renderer.color = lowest_color;
         audio_manager = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<AudioManager>();
+        orderbox_manager = transform.parent.gameObject.GetComponent<OrderBoxManager>();
         //orderBox_sprite_renderer = gameObject.GetComponent<SpriteRenderer>();
 
         if (orderForm.cholocate_cookie_counter > 0)
@@ -82,9 +84,15 @@ public class OrderBox : MonoBehaviour
 
             if (processing_timer.isTimerDone())
             {
-                audio_manager.playOrderReadyForPickUp();
+                showOrderIsReady();
             }
         }
+    }
+
+    public void showOrderIsReady()
+    {
+        audio_manager.playOrderReadyForPickUp();
+        orderbox_manager.turnOnAnimatedReadyForPickUp();
     }
 
     public void reassignAllOrderOptions()
