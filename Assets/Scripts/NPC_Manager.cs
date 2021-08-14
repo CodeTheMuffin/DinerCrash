@@ -12,11 +12,15 @@ public class NPC_Manager : MonoBehaviour
     public int max_NPCs_allowed = 5;
 
     public Timer spawning_timer;
-    public float max_spawning_time = 7f;
+
+    [SerializeField]
+    private float max_spawning_time = 3f;
 
     public TextSystem text_system;
 
     public Sprite[] NPC_Sprites;
+
+    public aWayPointSuperManager SuperManager;
 
     Dictionary<string, int> order_options_quantity = new Dictionary<string, int>();
 
@@ -97,7 +101,9 @@ public class NPC_Manager : MonoBehaviour
         int sprite_index = Random.Range(0, NPC_Sprites.Length);
         Sprite npc_sprite = NPC_Sprites[sprite_index];
 
-        GameObject npc_game_obj = GameObject.Instantiate(NPC_prefab, transform);
+        print("jere");
+        GameObject npc_game_obj = GameObject.Instantiate(NPC_prefab, SuperManager.getSpawningTransform());
+        print("Done");
 
         NPC npc_obj = npc_game_obj.GetComponent<NPC>();
         npc_obj.setSprite(npc_sprite);
