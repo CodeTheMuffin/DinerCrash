@@ -16,6 +16,9 @@ public class NPC : MonoBehaviour
     public int node_index = 0;
     public bool ready_for_next_point = false; //for when the NPC reached the nextWayPoint
 
+    Color deselectedColor = new Color(1f, 1f, 1f, 0.8f);
+    Color selectedColor = new Color(1f, 1f, 1f, 1f);
+
     public enum State
     {
         spawned = -1,
@@ -28,6 +31,7 @@ public class NPC : MonoBehaviour
     public void justSpawnedHandler()
     {
         updateTimer();
+        turnOffHighlight();
         current_state = (int)State.entering;
     }
 
@@ -38,7 +42,7 @@ public class NPC : MonoBehaviour
 
     public void updateTimer()
     {
-        walkingTimer.max_time_in_seconds = 0.1f;
+        walkingTimer.max_time_in_seconds = UnityEngine.Random.Range(0.5f, 0.25f);
     }
 
     public void updateTimerForEntering()
@@ -109,6 +113,16 @@ public class NPC : MonoBehaviour
     public void setSprite(Sprite s)
     {
         gameObject.GetComponent<SpriteRenderer>().sprite = s;
+    }
+
+    public void turnOnHighlight()
+    {
+        gameObject.GetComponent<SpriteRenderer>().color = selectedColor;
+    }
+
+    public void turnOffHighlight()
+    {
+        gameObject.GetComponent<SpriteRenderer>().color = deselectedColor;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
