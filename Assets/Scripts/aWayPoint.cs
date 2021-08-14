@@ -7,10 +7,21 @@ public class aWayPoint : MonoBehaviour
     public bool isFree = true;
     List<GameObject> current_objects = new List<GameObject>();
 
+    public static bool showSprite = true;
+
+    private void Start()
+    {
+        if (!showSprite)
+        {
+            transform.GetComponent<SpriteRenderer>().enabled = false;
+        }
+    }
+
     public bool isWayPointFree()
     {
         return isFree;
     }
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

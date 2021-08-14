@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4381623448528815039}
   - component: {fileID: 4587128544375289122}
   - component: {fileID: 2155334707860762979}
-  - component: {fileID: 8879773093191919204}
+  - component: {fileID: -4710967607657632285}
   m_Layer: 0
   m_Name: NPC
   m_TagString: npc
@@ -135,7 +135,7 @@ MonoBehaviour:
   max_time_in_seconds: 2
   time: 0
   timer_stopped: 0
---- !u!50 &8879773093191919204
+--- !u!50 &-4710967607657632285
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0

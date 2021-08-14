@@ -42,7 +42,7 @@ public class NPC : MonoBehaviour
 
     public void updateTimer()
     {
-        walkingTimer.max_time_in_seconds = UnityEngine.Random.Range(0.5f, 0.25f);
+        walkingTimer.max_time_in_seconds = UnityEngine.Random.Range(0.1f, 0.25f);
     }
 
     public void updateTimerForEntering()
