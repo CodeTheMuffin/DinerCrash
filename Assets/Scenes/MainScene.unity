@@ -4498,6 +4498,81 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!1 &1674047820
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1674047822}
+  - component: {fileID: 1674047821}
+  - component: {fileID: 1674047823}
+  m_Layer: 0
+  m_Name: NPC_Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1674047821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1674047820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c00590525727fd4dafe2ffc1a99a218, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NPC_prefab: {fileID: 4381623448528815038, guid: c343def71a64d81439345500d2d69b3c, type: 3}
+  NPCs: []
+  max_NPCs_allowed: 5
+  spawning_timer: {fileID: 1674047823}
+  max_spawning_time: 5
+  text_system: {fileID: 1442281601}
+  NPC_Sprites:
+  - {fileID: -2352264988476575153, guid: bb7c27a6da7b6094ca7aeb1fb73febda, type: 3}
+  - {fileID: -4653784276009535186, guid: bb7c27a6da7b6094ca7aeb1fb73febda, type: 3}
+  - {fileID: -1899299118430633907, guid: bb7c27a6da7b6094ca7aeb1fb73febda, type: 3}
+  - {fileID: -4499306831701763636, guid: bb7c27a6da7b6094ca7aeb1fb73febda, type: 3}
+  - {fileID: 2218390236460687747, guid: bb7c27a6da7b6094ca7aeb1fb73febda, type: 3}
+  - {fileID: -4695027236305748639, guid: bb7c27a6da7b6094ca7aeb1fb73febda, type: 3}
+  - {fileID: -5935332612762631239, guid: bb7c27a6da7b6094ca7aeb1fb73febda, type: 3}
+  - {fileID: 4115710053424014800, guid: bb7c27a6da7b6094ca7aeb1fb73febda, type: 3}
+  - {fileID: 1606119240524437468, guid: bb7c27a6da7b6094ca7aeb1fb73febda, type: 3}
+--- !u!4 &1674047822
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1674047820}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1674047823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1674047820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53022a5774f918d4e975b9d4dc5ce1d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  max_time_in_seconds: 2
+  time: 0
+  timer_stopped: 0
 --- !u!1 &1690401929
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,6 +8,7 @@ TagManager:
   - order_box_parent
   - order_box
   - trash can
+  - npc
   layers:
   - Default
   - TransparentFX
