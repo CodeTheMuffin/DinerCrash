@@ -8,6 +8,7 @@ It also includes a "weighted edges" system that is especially useful to quickly 
 You can view an example on how to use this asset by looking inside the "Demo Scene" folder.
 
 A quick start guide is available at https://aridez.github.io/Simple-Graph-Editor/QuickStart.html
+https://skytanet.com/SimpleGraphEditor/quickstart
 https://github.com/Aridez/Simple-Graph-Editor
 
 If you have any other questions, please create an issue at https://github.com/Aridez/Simple-Graph-Editor/issues, or send me an email at ericmourinmarin@gmail.com.

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 /*
  This manager handles the spawning, removal and configuration of NPCs.
@@ -12,9 +13,7 @@ public class NPC_Manager : MonoBehaviour
     public int max_NPCs_allowed = 5;
 
     public Timer spawning_timer;
-
-    [SerializeField]
-    private float max_spawning_time = 3f;
+    public float max_spawning_time = 7f;
 
     public TextSystem text_system;
 
@@ -58,6 +57,17 @@ public class NPC_Manager : MonoBehaviour
                 spawnNPC();
             }
         }
+
+        foreach (NPC robot in NPCs)
+        {
+            if (robot.ready_for_next_point)
+            {
+                robot.currentWayPoint = robot.nextWayPoint;
+                Tuple<int, aWayPoint> newPoint = SuperManager.getNextStateAndWayPoint(robot.current_state, robot.currentWayPoint);
+                robot.nextWayPoint = newPoint.Item2;
+                robot.ready_for_next_point = false;
+            }
+        }
     }
 
     public int CountNPCs()
@@ -80,7 +90,7 @@ public class NPC_Manager : MonoBehaviour
 
         foreach (string key in keys )
         {
-            int quantity = Random.Range(0, UI_Manger.MAX_AMOUNT);
+            int quantity = UnityEngine.Random.Range(0, UI_Manger.MAX_AMOUNT);
             order_options_quantity[key] = quantity;
             //print($"Key: {key} amount: {quantity.ToString()}");
         }
@@ -98,15 +108,19 @@ public class NPC_Manager : MonoBehaviour
 
 
         // Determine what sprite to use and the color
-        int sprite_index = Random.Range(0, NPC_Sprites.Length);
+        int sprite_index = UnityEngine.Random.Range(0, NPC_Sprites.Length);
         Sprite npc_sprite = NPC_Sprites[sprite_index];
 
-        print("jere");
         GameObject npc_game_obj = GameObject.Instantiate(NPC_prefab, SuperManager.getSpawningTransform());
-        print("Done");
 
         NPC npc_obj = npc_game_obj.GetComponent<NPC>();
+        npc_obj.currentWayPoint = SuperManager.spawningPoint;
+        Tuple<int, aWayPoint> newPoint = SuperManager.getNextStateAndWayPoint((int)NPC.State.spawned, npc_obj.currentWayPoint);
+        npc_obj.nextWayPoint = newPoint.Item2;
+        npc_obj.justSpawnedHandler();
+        //npc_obj.nextWayPoint = SuperManager.
         npc_obj.setSprite(npc_sprite);
         npc_obj.setOrderForm(expectedOrderForm);
+        NPCs.Add(npc_obj);
     }
 }
