@@ -21,6 +21,9 @@ public class NPC_Manager : MonoBehaviour
 
     public aWayPointSuperManager SuperManager;
 
+    public Collider2D right_wall;
+    public Collider2D left_wall;
+
     Dictionary<string, int> order_options_quantity = new Dictionary<string, int>();
 
     // Start is called before the first frame update
@@ -117,6 +120,11 @@ public class NPC_Manager : MonoBehaviour
         npc_obj.currentWayPoint = SuperManager.spawningPoint;
         Tuple<int, aWayPoint> newPoint = SuperManager.getNextStateAndWayPoint((int)NPC.State.spawned, npc_obj.currentWayPoint);
         npc_obj.nextWayPoint = newPoint.Item2;
+
+        // prevent NPC colliding with right and left wall
+        Physics2D.IgnoreCollision(right_wall, npc_game_obj.GetComponent<Collider2D>());
+        Physics2D.IgnoreCollision(left_wall , npc_game_obj.GetComponent<Collider2D>());
+
         npc_obj.justSpawnedHandler();
         //npc_obj.nextWayPoint = SuperManager.
         npc_obj.setSprite(npc_sprite);

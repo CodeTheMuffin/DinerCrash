@@ -4,20 +4,8 @@ using UnityEngine;
 
 public class aWayPoint : MonoBehaviour
 {
-    bool isFree = false;
-    GameObject current_object;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public bool isFree = true;
+    List<GameObject> current_objects = new List<GameObject>();
 
     public bool isWayPointFree()
     {
@@ -26,10 +14,13 @@ public class aWayPoint : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        print($"HIT! {collision.name}");
         if (collision.tag == "npc")
         {
+            print(">>Hit NPC!!!");
+            //isFree = false;
+            current_objects.Add(collision.gameObject);
             isFree = false;
-            current_object = collision.gameObject;
         }
     }
 
@@ -46,8 +37,14 @@ public class aWayPoint : MonoBehaviour
     {
         if (collision.tag == "npc")
         {
-            isFree = true;
-            current_object = null;
+            GameObject g_obj = collision.gameObject;
+
+            current_objects.Remove(g_obj);
+
+            if (current_objects.Count == 0)
+            {
+                isFree = true;
+            }
         }
     }
 }

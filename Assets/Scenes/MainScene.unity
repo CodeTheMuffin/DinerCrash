@@ -609,9 +609,10 @@ GameObject:
   - component: {fileID: 149200024}
   - component: {fileID: 149200025}
   - component: {fileID: 149200026}
+  - component: {fileID: 149200027}
   m_Layer: 0
   m_Name: EntrancePoint_06
-  m_TagString: Untagged
+  m_TagString: waypoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -693,6 +694,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8398cfee37dacb848902c17339040fc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isFree: 1
+--- !u!61 &149200027
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 149200023}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 1}
+    oldSize: {x: 0.125, y: 0.125}
+    newSize: {x: 0.2, y: 0.2}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.25, y: 0.25}
+  m_EdgeRadius: 0
 --- !u!1 &153513638
 GameObject:
   m_ObjectHideFlags: 0
@@ -1090,9 +1118,10 @@ GameObject:
   - component: {fileID: 322707797}
   - component: {fileID: 322707798}
   - component: {fileID: 322707799}
+  - component: {fileID: 322707800}
   m_Layer: 0
   m_Name: ExitPoint_06
-  m_TagString: Untagged
+  m_TagString: waypoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1174,6 +1203,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8398cfee37dacb848902c17339040fc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isFree: 1
+--- !u!61 &322707800
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 322707796}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 1}
+    oldSize: {x: 0.125, y: 0.125}
+    newSize: {x: 0.2, y: 0.2}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.25, y: 0.25}
+  m_EdgeRadius: 0
 --- !u!1 &327687032
 GameObject:
   m_ObjectHideFlags: 0
@@ -1617,6 +1673,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8398cfee37dacb848902c17339040fc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isFree: 1
 --- !u!1 &502016760
 GameObject:
   m_ObjectHideFlags: 0
@@ -2354,9 +2411,10 @@ GameObject:
   - component: {fileID: 624090285}
   - component: {fileID: 624090286}
   - component: {fileID: 624090287}
+  - component: {fileID: 624090288}
   m_Layer: 0
   m_Name: ExitPoint_03
-  m_TagString: Untagged
+  m_TagString: waypoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2438,6 +2496,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8398cfee37dacb848902c17339040fc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isFree: 1
+--- !u!61 &624090288
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 624090284}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 1}
+    oldSize: {x: 0.125, y: 0.125}
+    newSize: {x: 0.2, y: 0.2}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.25, y: 0.25}
+  m_EdgeRadius: 0
 --- !u!1 &631750831
 GameObject:
   m_ObjectHideFlags: 0
@@ -2745,9 +2830,10 @@ GameObject:
   - component: {fileID: 696635139}
   - component: {fileID: 696635140}
   - component: {fileID: 696635141}
+  - component: {fileID: 696635142}
   m_Layer: 0
   m_Name: EntrancePoint_04
-  m_TagString: Untagged
+  m_TagString: waypoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2829,6 +2915,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8398cfee37dacb848902c17339040fc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isFree: 1
+--- !u!61 &696635142
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 696635138}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 1}
+    oldSize: {x: 0.125, y: 0.125}
+    newSize: {x: 0.2, y: 0.2}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.25, y: 0.25}
+  m_EdgeRadius: 0
 --- !u!1 &703251014
 GameObject:
   m_ObjectHideFlags: 0
@@ -2840,9 +2953,10 @@ GameObject:
   - component: {fileID: 703251015}
   - component: {fileID: 703251016}
   - component: {fileID: 703251017}
+  - component: {fileID: 703251018}
   m_Layer: 0
   m_Name: StandingPoint_05
-  m_TagString: Untagged
+  m_TagString: waypoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2924,6 +3038,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8398cfee37dacb848902c17339040fc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isFree: 1
+--- !u!61 &703251018
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 703251014}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 1}
+    oldSize: {x: 0.125, y: 0.125}
+    newSize: {x: 0.2, y: 0.2}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.25, y: 0.25}
+  m_EdgeRadius: 0
 --- !u!1 &717431161
 GameObject:
   m_ObjectHideFlags: 0
@@ -3363,9 +3504,10 @@ GameObject:
   - component: {fileID: 932880544}
   - component: {fileID: 932880545}
   - component: {fileID: 932880546}
+  - component: {fileID: 932880547}
   m_Layer: 0
   m_Name: StandingPoint_03
-  m_TagString: Untagged
+  m_TagString: waypoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3447,6 +3589,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8398cfee37dacb848902c17339040fc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isFree: 1
+--- !u!61 &932880547
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 932880543}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 1}
+    oldSize: {x: 0.125, y: 0.125}
+    newSize: {x: 0.2, y: 0.2}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.25, y: 0.25}
+  m_EdgeRadius: 0
 --- !u!1 &948031734
 GameObject:
   m_ObjectHideFlags: 0
@@ -4143,7 +4312,7 @@ GameObject:
   - component: {fileID: 1081897860}
   m_Layer: 0
   m_Name: EntrancePoint_01
-  m_TagString: Untagged
+  m_TagString: waypoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4225,6 +4394,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8398cfee37dacb848902c17339040fc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isFree: 1
 --- !u!61 &1081897860
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4241,7 +4411,7 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0, y: 1}
     oldSize: {x: 0.125, y: 0.125}
     newSize: {x: 0.2, y: 0.2}
     adaptiveTilingThreshold: 0.5
@@ -4249,7 +4419,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.5, y: 0.5}
+  m_Size: {x: 0.25, y: 0.25}
   m_EdgeRadius: 0
 --- !u!1 &1088682754
 GameObject:
@@ -4535,9 +4705,10 @@ GameObject:
   - component: {fileID: 1267332367}
   - component: {fileID: 1267332368}
   - component: {fileID: 1267332369}
+  - component: {fileID: 1267332370}
   m_Layer: 0
   m_Name: StandingPoint_07
-  m_TagString: Untagged
+  m_TagString: waypoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4619,6 +4790,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8398cfee37dacb848902c17339040fc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isFree: 1
+--- !u!61 &1267332370
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1267332366}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 1}
+    oldSize: {x: 0.125, y: 0.125}
+    newSize: {x: 0.2, y: 0.2}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.25, y: 0.25}
+  m_EdgeRadius: 0
 --- !u!1 &1287379970
 GameObject:
   m_ObjectHideFlags: 0
@@ -5273,9 +5471,10 @@ GameObject:
   - component: {fileID: 1535060064}
   - component: {fileID: 1535060065}
   - component: {fileID: 1535060066}
+  - component: {fileID: 1535060067}
   m_Layer: 0
   m_Name: StandingPoint_04
-  m_TagString: Untagged
+  m_TagString: waypoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5357,6 +5556,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8398cfee37dacb848902c17339040fc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isFree: 1
+--- !u!61 &1535060067
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1535060063}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 1}
+    oldSize: {x: 0.125, y: 0.125}
+    newSize: {x: 0.2, y: 0.2}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.25, y: 0.25}
+  m_EdgeRadius: 0
 --- !u!1 &1581707858
 GameObject:
   m_ObjectHideFlags: 0
@@ -5763,9 +5989,10 @@ GameObject:
   - component: {fileID: 1632151338}
   - component: {fileID: 1632151339}
   - component: {fileID: 1632151340}
+  - component: {fileID: 1632151341}
   m_Layer: 0
   m_Name: EntrancePoint_02
-  m_TagString: Untagged
+  m_TagString: waypoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5847,6 +6074,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8398cfee37dacb848902c17339040fc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isFree: 1
+--- !u!61 &1632151341
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1632151337}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 1}
+    oldSize: {x: 0.125, y: 0.125}
+    newSize: {x: 0.2, y: 0.2}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.25, y: 0.25}
+  m_EdgeRadius: 0
 --- !u!1 &1674047820
 GameObject:
   m_ObjectHideFlags: 0
@@ -5894,6 +6148,8 @@ MonoBehaviour:
   - {fileID: 4115710053424014800, guid: bb7c27a6da7b6094ca7aeb1fb73febda, type: 3}
   - {fileID: 1606119240524437468, guid: bb7c27a6da7b6094ca7aeb1fb73febda, type: 3}
   SuperManager: {fileID: 1447319349}
+  right_wall: {fileID: 1079597279}
+  left_wall: {fileID: 661466377}
 --- !u!4 &1674047822
 Transform:
   m_ObjectHideFlags: 0
@@ -6108,9 +6364,10 @@ GameObject:
   - component: {fileID: 1701184690}
   - component: {fileID: 1701184691}
   - component: {fileID: 1701184692}
+  - component: {fileID: 1701184693}
   m_Layer: 0
   m_Name: EntrancePoint_03
-  m_TagString: Untagged
+  m_TagString: waypoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6192,6 +6449,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8398cfee37dacb848902c17339040fc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isFree: 1
+--- !u!61 &1701184693
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1701184689}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 1}
+    oldSize: {x: 0.125, y: 0.125}
+    newSize: {x: 0.2, y: 0.2}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.25, y: 0.25}
+  m_EdgeRadius: 0
 --- !u!1 &1710291593
 GameObject:
   m_ObjectHideFlags: 0
@@ -6262,9 +6546,10 @@ GameObject:
   - component: {fileID: 1731058975}
   - component: {fileID: 1731058976}
   - component: {fileID: 1731058977}
+  - component: {fileID: 1731058978}
   m_Layer: 0
   m_Name: StandingPoint_06
-  m_TagString: Untagged
+  m_TagString: waypoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6346,6 +6631,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8398cfee37dacb848902c17339040fc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isFree: 1
+--- !u!61 &1731058978
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1731058974}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 1}
+    oldSize: {x: 0.125, y: 0.125}
+    newSize: {x: 0.2, y: 0.2}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.25, y: 0.25}
+  m_EdgeRadius: 0
 --- !u!1 &1796500046
 GameObject:
   m_ObjectHideFlags: 0
@@ -6489,9 +6801,10 @@ GameObject:
   - component: {fileID: 1811623126}
   - component: {fileID: 1811623127}
   - component: {fileID: 1811623128}
+  - component: {fileID: 1811623129}
   m_Layer: 0
   m_Name: ExitPoint_04
-  m_TagString: Untagged
+  m_TagString: waypoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6573,6 +6886,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8398cfee37dacb848902c17339040fc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isFree: 1
+--- !u!61 &1811623129
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1811623125}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 1}
+    oldSize: {x: 0.125, y: 0.125}
+    newSize: {x: 0.2, y: 0.2}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.25, y: 0.25}
+  m_EdgeRadius: 0
 --- !u!1 &1822863405
 GameObject:
   m_ObjectHideFlags: 0
@@ -7235,9 +7575,10 @@ GameObject:
   - component: {fileID: 1921419098}
   - component: {fileID: 1921419099}
   - component: {fileID: 1921419100}
+  - component: {fileID: 1921419101}
   m_Layer: 0
   m_Name: ExitPoint_02
-  m_TagString: Untagged
+  m_TagString: waypoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7319,6 +7660,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8398cfee37dacb848902c17339040fc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isFree: 1
+--- !u!61 &1921419101
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1921419097}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 1}
+    oldSize: {x: 0.125, y: 0.125}
+    newSize: {x: 0.2, y: 0.2}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.25, y: 0.25}
+  m_EdgeRadius: 0
 --- !u!1 &1941263158
 GameObject:
   m_ObjectHideFlags: 0
@@ -7330,9 +7698,10 @@ GameObject:
   - component: {fileID: 1941263159}
   - component: {fileID: 1941263160}
   - component: {fileID: 1941263161}
+  - component: {fileID: 1941263162}
   m_Layer: 0
   m_Name: ExitPoint_01
-  m_TagString: Untagged
+  m_TagString: waypoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7414,6 +7783,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8398cfee37dacb848902c17339040fc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isFree: 1
+--- !u!61 &1941263162
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1941263158}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 1}
+    oldSize: {x: 0.125, y: 0.125}
+    newSize: {x: 0.2, y: 0.2}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.25, y: 0.25}
+  m_EdgeRadius: 0
 --- !u!1 &1945329052
 GameObject:
   m_ObjectHideFlags: 0
@@ -7425,9 +7821,10 @@ GameObject:
   - component: {fileID: 1945329053}
   - component: {fileID: 1945329054}
   - component: {fileID: 1945329055}
+  - component: {fileID: 1945329056}
   m_Layer: 0
   m_Name: EntrancePoint_07
-  m_TagString: Untagged
+  m_TagString: waypoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7509,6 +7906,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8398cfee37dacb848902c17339040fc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isFree: 1
+--- !u!61 &1945329056
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1945329052}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 1}
+    oldSize: {x: 0.125, y: 0.125}
+    newSize: {x: 0.2, y: 0.2}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.25, y: 0.25}
+  m_EdgeRadius: 0
 --- !u!1 &1961321748
 GameObject:
   m_ObjectHideFlags: 0
@@ -7520,9 +7944,10 @@ GameObject:
   - component: {fileID: 1961321749}
   - component: {fileID: 1961321750}
   - component: {fileID: 1961321751}
+  - component: {fileID: 1961321752}
   m_Layer: 0
   m_Name: EntrancePoint_05
-  m_TagString: Untagged
+  m_TagString: waypoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7604,6 +8029,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8398cfee37dacb848902c17339040fc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isFree: 1
+--- !u!61 &1961321752
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1961321748}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 1}
+    oldSize: {x: 0.125, y: 0.125}
+    newSize: {x: 0.2, y: 0.2}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.25, y: 0.25}
+  m_EdgeRadius: 0
 --- !u!1 &1979968287
 GameObject:
   m_ObjectHideFlags: 0
@@ -7615,9 +8067,10 @@ GameObject:
   - component: {fileID: 1979968288}
   - component: {fileID: 1979968289}
   - component: {fileID: 1979968290}
+  - component: {fileID: 1979968291}
   m_Layer: 0
   m_Name: StandingPoint_02
-  m_TagString: Untagged
+  m_TagString: waypoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7699,6 +8152,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8398cfee37dacb848902c17339040fc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isFree: 1
+--- !u!61 &1979968291
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1979968287}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 1}
+    oldSize: {x: 0.125, y: 0.125}
+    newSize: {x: 0.2, y: 0.2}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.25, y: 0.25}
+  m_EdgeRadius: 0
 --- !u!1 &1982144356
 GameObject:
   m_ObjectHideFlags: 0
@@ -7976,9 +8456,10 @@ GameObject:
   - component: {fileID: 2028883780}
   - component: {fileID: 2028883781}
   - component: {fileID: 2028883782}
+  - component: {fileID: 2028883783}
   m_Layer: 0
   m_Name: StandingPoint_01
-  m_TagString: Untagged
+  m_TagString: waypoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8060,6 +8541,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8398cfee37dacb848902c17339040fc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isFree: 1
+--- !u!61 &2028883783
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2028883779}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 1}
+    oldSize: {x: 0.125, y: 0.125}
+    newSize: {x: 0.2, y: 0.2}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.25, y: 0.25}
+  m_EdgeRadius: 0
 --- !u!1 &2050735282
 GameObject:
   m_ObjectHideFlags: 0
@@ -8283,9 +8791,10 @@ GameObject:
   - component: {fileID: 2141949827}
   - component: {fileID: 2141949828}
   - component: {fileID: 2141949829}
+  - component: {fileID: 2141949830}
   m_Layer: 0
   m_Name: ExitPoint_05
-  m_TagString: Untagged
+  m_TagString: waypoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8367,3 +8876,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8398cfee37dacb848902c17339040fc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isFree: 1
+--- !u!61 &2141949830
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2141949826}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 1}
+    oldSize: {x: 0.125, y: 0.125}
+    newSize: {x: 0.2, y: 0.2}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.25, y: 0.25}
+  m_EdgeRadius: 0
