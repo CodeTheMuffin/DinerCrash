@@ -8,7 +8,7 @@ public class UI_Manger : MonoBehaviour
     public GameObject OrderingMenu;
     public OrderManager orderManager;
 
-    const int MAX_AMOUNT = 10;
+    public const int MAX_AMOUNT = 10;
 
     int cholocate_cookie_counter = 0;
     int oatmeal_raisan_cookie_counter = 0;

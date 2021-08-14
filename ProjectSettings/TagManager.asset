@@ -8,6 +8,8 @@ TagManager:
   - order_box_parent
   - order_box
   - trash can
+  - npc
+  - waypoint
   layers:
   - Default
   - TransparentFX

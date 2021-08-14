@@ -43,13 +43,19 @@ public class PlayerMovement : MonoBehaviour
     OrderBoxManager orderBoxInRange; // for when the user gets close to an OrderBox.
     Transform orderboxBeingHeld;
     List<GameObject> orderBoxInCloseRangeCollision = new List<GameObject>();
+
     bool collisionDetectionChange = false; // used so we dont go through the list each frame. set to true if a collision was added/removed
+    bool NPCcollisionDetectionChange = false;
+    GameObject selectedNPC;
+
+    List<GameObject> NPCsInCloseRangeCollision = new List<GameObject>();
 
     AudioManager audio_manager;
 
-    public bool testCollision = false;
+    public bool testCollision = true;
 
-    enum LookingDirection {
+    enum LookingDirection
+    {
         UP = 0,
         DOWN = 1,
         LEFT = 2,
@@ -78,7 +84,7 @@ public class PlayerMovement : MonoBehaviour
         {
             Application.Quit();
         }
-
+        UpdateNPCSelection();
         AccessOrder();
         AccessPC();
     }
@@ -205,7 +211,7 @@ public class PlayerMovement : MonoBehaviour
         //bool successfullyPickedUp = false;
         // If Im within range to pick up order and not already holding an order and press E
         // then pick up order
-        if (canPickUpOrder && !holdingOrder && orderBoxInRange &&  Input.GetKeyDown(KeyCode.E))
+        if (canPickUpOrder && !holdingOrder && orderBoxInRange && Input.GetKeyDown(KeyCode.E))
         {
             if (orderBoxInRange.canOrderBePickedUp())
             {
@@ -244,6 +250,37 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    void UpdateNPCSelection()
+    {
+        if (NPCcollisionDetectionChange)
+        {
+            NPCcollisionDetectionChange = false;
+            collisionDetectionChange = false;//// COULD BE A BUG but preventing selecting more than one thing!
+            turnHighlightOffForAll_NPC_Collisions();
+
+            GameObject newNPC = null;
+            /*if (holdingOrder && orderboxBeingHeld)
+            {
+
+            }*/
+
+            foreach (GameObject npc in NPCsInCloseRangeCollision)
+            {
+                if (isNewObjectCloserCompare(newNPC, npc))
+                {
+                    newNPC = npc;
+                }
+            }
+
+            if (newNPC != null)
+            {
+                selectedNPC = newNPC;
+                selectedNPC.GetComponent<NPC>().turnOnHighlight();
+            }
+        }
+    }
+
+
     // Determines which parent box gets animated.
     void UpdateOrderSelection()
     {
@@ -260,7 +297,7 @@ public class PlayerMovement : MonoBehaviour
                 {
                     OrderBoxManager order_box = box.GetComponent<OrderBoxManager>();
 
-                    if (order_box.isOrderAvailable() && isNewBoxCloserCompare(newBox, box))
+                    if (order_box.isOrderAvailable() && isNewObjectCloserCompare(newBox, box))
                     {
                         newBox = box;
                     }
@@ -280,7 +317,7 @@ public class PlayerMovement : MonoBehaviour
                 {
                     OrderBoxManager order_box = box.GetComponent<OrderBoxManager>();
 
-                    if (order_box.canOrderBePickedUp() && isNewBoxCloserCompare(newBox, box))
+                    if (order_box.canOrderBePickedUp() && isNewObjectCloserCompare(newBox, box))
                     {
                         newBox = box;
                     }
@@ -294,7 +331,7 @@ public class PlayerMovement : MonoBehaviour
                     canPickUpOrder = true;
                 }
             }
-        }       
+        }
     }
 
     void AttemptToUpdateOrderDirectionBasedOnMovement()
@@ -352,6 +389,14 @@ public class PlayerMovement : MonoBehaviour
             box.GetComponent<OrderBoxManager>().turnOffAnimatedBackground();
         }
     }
+    void turnHighlightOffForAll_NPC_Collisions()
+    {
+        foreach (GameObject npc in NPCsInCloseRangeCollision)
+        {
+            npc.GetComponent<NPC>().turnOffHighlight();
+        }
+    }
+
 
     // For on trigger enter
     bool isNewBoxCloser(GameObject newBox)
@@ -369,13 +414,13 @@ public class PlayerMovement : MonoBehaviour
     }
 
     // For comparing two boxes distances from player
-    bool isNewBoxCloserCompare(GameObject oldBox, GameObject newBox)
+    bool isNewObjectCloserCompare(GameObject oldObject, GameObject newObject)
     {
-        if (oldBox == null)
+        if (oldObject == null)
         { return true; }
 
-        float old_distance = Vector2.Distance(transform.position, oldBox.transform.position);
-        float new_distance = Vector2.Distance(transform.position, newBox.transform.position);
+        float old_distance = Vector2.Distance(transform.position, oldObject.transform.position);
+        float new_distance = Vector2.Distance(transform.position, newObject.transform.position);
 
         if (new_distance < old_distance)
             return true;
@@ -426,51 +471,6 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (collision.tag == "order_box_parent")
         {
-            /*ATTTEMPT 1
-            canPickUpOrder = true;
-            orderboxParent = collision.gameObject;
-
-            if (!orderBoxInRangeCollision.Contains(orderboxParent))
-            {
-                orderBoxInRangeCollision.Add(orderboxParent);
-            }
-            orderBoxInRange = orderboxParent.GetComponent<OrderBoxManager>();*/
-
-
-
-            /*ATTEMPT 2
-            OrderBox boxParent = collision.gameObject.GetComponent<OrderBoxManager>();
-
-            if (boxParent.canOrderBePickedUp() && !holdingOrder)
-            {
-                if (!orderBoxInCloseRangeCollision.Contains(collision.gameObject))
-                {
-                    orderBoxInCloseRangeCollision.Add(collision.gameObject);
-                }
-
-                if (isNewBoxCloser(collision.gameObject))
-                {
-                    canPickUpOrder = true;
-                    orderboxParent = collision.gameObject;
-                    orderBoxInRange = boxParent;//orderboxParent.GetComponent<OrderBoxManager>();
-                    orderBoxInRange.turnOnAnimatedPickUpBackground();
-                }
-            }
-            else if (holdingOrder && boxParent.isOrderAvailable())
-            {
-                if (!orderBoxInCloseRangeCollision.Contains(collision.gameObject))
-                {
-                    orderBoxInCloseRangeCollision.Add(collision.gameObject);
-                }
-
-                if (isNewBoxCloser(collision.gameObject))
-                {
-                    orderboxParent = collision.gameObject;
-                    orderBoxInRange = boxParent;//orderboxParent.GetComponent<OrderBoxManager>();
-                    orderBoxInRange.turnOnAnimatedPutDownBackground();
-                }
-            }*/
-
             if (!orderBoxInCloseRangeCollision.Contains(collision.gameObject))
             {
                 orderBoxInCloseRangeCollision.Add(collision.gameObject);
@@ -501,55 +501,6 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (collision.tag == "order_box_parent")
         {
-            /* ATTEMPT 1
-            canPickUpOrder = false;
-            orderBoxInRange.turnOffAnimatedBackground();
-            orderBoxInRange = null;
-            
-            if (orderBoxInRangeCollision.Contains(collision.gameObject))
-            {
-                orderBoxInRangeCollision.Remove(collision.gameObject);
-                orderboxParent = null;
-            }
-
-            // Get the last collided orderbox
-            if (orderBoxInRangeCollision.Count > 0 && orderboxParent == null)
-            {
-                orderboxParent = orderBoxInRangeCollision[orderBoxInRangeCollision.Count - 1];
-                orderBoxInRange = orderboxParent.GetComponent<OrderBoxManager>();
-            }*/
-
-            /* ATTEMPT 2
-            if (orderBoxInCloseRangeCollision.Contains(collision.gameObject))
-            {
-                orderBoxInCloseRangeCollision.Remove(collision.gameObject);
-                collision.gameObject.GetComponent<OrderBoxManager>().turnOffAnimatedBackground();
-
-                if (GameObject.ReferenceEquals(orderboxParent, collision.gameObject))
-                {
-                    if (orderBoxInRange)
-                    { orderBoxInRange.turnOffAnimatedBackground(); }
-                    
-                    orderBoxInRange = null;
-
-                    // could be set to null
-                    orderboxParent = findNewCloserBox();
-
-                    if (orderboxParent != null)
-                    {
-                        orderBoxInRange = orderboxParent.GetComponent<OrderBoxManager>();
-
-                        if (holdingOrder)
-                        {
-                            orderBoxInRange.turnOnAnimatedPutDownBackground();
-                        }
-                        else 
-                        {
-                            orderBoxInRange.turnOnAnimatedPickUpBackground();
-                        }
-                    }
-                }
-            }*/
             if (orderBoxInCloseRangeCollision.Contains(collision.gameObject))
             {
                 orderBoxInCloseRangeCollision.Remove(collision.gameObject);
@@ -564,6 +515,7 @@ public class PlayerMovement : MonoBehaviour
                 collisionDetectionChange = true;
             }
         }
+        
         else if (collision.tag == "trash can")
         {
             canThrowAwayOrder = false;
@@ -575,4 +527,44 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (testCollision)
+        {
+            print("Entering Collision: " + collision.collider.name);
+        }
+
+        if (collision.collider.tag == "npc")
+        {
+            if (!NPCsInCloseRangeCollision.Contains(collision.gameObject))
+            {
+                NPCsInCloseRangeCollision.Add(collision.gameObject);
+                NPCcollisionDetectionChange = true;
+            }
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (testCollision)
+        {
+            print("Leaving Collision: " + collision.collider.name);
+        }
+
+        if (collision.collider.tag == "npc")
+        {
+            if (NPCsInCloseRangeCollision.Contains(collision.gameObject))
+            {
+                NPCsInCloseRangeCollision.Remove(collision.gameObject);
+                collision.gameObject.GetComponent<NPC>().turnOffHighlight();
+            }
+
+            if (NPCsInCloseRangeCollision.Count == 0)
+            {
+                selectedNPC = null;
+            }
+
+            NPCcollisionDetectionChange = true;
+        }
+    }
 }
