@@ -44,7 +44,8 @@ public class TextSystem : MonoBehaviour
         textBox = new List<string>();
 
         //string xx = "Quick test\nfun!";
-        NPC_string = "Quick test\nfun!";
+        NPC_string = "Welcome!! I hope you have fun!";
+        NPC_string = adjustTextRegex(NPC_string).Item1;
 
         //Tuple<string,List<string>> result = adjustTextRegex(xx);
         //NPC_string = result.Item1;

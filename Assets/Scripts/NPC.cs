@@ -92,7 +92,7 @@ public class NPC : MonoBehaviour
 
     void updateMovement(float delta_time)
     {
-        if (nextWayPoint && (!ready_for_next_point || getDistanceToNextWayPoint() > 1f)) // if the next to next way point is 1 unit
+        if (nextWayPoint && (!ready_for_next_point || getDistanceToNextWayPoint() > 0.5f)) // if the next to next way point is 1 unit
         {
             bool canMove = walkingTimer.tick_n_check(delta_time);
 
