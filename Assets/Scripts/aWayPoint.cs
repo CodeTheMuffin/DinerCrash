@@ -7,11 +7,11 @@ public class aWayPoint : MonoBehaviour
     public bool isFree = true;
     List<GameObject> current_objects = new List<GameObject>();
 
-    public static bool showSprite = true;
+    public static bool showSpriteAtStart = false; // for when you want to DEBUG the wayPoints
 
     private void Start()
     {
-        if (!showSprite)
+        if (!showSpriteAtStart)
         {
             transform.GetComponent<SpriteRenderer>().enabled = false;
         }
