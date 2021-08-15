@@ -10,10 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4381623448528815037}
   - component: {fileID: 4381623448528815036}
-  - component: {fileID: 4381623448528815039}
-  - component: {fileID: 4587128544375289122}
-  - component: {fileID: 2155334707860762979}
   - component: {fileID: -4710967607657632285}
+  - component: {fileID: 4587128544375289122}
+  - component: {fileID: 3373595083114030645}
+  - component: {fileID: 4381623448528815039}
+  - component: {fileID: 2155334707860762979}
   m_Layer: 0
   m_Name: NPC
   m_TagString: npc
@@ -72,9 +73,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: 708336809
+  m_SortingLayer: 1
+  m_SortingOrder: 5
   m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -86,55 +87,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &4381623448528815039
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4381623448528815038}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 562fa347d5952474b94e992f149da243, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentWayPoint: {fileID: 0}
-  nextWayPoint: {fileID: 0}
-  walkingTimer: {fileID: 2155334707860762979}
-  current_state: 0
-  node_index: 0
-  ready_for_next_point: 0
---- !u!58 &4587128544375289122
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4381623448528815038}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.375
---- !u!114 &2155334707860762979
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4381623448528815038}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53022a5774f918d4e975b9d4dc5ce1d6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  max_time_in_seconds: 2
-  time: 0
-  timer_stopped: 0
 --- !u!50 &-4710967607657632285
 Rigidbody2D:
   serializedVersion: 4
@@ -156,3 +108,69 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!58 &4587128544375289122
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4381623448528815038}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.375
+--- !u!58 &3373595083114030645
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4381623448528815038}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.5
+--- !u!114 &4381623448528815039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4381623448528815038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 562fa347d5952474b94e992f149da243, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentWayPoint: {fileID: 0}
+  nextWayPoint: {fileID: 0}
+  orderingWayPoint: {fileID: 0}
+  walkingTimer: {fileID: 2155334707860762979}
+  current_state: 0
+  node_index: 0
+  ready_for_next_point: 0
+--- !u!114 &2155334707860762979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4381623448528815038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53022a5774f918d4e975b9d4dc5ce1d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  max_time_in_seconds: 2
+  time: 0
+  timer_stopped: 0
