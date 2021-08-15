@@ -8,6 +8,7 @@ public class NPC : MonoBehaviour
     public aWayPoint currentWayPoint;
     public aWayPoint nextWayPoint;
     public aWayPoint orderingWayPoint;
+    public aWayPoint standingWayPoint;
 
     public Timer walkingTimer;
     float walking_step;
@@ -17,6 +18,10 @@ public class NPC : MonoBehaviour
     public int node_index = 0;
     public bool ready_for_next_point = false; //for when the NPC reached the nextWayPoint
     public bool ready_to_order; // reached order waypoint
+    public bool need_new_standing_point = false; // for when their current standing spot was taken; find new one!
+    public bool wasOrderPlaced = false; // for when the player placed the order for the NPC // also indicates delivery
+
+    public List<OrderBox> orders = new List<OrderBox>();
 
     Color deselectedColor = new Color(1f, 1f, 1f, 0.9f);
     Color selectedColor = new Color(1f, 1f, 1f, 1f);
@@ -44,7 +49,7 @@ public class NPC : MonoBehaviour
 
     public void updateTimer()
     {
-        walkingTimer.max_time_in_seconds = UnityEngine.Random.Range(0.05f, 0.25f); // the amount of time to move 0.125 units (1 pixel)
+        walkingTimer.max_time_in_seconds = UnityEngine.Random.Range(0.05f, 0.2f); // the amount of time to move 0.125 units (1 pixel)
     }
 
     public void updateTimerForEntering()
@@ -98,11 +103,18 @@ public class NPC : MonoBehaviour
         {
             bool canMove = walkingTimer.tick_n_check(delta_time);
 
-            if (canMove && nextWayPoint.isWayPointFree())
+            if (canMove)
             {
-                transform.position = Vector2.MoveTowards(transform.position, nextWayPoint.transform.position, UPP);
-                //ready_for_next_point = true;
-                walkingTimer.reset_timer();
+                if (nextWayPoint.isWayPointFree())
+                {
+                    transform.position = Vector2.MoveTowards(transform.position, nextWayPoint.transform.position, UPP);
+                    //ready_for_next_point = true;
+                    walkingTimer.reset_timer();
+                }
+                else if (current_state == (int)NPC.State.standing && ready_for_next_point)
+                {
+                    need_new_standing_point = true;
+                }
             }
         }
     }
@@ -127,6 +139,23 @@ public class NPC : MonoBehaviour
         gameObject.GetComponent<SpriteRenderer>().color = deselectedColor;
     }
 
+    public void prepareForStanding()
+    {
+        // after order is placed, transition from entering to standing
+        current_state = (int)NPC.State.standing;
+        ready_for_next_point = false;
+        need_new_standing_point = true;
+        ready_to_order = true;// maybe set to false??
+        wasOrderPlaced = true;
+    }
+
+    public void prepareForExitting()
+    { 
+        current_state = (int)NPC.State.exitting;
+        ready_for_next_point = true;
+        print("Preparing for exitting");
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         //print($"Something collided with NPC {collision.name} {collision.tag}");
@@ -140,13 +169,13 @@ public class NPC : MonoBehaviour
             if (collidedWayPoint == nextWayPoint)
             {
                 collidedWayPoint.isFree = false;
-
-                if (collidedWayPoint != orderingWayPoint)
+                if (collidedWayPoint != orderingWayPoint && collidedWayPoint != standingWayPoint)
                 {
                     ready_for_next_point = true;
                 }
                 else
                 {
+                    ready_for_next_point = false;
                     ready_to_order = true;
                 }
             }

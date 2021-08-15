@@ -10,7 +10,8 @@ public class NPC_Manager : MonoBehaviour
 {
     public GameObject NPC_prefab;
     public List<NPC> NPCs = new List<NPC>();
-    public int max_NPCs_allowed = 5;
+    public List<NPC> DyingNPCs = new List<NPC>();
+    public int max_NPCs_allowed = 7;
 
     public Timer spawning_timer;
     public float max_spawning_time = 7f;
@@ -24,6 +25,8 @@ public class NPC_Manager : MonoBehaviour
 
     public Collider2D right_wall;
     public Collider2D left_wall;
+
+    public Transform AreaToDie;
 
     Dictionary<string, int> order_options_quantity = new Dictionary<string, int>();
 
@@ -54,7 +57,7 @@ public class NPC_Manager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(CountNPCs() <= max_NPCs_allowed)
+        if(CountNPCs() < max_NPCs_allowed)
         {
             bool isTimerDone = spawning_timer.tick_n_check(Time.deltaTime);
             if (isTimerDone)
@@ -63,15 +66,51 @@ public class NPC_Manager : MonoBehaviour
             }
         }
 
+        //handling robots NPCs
         foreach (NPC robot in NPCs)
         {
+            if (robot.current_state == (int)NPC.State.dying)
+            {
+                DyingNPCs.Add(robot);
+                robot.transform.position = AreaToDie.position;
+                continue;
+            }
+
             if (robot.ready_for_next_point)
             {
                 robot.currentWayPoint = robot.nextWayPoint;
                 Tuple<int, aWayPoint> newPoint = SuperManager.getNextStateAndWayPoint(robot.current_state, robot.currentWayPoint);
+                int new_state = newPoint.Item1;
+
+                if (new_state == (int)NPC.State.standing)
+                {
+                   robot.standingWayPoint = newPoint.Item2;
+                }
+
+                robot.current_state = new_state;
                 robot.nextWayPoint = newPoint.Item2;
                 robot.ready_for_next_point = false;
             }
+            else if (robot.need_new_standing_point)
+            {
+                aWayPoint newPoint = SuperManager.getRandomStandingWayPoint();
+                if (newPoint != null)
+                {
+                    robot.nextWayPoint = newPoint;
+                }
+                robot.need_new_standing_point = false;
+                robot.standingWayPoint = newPoint;
+            }
+        }
+
+        if (DyingNPCs.Count > 0)
+        {
+            foreach (NPC deadNPC in DyingNPCs)
+            {
+                NPCs.Remove(deadNPC);
+                Destroy(deadNPC.gameObject, 10f);//Destroy in 2 seconds
+            }
+            DyingNPCs.Clear();
         }
     }
 

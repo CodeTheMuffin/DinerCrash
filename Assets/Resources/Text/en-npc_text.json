@@ -9,8 +9,15 @@
 		"REQUEST_01"	: {"RAW_TEXT" : "I would like {quantity} {option}"},
 		"REQUEST_02"	: {"RAW_TEXT" : "and I would like {quantity} {option}"},
 		"REQUEST_03"	: {"RAW_TEXT" : "Can I have {quantity} {option}?"},
+		"REQUEST_04"	: {"RAW_TEXT" : "Hi. Can I have {quantity} {option}?"},
 	},
 	"ISSUES":{
 		"ISSUE_01"		: {"RAW_TEXT" : "That isn't what I ordered!"},
+		"ISSUE_02"		: {"RAW_TEXT" : "Ughhh I'm missing something!\n{missing}"},
+	},
+	"EXIT_TEXTS":{
+		"EXIT_TEXT_01"	:  {"RAW_TEXT" : "Thanks!"},
+		"EXIT_TEXT_02"	:  {"RAW_TEXT" : "Goodbye!"},
 	}
+	
 }

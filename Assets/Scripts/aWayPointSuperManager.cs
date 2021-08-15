@@ -32,6 +32,11 @@ public class aWayPointSuperManager : MonoBehaviour
         return manager_points[manager_points.Length - 1];
     }
 
+    public aWayPoint getRandomStandingWayPoint()
+    {
+        return pointManagers[(int)NPC.State.standing].getRandomStandingWayPoint();
+    }
+
     public Tuple<int, aWayPoint> getNextStateAndWayPoint(int current_state, aWayPoint current_point)
     {
         int new_state = -5;
@@ -67,7 +72,7 @@ public class aWayPointSuperManager : MonoBehaviour
         else if (current_state == (int)NPC.State.standing)
         {
             new_state = (int)NPC.State.exitting;
-            new_waypoint= pointManagers[current_state + 1].getWayPoint(0);
+            new_waypoint= pointManagers[current_state + 1].getRandomStandingWayPoint();
         }
         else if(current_state == (int)NPC.State.exitting)
         {
@@ -78,6 +83,11 @@ public class aWayPointSuperManager : MonoBehaviour
                 //prepare for deletion
                 new_state = (int)NPC.State.dying;
                 new_waypoint = null;
+            }
+            else if (index == -10) // current point does not exist in current state, so grab first way point in current state
+            {
+                new_state = current_state;
+                new_waypoint = pointManagers[current_state].getWayPoint(0);
             }
             else
             {

@@ -46,9 +46,13 @@ public class PlayerMovement : MonoBehaviour
 
     bool collisionDetectionChange = false; // used so we dont go through the list each frame. set to true if a collision was added/removed
     bool NPCcollisionDetectionChange = false;
-    GameObject selectedNPC;
+    NPC selectedNPC;
 
-    List<GameObject> NPCsInCloseRangeCollision = new List<GameObject>();
+    List<NPC> NPCsInCloseRangeCollision = new List<NPC>();
+    Color32 normal_trash_can_color = new Color32(255,255,255, 255);
+    Color32 highlighted_trash_can_color = new Color32(170, 170, 170, 255);
+
+    public SpriteRenderer trashcan;
 
     AudioManager audio_manager;
 
@@ -85,6 +89,7 @@ public class PlayerMovement : MonoBehaviour
             Application.Quit();
         }
         UpdateNPCSelection();
+        AccessNPC();
         AccessOrder();
         AccessPC();
     }
@@ -139,7 +144,7 @@ public class PlayerMovement : MonoBehaviour
         if (canAccessMenu)
         {
             // Going to the computer and pressing E to open ordering menu
-            if (!ui_manger.isOrderingMenuOpen() && Input.GetKeyDown(KeyCode.E))
+            if (!ui_manger.isOrderingMenuOpen() && !selectedNPC && Input.GetKeyDown(KeyCode.E))
             {
                 bool capacityToOrder = ui_manger.haveCapacityToOrder();
 
@@ -190,6 +195,59 @@ public class PlayerMovement : MonoBehaviour
         AttemptToThrowAwayOrder();
     }
 
+    void AccessNPC()
+    {
+        //selected NPC should only have ready_to_order as true
+        if (selectedNPC) // TODO: prepare ordering for NPC
+        {
+            if (Input.GetKeyDown(KeyCode.E))// and Not hold order (do that for giving order??)
+            {
+                if (holdingOrder)
+                {
+                    if (selectedNPC.wasOrderPlaced)
+                    {
+                        // give NPC the order
+                        selectedNPC.prepareForExitting();
+                    }
+                }
+                else // if not holding anything
+                {
+                    if (selectedNPC.ready_to_order)
+                    {
+                        if (!selectedNPC.wasOrderPlaced)
+                        {
+                            // get order
+                            print("Order received.");
+                            selectedNPC.prepareForStanding();
+                        }
+                        else // order was placed
+                        { 
+                            // maybe show what they want/ asked for again in text box??
+                        }
+                    }
+                }
+
+                /*if (selectedNPC.ready_to_order)
+                {
+                    if (!selectedNPC.wasOrderPlaced)
+                    {
+                        // get order
+                        print("Order received.");
+                        selectedNPC.prepareForStanding();
+                    }
+                    else //order was already placed
+                    {
+                        if (holdingOrder)
+                        {
+                            
+                        }
+                        selectedNPC.prepareForExitting();
+                    }
+                }*/
+                
+            }
+        }
+    }
     /*void AttemptToAnimateSelectedPickUpOrder()
     {
         if (canPickUpOrder && !holdingOrder && orderBoxInRange)
@@ -211,7 +269,7 @@ public class PlayerMovement : MonoBehaviour
         //bool successfullyPickedUp = false;
         // If Im within range to pick up order and not already holding an order and press E
         // then pick up order
-        if (canPickUpOrder && !holdingOrder && orderBoxInRange && Input.GetKeyDown(KeyCode.E))
+        if (canPickUpOrder && !holdingOrder && orderBoxInRange && !selectedNPC && Input.GetKeyDown(KeyCode.E))
         {
             if (orderBoxInRange.canOrderBePickedUp())
             {
@@ -234,7 +292,7 @@ public class PlayerMovement : MonoBehaviour
         // If Im within range to pick up order and already holding an order and press E
         // then put down order
 
-        if (holdingOrder && orderboxBeingHeld && orderboxParent && orderBoxInRange && Input.GetKeyDown(KeyCode.E))
+        if (holdingOrder && orderboxBeingHeld && orderboxParent && orderBoxInRange && !selectedNPC && Input.GetKeyDown(KeyCode.E))
         {
             if (orderBoxInRange.isOrderAvailable())
             {
@@ -250,36 +308,61 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    void unhighlightEverything()
+    {
+        turnAnimationOffForAllCollisions();
+        trashcan.color = normal_trash_can_color;
+        turnHighlightOffForAll_NPC_Collisions();
+    }
+
     void UpdateNPCSelection()
     {
         if (NPCcollisionDetectionChange)
         {
             NPCcollisionDetectionChange = false;
-            collisionDetectionChange = false;//// COULD BE A BUG but preventing selecting more than one thing!
-            turnHighlightOffForAll_NPC_Collisions();
+            //turnAnimationOffForAllCollisions();
+            //trashcan.color = normal_trash_can_color;
+            unhighlightEverything();
+
+            collisionDetectionChange = false;//// COULD BE A BUG but preventing selecting more than one thing! Priortize NPC collisions
+            //turnHighlightOffForAll_NPC_Collisions();
 
             GameObject newNPC = null;
+            NPC newNPC_script = null;
             /*if (holdingOrder && orderboxBeingHeld)
             {
 
             }*/
 
-            foreach (GameObject npc in NPCsInCloseRangeCollision)
+            foreach (NPC npc in NPCsInCloseRangeCollision)
             {
-                if (isNewObjectCloserCompare(newNPC, npc))
+                if (isNewObjectCloserCompare(newNPC, npc.gameObject))
                 {
-                    NPC npc_script = npc.GetComponent<NPC>();
-                    if (npc_script.ready_to_order)//if they are at/touched the order waypoint
+                    //NPC npc_script = npc.GetComponent<NPC>();
+
+                    if (holdingOrder)
                     {
-                        newNPC = npc;
+                        if (npc.wasOrderPlaced)
+                        {
+                            newNPC = npc.gameObject;
+                            newNPC_script = npc;
+                        }
+                    }
+                    else
+                    {
+                        if (npc.ready_to_order)//if they were at/touched the order waypoint
+                        {
+                            newNPC = npc.gameObject;
+                            newNPC_script = npc;
+                        }
                     }
                 }
             }
 
-            if (newNPC != null)
+            if (newNPC_script != null)
             {
-                selectedNPC = newNPC;
-                selectedNPC.GetComponent<NPC>().turnOnHighlight();
+                selectedNPC = newNPC_script;
+                selectedNPC.turnOnHighlight();
             }
         }
     }
@@ -288,7 +371,7 @@ public class PlayerMovement : MonoBehaviour
     // Determines which parent box gets animated.
     void UpdateOrderSelection()
     {
-        if (collisionDetectionChange)
+        if (collisionDetectionChange && !selectedNPC)
         {
             turnAnimationOffForAllCollisions();
             collisionDetectionChange = false;
@@ -363,7 +446,7 @@ public class PlayerMovement : MonoBehaviour
 
     void AttemptToThrowAwayOrder()
     {
-        if (canThrowAwayOrder && holdingOrder && orderboxBeingHeld && Input.GetKeyDown(KeyCode.E))
+        if (canThrowAwayOrder && holdingOrder && orderboxBeingHeld && !selectedNPC && Input.GetKeyDown(KeyCode.E))
         {
             audio_manager.playPlayerThrowOrderAway();
             emptyHands();
@@ -395,7 +478,7 @@ public class PlayerMovement : MonoBehaviour
     }
     void turnHighlightOffForAll_NPC_Collisions()
     {
-        foreach (GameObject npc in NPCsInCloseRangeCollision)
+        foreach (NPC npc in NPCsInCloseRangeCollision)
         {
             npc.GetComponent<NPC>().turnOffHighlight();
         }
@@ -483,16 +566,20 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (collision.tag == "npc")
         {
-            if (!NPCsInCloseRangeCollision.Contains(collision.gameObject))
+            NPC npc_script = collision.gameObject.GetComponent<NPC>();
+            if (!NPCsInCloseRangeCollision.Contains(npc_script))
             {
-                NPCsInCloseRangeCollision.Add(collision.gameObject);
+                NPCsInCloseRangeCollision.Add(npc_script);
                 NPCcollisionDetectionChange = true;
             }
         }
         else if (collision.tag == "trash can")
         {
-            canThrowAwayOrder = true;
-            collision.gameObject.GetComponent<SpriteRenderer>().color = new Color32(170, 170, 170, 255);
+            if (!selectedNPC)
+            {
+                canThrowAwayOrder = true;
+                collision.gameObject.GetComponent<SpriteRenderer>().color = highlighted_trash_can_color;
+            }
             if (testCollision)
             {
                 print("Entered trash can");
@@ -529,9 +616,10 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (collision.tag == "npc")
         {
-            if (NPCsInCloseRangeCollision.Contains(collision.gameObject))
+            NPC npc_script = collision.gameObject.GetComponent<NPC>();
+            if (NPCsInCloseRangeCollision.Contains(npc_script))
             {
-                NPCsInCloseRangeCollision.Remove(collision.gameObject);
+                NPCsInCloseRangeCollision.Remove(npc_script);
                 collision.gameObject.GetComponent<NPC>().turnOffHighlight();
             }
 
@@ -545,7 +633,7 @@ public class PlayerMovement : MonoBehaviour
         else if (collision.tag == "trash can")
         {
             canThrowAwayOrder = false;
-            collision.gameObject.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 255);
+            collision.gameObject.GetComponent<SpriteRenderer>().color = normal_trash_can_color;
             if (testCollision)
             {
                 print("leaving trash can");
@@ -553,7 +641,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    /*private void OnCollisionEnter(Collision collision)
     {
         if (testCollision)
         {
@@ -592,5 +680,5 @@ public class PlayerMovement : MonoBehaviour
 
             NPCcollisionDetectionChange = true;
         }
-    }
+    }*/
 }
