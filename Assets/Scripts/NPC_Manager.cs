@@ -20,6 +20,7 @@ public class NPC_Manager : MonoBehaviour
     public Sprite[] NPC_Sprites;
 
     public aWayPointSuperManager SuperManager;
+    aWayPoint orderWayPoint;
 
     public Collider2D right_wall;
     public Collider2D left_wall;
@@ -32,6 +33,7 @@ public class NPC_Manager : MonoBehaviour
         spawning_timer.max_time_in_seconds = max_spawning_time;
         spawning_timer.reset_timer();
         clearOrderOptions();
+        orderWayPoint = SuperManager.getOrderingWayPoint();
     }
 
     public void clearOrderOptions()
@@ -120,8 +122,9 @@ public class NPC_Manager : MonoBehaviour
         npc_obj.currentWayPoint = SuperManager.spawningPoint;
         Tuple<int, aWayPoint> newPoint = SuperManager.getNextStateAndWayPoint((int)NPC.State.spawned, npc_obj.currentWayPoint);
         npc_obj.nextWayPoint = newPoint.Item2;
+        npc_obj.orderingWayPoint = orderWayPoint;
 
-        // prevent NPC colliding with right and left wall
+        // prevent NPC colliding with right and left wall for spawning and exitting/deletion
         Physics2D.IgnoreCollision(right_wall, npc_game_obj.GetComponent<Collider2D>());
         Physics2D.IgnoreCollision(left_wall , npc_game_obj.GetComponent<Collider2D>());
 

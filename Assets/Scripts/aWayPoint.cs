@@ -25,10 +25,10 @@ public class aWayPoint : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        print($"HIT! {collision.name}");
+        //print($"HIT! {collision.name}");
         if (collision.tag == "npc")
         {
-            print(">>Hit NPC!!!");
+            //print(">>Hit NPC!!!");
             //isFree = false;
             current_objects.Add(collision.gameObject);
             isFree = false;

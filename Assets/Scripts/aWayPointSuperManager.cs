@@ -26,6 +26,12 @@ public class aWayPointSuperManager : MonoBehaviour
         return spawningPoint.GetComponent<Transform>();
     }
 
+    public aWayPoint getOrderingWayPoint()
+    {
+        aWayPoint[] manager_points = pointManagers[(int)NPC.State.entering].myPoints;
+        return manager_points[manager_points.Length - 1];
+    }
+
     public Tuple<int, aWayPoint> getNextStateAndWayPoint(int current_state, aWayPoint current_point)
     {
         int new_state = -5;

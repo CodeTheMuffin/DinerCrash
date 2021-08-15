@@ -7,6 +7,7 @@ public class NPC : MonoBehaviour
     OrderForm expectedOrder;
     public aWayPoint currentWayPoint;
     public aWayPoint nextWayPoint;
+    public aWayPoint orderingWayPoint;
 
     public Timer walkingTimer;
     float walking_step;
@@ -15,8 +16,9 @@ public class NPC : MonoBehaviour
     public int current_state;
     public int node_index = 0;
     public bool ready_for_next_point = false; //for when the NPC reached the nextWayPoint
+    public bool ready_to_order; // reached order waypoint
 
-    Color deselectedColor = new Color(1f, 1f, 1f, 0.8f);
+    Color deselectedColor = new Color(1f, 1f, 1f, 0.9f);
     Color selectedColor = new Color(1f, 1f, 1f, 1f);
 
     public enum State
@@ -42,7 +44,7 @@ public class NPC : MonoBehaviour
 
     public void updateTimer()
     {
-        walkingTimer.max_time_in_seconds = UnityEngine.Random.Range(0.1f, 0.25f);
+        walkingTimer.max_time_in_seconds = UnityEngine.Random.Range(0.05f, 0.25f); // the amount of time to move 0.125 units (1 pixel)
     }
 
     public void updateTimerForEntering()
@@ -127,6 +129,7 @@ public class NPC : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        //print($"Something collided with NPC {collision.name} {collision.tag}");
         if (collision.tag == "waypoint")
         {
             /*
@@ -137,7 +140,15 @@ public class NPC : MonoBehaviour
             if (collidedWayPoint == nextWayPoint)
             {
                 collidedWayPoint.isFree = false;
-                ready_for_next_point = true;
+
+                if (collidedWayPoint != orderingWayPoint)
+                {
+                    ready_for_next_point = true;
+                }
+                else
+                {
+                    ready_to_order = true;
+                }
             }
         }
     }

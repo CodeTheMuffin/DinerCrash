@@ -268,7 +268,11 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (isNewObjectCloserCompare(newNPC, npc))
                 {
-                    newNPC = npc;
+                    NPC npc_script = npc.GetComponent<NPC>();
+                    if (npc_script.ready_to_order)//if they are at/touched the order waypoint
+                    {
+                        newNPC = npc;
+                    }
                 }
             }
 
@@ -477,6 +481,14 @@ public class PlayerMovement : MonoBehaviour
                 collisionDetectionChange = true;
             }
         }
+        else if (collision.tag == "npc")
+        {
+            if (!NPCsInCloseRangeCollision.Contains(collision.gameObject))
+            {
+                NPCsInCloseRangeCollision.Add(collision.gameObject);
+                NPCcollisionDetectionChange = true;
+            }
+        }
         else if (collision.tag == "trash can")
         {
             canThrowAwayOrder = true;
@@ -515,7 +527,21 @@ public class PlayerMovement : MonoBehaviour
                 collisionDetectionChange = true;
             }
         }
-        
+        else if (collision.tag == "npc")
+        {
+            if (NPCsInCloseRangeCollision.Contains(collision.gameObject))
+            {
+                NPCsInCloseRangeCollision.Remove(collision.gameObject);
+                collision.gameObject.GetComponent<NPC>().turnOffHighlight();
+            }
+
+            if (NPCsInCloseRangeCollision.Count == 0)
+            {
+                selectedNPC = null;
+            }
+
+            NPCcollisionDetectionChange = true;
+        }
         else if (collision.tag == "trash can")
         {
             canThrowAwayOrder = false;
