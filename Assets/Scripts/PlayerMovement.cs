@@ -200,13 +200,15 @@ public class PlayerMovement : MonoBehaviour
         //selected NPC should only have ready_to_order as true
         if (selectedNPC) // TODO: prepare ordering for NPC
         {
-            if (Input.GetKeyDown(KeyCode.E))// and Not hold order (do that for giving order??)
+            if (Input.GetKeyDown(KeyCode.E))
             {
                 if (holdingOrder)
                 {
                     if (selectedNPC.wasOrderPlaced)
                     {
                         // give NPC the order
+                        selectedNPC.receiveOrderFromPlayer(orderboxBeingHeld.GetComponent<OrderBox>().orderForm);
+                        emptyHands();
                         selectedNPC.prepareForExitting();
                     }
                 }

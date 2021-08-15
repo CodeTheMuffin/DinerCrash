@@ -21,7 +21,7 @@ public class NPC : MonoBehaviour
     public bool need_new_standing_point = false; // for when their current standing spot was taken; find new one!
     public bool wasOrderPlaced = false; // for when the player placed the order for the NPC // also indicates delivery
 
-    public List<OrderBox> orders = new List<OrderBox>();
+    public List<OrderForm> orders = new List<OrderForm>();
 
     Color deselectedColor = new Color(1f, 1f, 1f, 0.9f);
     Color selectedColor = new Color(1f, 1f, 1f, 1f);
@@ -45,6 +45,12 @@ public class NPC : MonoBehaviour
     public void setOrderForm(OrderForm order)
     {
         expectedOrder = order;
+    }
+
+    // when the player hands over the order to the customer
+    public void receiveOrderFromPlayer(OrderForm order)
+    {
+        orders.Add(order);
     }
 
     public void updateTimer()
