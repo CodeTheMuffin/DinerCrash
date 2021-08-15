@@ -34,7 +34,7 @@ public class NPC_Manager : MonoBehaviour
     void Start()
     {
         spawning_timer.max_time_in_seconds = max_spawning_time;
-        spawning_timer.reset_timer();
+        //spawning_timer.reset_timer();
         clearOrderOptions();
         orderWayPoint = SuperManager.getOrderingWayPoint();
     }
@@ -108,7 +108,7 @@ public class NPC_Manager : MonoBehaviour
             foreach (NPC deadNPC in DyingNPCs)
             {
                 NPCs.Remove(deadNPC);
-                Destroy(deadNPC.gameObject, 10f);//Destroy in 2 seconds
+                Destroy(deadNPC.gameObject, 2f);//Destroy in 2 seconds
             }
             DyingNPCs.Clear();
         }

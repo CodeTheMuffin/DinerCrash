@@ -30,7 +30,7 @@ public class AudioManager : MonoBehaviour
     public void playPlayerPickOrderUp()
     { audioSource.PlayOneShot(pickingOrderUp); }
     public void playPlayerThrowOrderAway()
-    { audioSource.PlayOneShot(throwOrderAway, 0.01f); }
+    { audioSource.PlayOneShot(throwOrderAway, 0.5f); }
 
     public void playOrderReadyForPickUp()
     { audioSource.PlayOneShot(orderReadyForPickUp); }
