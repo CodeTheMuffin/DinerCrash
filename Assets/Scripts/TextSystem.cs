@@ -63,7 +63,8 @@ public class TextSystem : MonoBehaviour
         jsontext = LoadJSON("Text/en-npc_text");
         NPC_JSON = JSON.Parse(jsontext);
 
-        //ProcessJSONs(); // suppose to help safe some time, but TBH may not be worth the initial loading time...
+        //Need to keep for warning methods()
+        ProcessJSONs(); // suppose to help safe some time, but TBH may not be worth the initial loading time... 
 
         adjust_scroll_availability();
     }
@@ -1037,7 +1038,8 @@ public class TextSystem : MonoBehaviour
     public void update_textbox()
     {
         string message = "";
-        if (warning_string.Length > 0 && NPC_string.Length > 0)
+
+        /*if (warning_string.Length > 0 && NPC_string.Length > 0)
         {
             message = warning_string + "\n" + buffer_line + "\n" + NPC_string;
         }
@@ -1048,7 +1050,18 @@ public class TextSystem : MonoBehaviour
         else if (NPC_string.Length > 0)
         {
             message = NPC_string;
-        }
+        }*/
+        //Priority: warning, system, then NPC
+
+        message = warning_string;
+        if (warning_string.Length > 0 && (NPC_string.Length > 0 || system_string.Length > 0))
+        { message += "\n" + buffer_line + "\n"; }
+
+        message += system_string;
+        if (system_string.Length > 0 && NPC_string.Length > 0)
+        { message += "\n" + buffer_line + "\n"; }
+
+        message += NPC_string;
 
         if (message.Length > 0)
         {
@@ -1096,7 +1109,15 @@ public class TextSystem : MonoBehaviour
 
     public void updateNPCtext(string formatted_text)
     {
+        warning_string = "";
+        system_string = "";
         NPC_string = formatted_text;
+        update_textbox();
+    }
+
+    public void updateSystemText(string text)
+    {
+        system_string = adjustTextRegex(text).Item1;
         update_textbox();
     }
 

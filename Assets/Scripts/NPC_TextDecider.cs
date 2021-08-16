@@ -205,7 +205,10 @@ public class NPC_TextDecider : MonoBehaviour
         textSYS.updateNPCtext(formatted_text);
     }
 
-
+    public void updateSystemText(string text)
+    {
+        textSYS.updateSystemText(text);
+    }
     /*// BELOW FOR DEBUGGING      COMMENT OUT
     // Need to stop spawning or limit to 1
     public int index = 0;

@@ -22,6 +22,8 @@ public class NPC : MonoBehaviour
     public bool need_new_standing_point = false; // for when their current standing spot was taken; find new one!
     public bool wasOrderPlaced = false; // for when the player placed the order for the NPC // also indicates delivery
 
+    //when combined all of them, consider not applying discount if only one of them have it
+    // if applied, it would throw off weighted rating
     public List<OrderForm> orders = new List<OrderForm>();
 
     public string request_text = "";// should already be formatted to textbox
@@ -65,6 +67,18 @@ public class NPC : MonoBehaviour
     public void receiveOrderFromPlayer(OrderForm order)
     {
         orders.Add(order);
+
+        /*
+         KEYS:
+        "rating"
+        "missing"
+        "missing_total"
+        "weighted_rating"
+         */
+        Dictionary<string, object> rating_info = OrderForm.rateOrderReceived(expectedOrder, order);
+
+        text_decider.updateSystemText($"Weighted Rating:{System.Math.Round((float)rating_info["weighted_rating"] * 100)}%");
+        //print($"Weighted rating: {(float)rating_info["weighted_rating"]*100}%");
     }
 
     public void updateTimer()
