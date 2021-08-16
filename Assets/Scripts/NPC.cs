@@ -65,8 +65,13 @@ public class NPC : MonoBehaviour
         progress_standing_wait_time = (float)System.Math.Round(Random.Range(10f, 20f));
 
         progress_bar.setProgessMaxTime(progress_entering_wait_time);
+        progress_bar.progress_timer.timer_stopped = true;
         progress_bar.bar_color = progress_color_entering;
         progress_bar.resetProgress();
+
+        //hide progress bar until reached first entering way point!
+        progress_bar.gameObject.SetActive(false);
+
         //print(request_text);
     }
 
@@ -101,6 +106,11 @@ public class NPC : MonoBehaviour
     public void updateTimer()
     {
         walkingTimer.max_time_in_seconds = UnityEngine.Random.Range(0.05f, 0.2f); // the amount of time to move 0.125 units (1 pixel)
+    }
+
+    public void updateProgressbar(float delta_time)
+    { 
+        
     }
 
     public void updateTimerForEntering()
@@ -214,6 +224,13 @@ public class NPC : MonoBehaviour
 
             if (collidedWayPoint == nextWayPoint)
             {
+                //unhide progress bar now that it reached (persumably) the first entering way point!
+                if (!progress_bar.gameObject.activeSelf)
+                {
+                    progress_bar.gameObject.SetActive(true);
+                    progress_bar.progress_timer.reset_timer();
+                }
+
                 collidedWayPoint.isFree = false;
                 if (collidedWayPoint != orderingWayPoint && collidedWayPoint != standingWayPoint)
                 {
