@@ -23,9 +23,14 @@ public class ProgressBar : MonoBehaviour
         bool isDone = progress_timer.tick_n_check(delta_time);
 
         //progress should be going down
-        progress = progress_timer.getTimerCompletionPercentage();// ranges from 0.0 to 1.0 as 100%
+        progress = 1f - progress_timer.getTimerCompletionPercentage();// ranges from 0.0 to 1.0 as 100%
 
-        int bar_index = (int)Mathf.Ceil(progress / percentage_per_bar) - 1;
+        int bar_index = 0;
+
+        if (!isDone)
+        { 
+            bar_index = (int)Mathf.Ceil(progress / percentage_per_bar) - 1;
+        }
 
         // only multipling by 1f to show that you need to multiply by the max alpha range. 
         // For Color, alpha range is 0.0 to 1.0
@@ -34,8 +39,14 @@ public class ProgressBar : MonoBehaviour
         //localizes the progress of a given bar to adjust the alpha level of that bar
         float alpha_at_index = ((progress-(bar_index*percentage_per_bar))/ percentage_per_bar) * 1f;
 
-        Color old_color = bars[bar_index].color;
+        if (bar_index + 1 < bars.Count)
+        {
+            //set the previous bar's alpha to zero, so doesn't appear. Again using range 0-1f. Not 0-255.
+            Color previous_bar_old_color = bars[bar_index+1].color;
+            bars[bar_index+1].color = new Color(previous_bar_old_color.r, previous_bar_old_color.g, previous_bar_old_color.b, 0f);
+        }
 
+        Color old_color = bars[bar_index].color;
         bars[bar_index].color = new Color( old_color.r, old_color.g, old_color.b, alpha_at_index);
     }
 

@@ -60,10 +60,11 @@ public class NPC : MonoBehaviour
 
         request_text = text_decider.generateRequestsAndFormat();
 
-        progress_entering_wait_time = (float)System.Math.Round(Random.Range(20f, 30f));
+        progress_entering_wait_time = 5f;//(float)System.Math.Round(Random.Range(20f, 30f));
         progress_ordering_wait_time = (float)System.Math.Round(Random.Range(15f, 25f));
         progress_standing_wait_time = (float)System.Math.Round(Random.Range(10f, 20f));
 
+        progress_bar.calculateAndSetPPB();
         progress_bar.setProgessMaxTime(progress_entering_wait_time);
         progress_bar.progress_timer.timer_stopped = true;
         progress_bar.bar_color = progress_color_entering;
@@ -109,8 +110,11 @@ public class NPC : MonoBehaviour
     }
 
     public void updateProgressbar(float delta_time)
-    { 
-        
+    {
+        if (progress_bar.gameObject.activeSelf && !progress_bar.progress_timer.isTimerDone())
+        {
+            progress_bar.updateProgress(delta_time);
+        }
     }
 
     public void updateTimerForEntering()
