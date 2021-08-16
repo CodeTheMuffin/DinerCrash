@@ -135,7 +135,7 @@ public class NPC_Manager : MonoBehaviour
         {
             int quantity = UnityEngine.Random.Range(0, UI_Manger.MAX_AMOUNT);
             order_options_quantity[key] = quantity;
-            print($"Key: {key} amount: {quantity.ToString()}");
+            //print($"Key: {key} amount: {quantity.ToString()}");
         }
 
         int cholocate_cookie_counter = order_options_quantity[keys[0]];

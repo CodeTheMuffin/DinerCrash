@@ -24,7 +24,7 @@ public class NPC : MonoBehaviour
 
     public List<OrderForm> orders = new List<OrderForm>();
 
-    public string request_text = "";
+    public string request_text = "";// should already be formatted to textbox
     public List<string> request_text_box = new List<string>();
 
 
@@ -47,8 +47,13 @@ public class NPC : MonoBehaviour
         turnOffHighlight();
         current_state = (int)State.entering;
 
-        request_text = text_decider.generateRequests();
+        request_text = text_decider.generateRequestsAndFormat();
         //print(request_text);
+    }
+
+    public void tellPlayerOrder()
+    {
+        text_decider.updateNPCtext(request_text);
     }
 
     public void setOrderForm(OrderForm order)
@@ -96,11 +101,6 @@ public class NPC : MonoBehaviour
         updateMovement(Time.deltaTime);
     }
 
-    // Update is called once per frame
-    /*void Update()
-    {
-        
-    }*/
     void calculateWalkingStep()
     {
         if (currentWayPoint && nextWayPoint)

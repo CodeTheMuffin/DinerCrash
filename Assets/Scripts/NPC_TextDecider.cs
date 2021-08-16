@@ -175,6 +175,16 @@ public class NPC_TextDecider : MonoBehaviour
         return nothing_text;
     }
 
+    public string generateRequestsAndFormat()
+    {
+        string req_text = generateRequests();
+
+        System.Tuple<string, List<string>> output = textSYS.adjustTextRegex(req_text);
+        req_text = output.Item1;
+
+        return req_text;
+    }
+
     public string get_request_with_option(int quantity, string option_key, string formatted_text)
     {
         string s = "";
@@ -189,4 +199,44 @@ public class NPC_TextDecider : MonoBehaviour
 
         return s;
     }
+
+    public void updateNPCtext(string formatted_text)
+    {
+        textSYS.updateNPCtext(formatted_text);
+    }
+
+
+    /*// BELOW FOR DEBUGGING      COMMENT OUT
+    // Need to stop spawning or limit to 1
+    public int index = 0;
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            //string str = optionDict[option_keys[index]];
+            //string str = requestDict[request_keys[index]];
+            string str = nothingDict[nothing_keys[index]];
+            print($"Index: {index}\tstring: {str}");
+            System.Tuple<string, List<string>> info = textSYS.adjustTextRegex(str);
+
+            //textSYS.clearEverything();
+            textSYS.NPC_string = info.Item1;
+            //textSYS.textBox = info.Item2;
+            textSYS.update_textbox();
+
+            //index = (index + 1) % option_keys.Count;
+            //index = (index + 1) % request_keys.Count;
+            index = (index + 1) % nothing_keys.Count;
+        }
+
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            int i = 0;
+            foreach (string key in request_keys)
+            {
+                print($"i: {i}\tkey: {key}\tvalue: {requestDict[key]}");
+                i++;
+            }
+        }
+    }*/
 }
