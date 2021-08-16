@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class NPC : MonoBehaviour
 {
+    public NPC_TextDecider text_decider;
     OrderForm expectedOrder;
     public aWayPoint currentWayPoint;
     public aWayPoint nextWayPoint;
@@ -23,6 +24,11 @@ public class NPC : MonoBehaviour
 
     public List<OrderForm> orders = new List<OrderForm>();
 
+    public string request_text = "";
+    public List<string> request_text_box = new List<string>();
+
+
+
     Color deselectedColor = new Color(1f, 1f, 1f, 0.9f);
     Color selectedColor = new Color(1f, 1f, 1f, 1f);
 
@@ -40,6 +46,9 @@ public class NPC : MonoBehaviour
         updateTimer();
         turnOffHighlight();
         current_state = (int)State.entering;
+
+        request_text = text_decider.generateRequests();
+        print(request_text);
     }
 
     public void setOrderForm(OrderForm order)

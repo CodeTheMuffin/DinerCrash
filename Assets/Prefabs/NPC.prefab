@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 3373595083114030645}
   - component: {fileID: 4381623448528815039}
   - component: {fileID: 2155334707860762979}
+  - component: {fileID: 6328131555632162720}
   m_Layer: 0
   m_Name: NPC
   m_TagString: npc
@@ -152,13 +153,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 562fa347d5952474b94e992f149da243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  text_decider: {fileID: 6328131555632162720}
   currentWayPoint: {fileID: 0}
   nextWayPoint: {fileID: 0}
   orderingWayPoint: {fileID: 0}
+  standingWayPoint: {fileID: 0}
   walkingTimer: {fileID: 2155334707860762979}
   current_state: 0
   node_index: 0
   ready_for_next_point: 0
+  ready_to_order: 0
+  need_new_standing_point: 0
+  wasOrderPlaced: 0
+  request_text: 
+  request_text_box: []
 --- !u!114 &2155334707860762979
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -174,3 +182,16 @@ MonoBehaviour:
   max_time_in_seconds: 2
   time: 0
   timer_stopped: 0
+--- !u!114 &6328131555632162720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4381623448528815038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6050ab754799c64787adb74f50d99c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textSYS: {fileID: 0}

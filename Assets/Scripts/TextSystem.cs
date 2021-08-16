@@ -35,9 +35,9 @@ public class TextSystem : MonoBehaviour
     string buffer_line = "";
 
     //used as keys in JSON Nodes
-    static string RAW_TEXT = "RAW_TEXT";
-    static string FORMATTED_TEXT = "FORMATTED_TEXT";
-    static string TEXTBOX_TEXT = "TEXTBOX_TEXT";
+    public const string RAW_TEXT = "RAW_TEXT";
+    public const string FORMATTED_TEXT = "FORMATTED_TEXT";
+    public const string TEXTBOX_TEXT = "TEXTBOX_TEXT";
 
     public void Start()
     {
@@ -155,6 +155,9 @@ public class TextSystem : MonoBehaviour
         }
     }
 
+
+    public JSONNode get_NPC_JSON()
+    { return NPC_JSON; }
 
     // excludes the spaces
     public string[] getAllWords(string text)

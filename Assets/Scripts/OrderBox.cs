@@ -7,14 +7,14 @@ public class OrderBox : MonoBehaviour
     /*enum Options
     {
         cholocate_cookie = 0,
-        oatmeal_raisan_cookie = 1,
+        oatmeal_raisin_cookie = 1,
         normal_milk = 2,
         warm_milk = 3
     }
 
     public static Dictionary<string, int> option_names_to_index = new Dictionary<string, int>() {
         {"opt 01", (int)Options.cholocate_cookie},
-        {"opt 02", (int)Options.oatmeal_raisan_cookie},
+        {"opt 02", (int)Options.oatmeal_raisin_cookie},
         {"opt 03", (int)Options.normal_milk},
         {"opt 04", (int)Options.warm_milk}
     };*/
@@ -53,8 +53,8 @@ public class OrderBox : MonoBehaviour
         if (orderForm.cholocate_cookie_counter > 0)
         { optionVisibility((int)OrderOptions.Options.cholocate_cookie, true); }
 
-        if (orderForm.oatmeal_raisan_cookie_counter > 0)
-        { optionVisibility((int)OrderOptions.Options.oatmeal_raisan_cookie, true); }
+        if (orderForm.oatmeal_raisin_cookie_counter > 0)
+        { optionVisibility((int)OrderOptions.Options.oatmeal_raisin_cookie, true); }
 
         if (orderForm.normal_milk_counter > 0)
         { optionVisibility((int)OrderOptions.Options.normal_milk, true); }

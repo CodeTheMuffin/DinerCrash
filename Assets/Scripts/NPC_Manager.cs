@@ -20,6 +20,7 @@ public class NPC_Manager : MonoBehaviour
 
     public Sprite[] NPC_Sprites;
 
+    public TextSystem textSYS;
     public aWayPointSuperManager SuperManager;
     aWayPoint orderWayPoint;
 
@@ -72,7 +73,8 @@ public class NPC_Manager : MonoBehaviour
             if (robot.current_state == (int)NPC.State.dying)
             {
                 DyingNPCs.Add(robot);
-                robot.transform.position = AreaToDie.position;
+                //Repositioned so it can get out of last WayPoint collider and be removed from memory
+                robot.transform.position = AreaToDie.position; 
                 continue;
             }
 
@@ -123,33 +125,38 @@ public class NPC_Manager : MonoBehaviour
         configureOptions();
     }
 
-    public void configureOptions()
+    OrderForm createRandomExpectedOrderForm()
     {
-        // Setting quantity values per option
-        clearOrderOptions();
-
         // using this or directly in foreach loop wouldn't let me modify the dictionary
         //Dictionary<string, int>.KeyCollection keys = order_options_quantity.Keys; 
         List<string> keys = new List<string>(order_options_quantity.Keys);
 
-        foreach (string key in keys )
+        foreach (string key in keys)
         {
             int quantity = UnityEngine.Random.Range(0, UI_Manger.MAX_AMOUNT);
             order_options_quantity[key] = quantity;
             //print($"Key: {key} amount: {quantity.ToString()}");
         }
 
-        int cholocate_cookie_counter        = order_options_quantity[keys[0]];
-        int oatmeal_raisan_cookie_counter   = order_options_quantity[keys[1]];
-        int normal_milk_counter             = order_options_quantity[keys[2]];
-        int warm_milk_counter               = order_options_quantity[keys[3]];
+        int cholocate_cookie_counter = order_options_quantity[keys[0]];
+        int oatmeal_raisin_cookie_counter = order_options_quantity[keys[1]];
+        int normal_milk_counter = order_options_quantity[keys[2]];
+        int warm_milk_counter = order_options_quantity[keys[3]];
 
         int total = 0;
         bool discount = false;
 
         // Making the expected order form
-        OrderForm expectedOrderForm = new OrderForm(cholocate_cookie_counter, oatmeal_raisan_cookie_counter, normal_milk_counter, warm_milk_counter, total, discount);
+        OrderForm expectedOrderForm = new OrderForm(cholocate_cookie_counter, oatmeal_raisin_cookie_counter, normal_milk_counter, warm_milk_counter, total, discount);
+        return expectedOrderForm;
+    }
 
+    public void configureOptions()
+    {
+        // Setting quantity values per option
+        clearOrderOptions();
+
+        OrderForm expectedOrderForm = createRandomExpectedOrderForm();
 
         // Determine what sprite to use and the color
         int sprite_index = UnityEngine.Random.Range(0, NPC_Sprites.Length);
@@ -167,10 +174,12 @@ public class NPC_Manager : MonoBehaviour
         Physics2D.IgnoreCollision(right_wall, npc_game_obj.GetComponent<Collider2D>());
         Physics2D.IgnoreCollision(left_wall , npc_game_obj.GetComponent<Collider2D>());
 
-        npc_obj.justSpawnedHandler();
-        //npc_obj.nextWayPoint = SuperManager.
+        
         npc_obj.setSprite(npc_sprite);
         npc_obj.setOrderForm(expectedOrderForm);
+        npc_obj.text_decider.SetValues(textSYS, expectedOrderForm);
+        npc_obj.justSpawnedHandler();
+
         NPCs.Add(npc_obj);
     }
 }
