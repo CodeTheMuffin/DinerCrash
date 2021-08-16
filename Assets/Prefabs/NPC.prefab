@@ -416,6 +416,8 @@ MonoBehaviour:
   progress_color_entering: {r: 0.5921569, g: 0.85490197, b: 0.24705882, a: 1}
   progress_color_ordering: {r: 0.44705883, g: 0.8392157, b: 0.80784315, a: 1}
   progress_color_standing: {r: 0.98039216, g: 0.79607844, b: 0.24313726, a: 1}
+  progress_color_exitting_mad: {r: 0.85490197, g: 0.30588236, b: 0.21960784, a: 1}
+  progress_color_exitting_happy: {r: 0.99215686, g: 0.96862745, b: 0.92941177, a: 1}
   progress_entering_wait_time: 30
   progress_ordering_wait_time: 25
   progress_standing_wait_time: 20

@@ -33,6 +33,8 @@ public class NPC : MonoBehaviour
     public Color progress_color_entering = Color.green;
     public Color progress_color_ordering = Color.blue;
     public Color progress_color_standing = Color.yellow;
+    public Color progress_color_exitting_mad = Color.red;
+    public Color progress_color_exitting_happy = Color.green;
 
     public float progress_entering_wait_time = 30f;//Random.Range(20f, 30f);
     public float progress_ordering_wait_time = 25f;// Random.Range(15f, 25f);
@@ -60,7 +62,7 @@ public class NPC : MonoBehaviour
 
         request_text = text_decider.generateRequestsAndFormat();
 
-        progress_entering_wait_time = 5f;//(float)System.Math.Round(Random.Range(20f, 30f));
+        progress_entering_wait_time = (float)System.Math.Round(Random.Range(20f, 30f));
         progress_ordering_wait_time = (float)System.Math.Round(Random.Range(15f, 25f));
         progress_standing_wait_time = (float)System.Math.Round(Random.Range(10f, 20f));
 
@@ -100,8 +102,25 @@ public class NPC : MonoBehaviour
          */
         Dictionary<string, object> rating_info = OrderForm.rateOrderReceived(expectedOrder, order);
 
-        text_decider.updateSystemText($"Weighted Rating:{System.Math.Round((float)rating_info["weighted_rating"] * 100)}%");
-        //print($"Weighted rating: {(float)rating_info["weighted_rating"]*100}%");
+        float success_rate = (float)rating_info["weighted_rating"];
+
+        text_decider.updateSystemText($"Weighted Rating:{System.Math.Round(success_rate * 100)}%");
+
+        if (success_rate >= 0.8f)
+        {
+            progress_bar.bar_color = progress_color_exitting_mad;
+        }
+        else if (success_rate >= 0.4f)
+        {
+            progress_bar.bar_color = progress_color_standing;
+        }
+        else
+        {
+            progress_bar.bar_color = progress_color_exitting_mad;
+        }
+
+        progress_bar.resetProgress();
+        print($"Weighted rating: {(float)rating_info["weighted_rating"]*100}%");
     }
 
     public void updateTimer()
@@ -111,9 +130,18 @@ public class NPC : MonoBehaviour
 
     public void updateProgressbar(float delta_time)
     {
-        if (progress_bar.gameObject.activeSelf && !progress_bar.progress_timer.isTimerDone())
+        bool progressDone = progress_bar.progress_timer.isTimerDone();
+
+        if (progress_bar.gameObject.activeSelf && !progressDone && current_state != (int)NPC.State.exitting)
         {
             progress_bar.updateProgress(delta_time);
+        }
+        else if (progressDone) //  and orders.Count == 0 ???
+        {
+            //TODO: AND they didn't receive an order, then leave!
+            prepareForExitting();
+            progress_bar.bar_color = progress_color_exitting_mad;
+            progress_bar.resetProgress();
         }
     }
 
@@ -213,7 +241,7 @@ public class NPC : MonoBehaviour
     { 
         current_state = (int)NPC.State.exitting;
         ready_for_next_point = true;
-        print("Preparing for exitting");
+        //print("Preparing for exitting");
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
