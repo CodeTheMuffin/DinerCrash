@@ -12,7 +12,7 @@ public class OrderManager : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("Press 'I' to do stuff");
+        //Debug.Log("Press 'I' to do stuff");
         resetALLOrderBoxesAndHide();
     }
 
@@ -56,7 +56,8 @@ public class OrderManager : MonoBehaviour
     }
 
 
-    private void Update()
+    /*DEBUG
+     private void Update()
     {
         quickTest();
     }
@@ -69,5 +70,5 @@ public class OrderManager : MonoBehaviour
             //print("Next free order spot: " + get_next_available_order_index().ToString());
             resetALLOrderBoxesAndHide();
         }
-    }
+    }*/
 }

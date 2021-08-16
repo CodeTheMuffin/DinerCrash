@@ -29,6 +29,15 @@ public class NPC : MonoBehaviour
     public string request_text = "";// should already be formatted to textbox
     public List<string> request_text_box = new List<string>();
 
+    public ProgressBar progress_bar;
+    public Color progress_color_entering = Color.green;
+    public Color progress_color_ordering = Color.blue;
+    public Color progress_color_standing = Color.yellow;
+
+    public float progress_entering_wait_time = 30f;//Random.Range(20f, 30f);
+    public float progress_ordering_wait_time = 25f;// Random.Range(15f, 25f);
+    public float progress_standing_wait_time = 20f;// Random.Range(10f, 20f);
+
 
 
     Color deselectedColor = new Color(1f, 1f, 1f, 0.9f);
@@ -50,6 +59,14 @@ public class NPC : MonoBehaviour
         current_state = (int)State.entering;
 
         request_text = text_decider.generateRequestsAndFormat();
+
+        progress_entering_wait_time = (float)System.Math.Round(Random.Range(20f, 30f));
+        progress_ordering_wait_time = (float)System.Math.Round(Random.Range(15f, 25f));
+        progress_standing_wait_time = (float)System.Math.Round(Random.Range(10f, 20f));
+
+        progress_bar.setProgessMaxTime(progress_entering_wait_time);
+        progress_bar.bar_color = progress_color_entering;
+        progress_bar.resetProgress();
         //print(request_text);
     }
 
