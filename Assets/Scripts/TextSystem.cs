@@ -11,33 +11,33 @@ using System.Linq;
 
 public class TextSystem : MonoBehaviour
 {
-    const int MAX_CHARS_PER_ROW = 10; // The max number of chars per row
+    const int MAX_CHARS_PER_ROW = 11; // The max number of chars per row;       was 10
     const int MAX_ROWS = 2; // X rows to show on screen at a time
 
     public TMPro.TextMeshProUGUI chat_box_text;
     public Button scroll_UP_button;
     public Button scroll_DOWN_button;
 
-    List<string> textBox;
+    public List<string> textBox;
     int scroll_page = 0;
 
     const char NEWLINE = '`';// If this is present, then place a new line in string.
 
-    string warning_string = "";
-    JSONNode warningJSON;
+    public string warning_string = "";
+    public JSONNode warningJSON;
 
-    string NPC_string = "";
-    JSONNode NPC_JSON;
+    public string NPC_string = "";
+    public JSONNode NPC_JSON;
 
-    string system_string = "";
-    JSONNode system_JSON;
+    public string system_string = "";
+    public JSONNode system_JSON;
 
     string buffer_line = "";
 
     //used as keys in JSON Nodes
-    static string RAW_TEXT = "RAW_TEXT";
-    static string FORMATTED_TEXT = "FORMATTED_TEXT";
-    static string TEXTBOX_TEXT = "TEXTBOX_TEXT";
+    public const string RAW_TEXT = "RAW_TEXT";
+    public const string FORMATTED_TEXT = "FORMATTED_TEXT";
+    public const string TEXTBOX_TEXT = "TEXTBOX_TEXT";
 
     public void Start()
     {
@@ -63,7 +63,8 @@ public class TextSystem : MonoBehaviour
         jsontext = LoadJSON("Text/en-npc_text");
         NPC_JSON = JSON.Parse(jsontext);
 
-        ProcessJSONs();
+        //Need to keep for warning methods()
+        ProcessJSONs(); // suppose to help safe some time, but TBH may not be worth the initial loading time... 
 
         adjust_scroll_availability();
     }
@@ -155,6 +156,25 @@ public class TextSystem : MonoBehaviour
         }
     }
 
+    public void clearEverything()
+    {
+        textBox.Clear();
+        scroll_page = 0;
+
+        warning_string = "";
+        warningJSON.Clear();
+
+        NPC_string = "";
+        NPC_JSON.Clear();
+
+        //system_string = "";
+        //system_JSON.Clear();
+
+        update_text("");
+    }
+
+    public JSONNode get_NPC_JSON()
+    { return NPC_JSON; }
 
     // excludes the spaces
     public string[] getAllWords(string text)
@@ -1018,7 +1038,8 @@ public class TextSystem : MonoBehaviour
     public void update_textbox()
     {
         string message = "";
-        if (warning_string.Length > 0 && NPC_string.Length > 0)
+
+        /*if (warning_string.Length > 0 && NPC_string.Length > 0)
         {
             message = warning_string + "\n" + buffer_line + "\n" + NPC_string;
         }
@@ -1029,7 +1050,18 @@ public class TextSystem : MonoBehaviour
         else if (NPC_string.Length > 0)
         {
             message = NPC_string;
-        }
+        }*/
+        //Priority: warning, system, then NPC
+
+        message = warning_string;
+        if (warning_string.Length > 0 && (NPC_string.Length > 0 || system_string.Length > 0))
+        { message += "\n" + buffer_line + "\n"; }
+
+        message += system_string;
+        if (system_string.Length > 0 && NPC_string.Length > 0)
+        { message += "\n" + buffer_line + "\n"; }
+
+        message += NPC_string;
 
         if (message.Length > 0)
         {
@@ -1038,6 +1070,7 @@ public class TextSystem : MonoBehaviour
             textBox.Clear();
             textBox.AddRange(newTextbox);
             update_text(message);
+            scroll_page = 0;
             adjust_scroll_availability();
         }
     }    
@@ -1074,6 +1107,19 @@ public class TextSystem : MonoBehaviour
         }
     }
 
+    public void updateNPCtext(string formatted_text)
+    {
+        warning_string = "";
+        system_string = "";
+        NPC_string = formatted_text;
+        update_textbox();
+    }
+
+    public void updateSystemText(string text)
+    {
+        system_string = adjustTextRegex(text).Item1;
+        update_textbox();
+    }
 
     // For debugging purposes
     void print_text_boxes()

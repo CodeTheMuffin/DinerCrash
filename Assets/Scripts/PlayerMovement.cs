@@ -220,6 +220,7 @@ public class PlayerMovement : MonoBehaviour
                         {
                             // get order
                             print("Order received.");
+                            selectedNPC.tellPlayerOrder();
                             selectedNPC.prepareForStanding();
                         }
                         else // order was placed

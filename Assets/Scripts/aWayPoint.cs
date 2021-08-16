@@ -28,15 +28,14 @@ public class aWayPoint : MonoBehaviour
         //print($"HIT! {collision.name}");
         if (collision.tag == "npc")
         {
-            //print(">>Hit NPC!!!");
             //isFree = false;
             current_objects.Add(collision.gameObject);
             isFree = false;
 
-            if (collision.GetComponent<NPC>().current_state == (int)NPC.State.exitting)
+            /*if (collision.GetComponent<NPC>().current_state == (int)NPC.State.exitting)
             {
                 print($"Enter Exitting object at {transform.name}");
-            }
+            }*/
         }
     }
 
@@ -53,7 +52,7 @@ public class aWayPoint : MonoBehaviour
     {
         if (collision.tag == "npc")
         {
-            if (collision.GetComponent<NPC>().current_state == (int)NPC.State.exitting)
+            /*if (collision.GetComponent<NPC>().current_state == (int)NPC.State.exitting)
             {
                 print($"Exiting exitting object at {transform.name}");
             }
@@ -61,7 +60,7 @@ public class aWayPoint : MonoBehaviour
             if (collision.GetComponent<NPC>().current_state == (int)NPC.State.dying)
             {
                 print($"Exiting dying object at {transform.name}");
-            }
+            }*/
 
             GameObject g_obj = collision.gameObject;
 

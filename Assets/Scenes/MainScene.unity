@@ -5547,6 +5547,10 @@ MonoBehaviour:
   chat_box_text: {fileID: 2060831157}
   scroll_UP_button: {fileID: 1796500048}
   scroll_DOWN_button: {fileID: 600609374}
+  textBox: []
+  warning_string: 
+  NPC_string: 
+  system_string: 
 --- !u!1 &1447319347
 GameObject:
   m_ObjectHideFlags: 0
@@ -6370,6 +6374,7 @@ MonoBehaviour:
   - {fileID: -5935332612762631239, guid: bb7c27a6da7b6094ca7aeb1fb73febda, type: 3}
   - {fileID: 4115710053424014800, guid: bb7c27a6da7b6094ca7aeb1fb73febda, type: 3}
   - {fileID: 1606119240524437468, guid: bb7c27a6da7b6094ca7aeb1fb73febda, type: 3}
+  textSYS: {fileID: 1442281601}
   SuperManager: {fileID: 1447319349}
   right_wall: {fileID: 1079597279}
   left_wall: {fileID: 661466377}
@@ -7667,12 +7672,12 @@ MonoBehaviour:
   OrderingMenu: {fileID: 155613611}
   orderManager: {fileID: 1710291595}
   cholocate_cookie_text: {fileID: 208017527}
-  oatmeal_raisan_cookie_text: {fileID: 139367759}
+  oatmeal_raisin_cookie_text: {fileID: 139367759}
   normal_milk_text: {fileID: 1822863407}
   warm_milk_text: {fileID: 1581707860}
   total_amount_text: {fileID: 730301428}
   cholocate_cookie_button: {fileID: 1613952904}
-  oatmeal_raisan_cookie_button: {fileID: 1982144358}
+  oatmeal_raisin_cookie_button: {fileID: 1982144358}
   normal_milk_button: {fileID: 1700361635}
   warm_milk_button: {fileID: 379210671}
   discount_button_image: {fileID: 114906126}
@@ -8487,7 +8492,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1892858375}
         m_TargetAssemblyTypeName: UI_Manger, Assembly-CSharp
-        m_MethodName: increment_oatmeal_raisan_cookie_counter
+        m_MethodName: increment_oatmeal_raisin_cookie_counter
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9046,7 +9051,7 @@ MonoBehaviour:
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
-  m_characterSpacing: 2
+  m_characterSpacing: -8
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -9072,7 +9077,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: 0, w: 0.0419178}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
