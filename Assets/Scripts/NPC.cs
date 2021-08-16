@@ -40,7 +40,7 @@ public class NPC : MonoBehaviour
     public float progress_ordering_wait_time = 25f;// Random.Range(15f, 25f);
     public float progress_standing_wait_time = 20f;// Random.Range(10f, 20f);
 
-
+    float success_rate = 0f; // 0- 1.0 as 100%
 
     Color deselectedColor = new Color(1f, 1f, 1f, 0.9f);
     Color selectedColor = new Color(1f, 1f, 1f, 1f);
@@ -62,7 +62,7 @@ public class NPC : MonoBehaviour
 
         request_text = text_decider.generateRequestsAndFormat();
 
-        progress_entering_wait_time = (float)System.Math.Round(Random.Range(20f, 30f));
+        progress_entering_wait_time = (float)System.Math.Round(Random.Range(45f, 60f));
         progress_ordering_wait_time = (float)System.Math.Round(Random.Range(15f, 25f));
         progress_standing_wait_time = (float)System.Math.Round(Random.Range(10f, 20f));
 
@@ -102,25 +102,11 @@ public class NPC : MonoBehaviour
          */
         Dictionary<string, object> rating_info = OrderForm.rateOrderReceived(expectedOrder, order);
 
-        float success_rate = (float)rating_info["weighted_rating"];
+        success_rate = (float)rating_info["weighted_rating"];
+        print($"Success rate: {success_rate}");
 
         text_decider.updateSystemText($"Weighted Rating:{System.Math.Round(success_rate * 100)}%");
-
-        if (success_rate >= 0.8f)
-        {
-            progress_bar.bar_color = progress_color_exitting_mad;
-        }
-        else if (success_rate >= 0.4f)
-        {
-            progress_bar.bar_color = progress_color_standing;
-        }
-        else
-        {
-            progress_bar.bar_color = progress_color_exitting_mad;
-        }
-
-        progress_bar.resetProgress();
-        print($"Weighted rating: {(float)rating_info["weighted_rating"]*100}%");
+        print($"Weighted rating: {success_rate*100}%");
     }
 
     public void updateTimer()
@@ -140,8 +126,6 @@ public class NPC : MonoBehaviour
         {
             //TODO: AND they didn't receive an order, then leave!
             prepareForExitting();
-            progress_bar.bar_color = progress_color_exitting_mad;
-            progress_bar.resetProgress();
         }
     }
 
@@ -235,12 +219,35 @@ public class NPC : MonoBehaviour
         need_new_standing_point = true;
         ready_to_order = true;// maybe set to false??
         wasOrderPlaced = true;
+
+        progress_bar.setProgessMaxTime(progress_standing_wait_time);
+        progress_bar.bar_color = progress_color_standing;
+        progress_bar.resetProgress();
     }
 
     public void prepareForExitting()
     { 
         current_state = (int)NPC.State.exitting;
         ready_for_next_point = true;
+
+        if (success_rate >= 0.8f)
+        {
+            print("great job!");
+            progress_bar.bar_color = progress_color_exitting_happy;
+        }
+        else if (success_rate >= 0.4f)
+        {
+            print("ok job!");
+            progress_bar.bar_color = progress_color_standing;
+        }
+        else
+        {
+            print("wtf man");
+            progress_bar.bar_color = progress_color_exitting_mad;
+        }
+
+        progress_bar.resetProgress();
+        progress_bar.progress_timer.forceTimerStop();
         //print("Preparing for exitting");
     }
 
