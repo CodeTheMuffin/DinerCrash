@@ -48,7 +48,7 @@ public class NPC : MonoBehaviour
         current_state = (int)State.entering;
 
         request_text = text_decider.generateRequests();
-        print(request_text);
+        //print(request_text);
     }
 
     public void setOrderForm(OrderForm order)

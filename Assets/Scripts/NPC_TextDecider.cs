@@ -13,12 +13,15 @@ public class NPC_TextDecider : MonoBehaviour
 
     public static List<string> option_keys = new List<string>();
     public static List<string> request_keys = new List<string>();
+    public static List<string> nothing_keys = new List<string>();
 
     public static Dictionary<string, string> optionDict = new Dictionary<string, string>();
     public static Dictionary<string, string> requestDict = new Dictionary<string, string>();
+    public static Dictionary<string, string> nothingDict = new Dictionary<string, string>();
 
     public const string OPTIONS  = "OPTIONS";
     public const string REQUESTS = "REQUESTS";
+    public const string NOTHINGS = "NOTHINGS";
     public const string RAW_TEXT = "RAW_TEXT";
 
 
@@ -34,6 +37,7 @@ public class NPC_TextDecider : MonoBehaviour
         {
             "OPTIONS",      // The various options to order from (also based on expectedOrder)
             "REQUESTS",     // How the NPC will make the order
+            "NOTHINGS",     // On the super rare case, the NPC orders nothing.
             "UPDATES",      // Optional. How the NPC may correct themselves on their requests. Does not have to be used
             "ISSUSES",      // Optional. Text used if the NPC has any issues, such as long wait time or wrong order.
             "EXIT_TEXTS"    // Optional. What the NPC says once they get their order and are leaving. 
@@ -67,6 +71,19 @@ public class NPC_TextDecider : MonoBehaviour
                 requestDict.Add(str_key, NPC_JSON_node[REQUESTS][str_key][RAW_TEXT]);
             }
         }
+
+        if (nothing_keys.Count == 0)
+        {
+            nothingDict.Clear();
+            JSONNode.KeyEnumerator keys = NPC_JSON_node[NOTHINGS].Keys;
+
+            foreach (JSONNode key in keys)
+            {
+                string str_key = key;
+                nothing_keys.Add(str_key);
+                nothingDict.Add(str_key, NPC_JSON_node[NOTHINGS][str_key][RAW_TEXT]);
+            }
+        }
     }
 
     public string generateRequests()
@@ -76,8 +93,17 @@ public class NPC_TextDecider : MonoBehaviour
         int total_quantity = expectedOrder.getTotalQuantity();
         int total_selected = expectedOrder.getTotalOptionsSelected();
 
-        int random_request_choice = Random.Range(0, request_keys.Count - 1);
+
+        if (total_quantity == 0) // On the super rare case, the NPC wants nothing
+        {
+            return generateNothingText();
+        }
+
+
+        int random_request_choice = Random.Range(0, request_keys.Count);
         string random_reqeuest_key = request_keys[random_request_choice];
+        //print(random_reqeuest_key);
+        //print($"Total quantity: {total_quantity}\t Total Selected: {total_selected}");
 
         // The starting text will contain {0} for quantity} {1} for the option
         string starting_request_text = requestDict[random_reqeuest_key];
@@ -137,6 +163,16 @@ public class NPC_TextDecider : MonoBehaviour
         }
 
         return request_text + ".";
+    }
+
+    //for when the NPC super rare, doesn't want anything.
+    public string generateNothingText()
+    {
+        int random_choice = Random.Range(0, nothing_keys.Count);
+        string random_key = nothing_keys[random_choice];
+        string nothing_text = nothingDict[random_key];
+
+        return nothing_text;
     }
 
     public string get_request_with_option(int quantity, string option_key, string formatted_text)
