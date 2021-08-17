@@ -36,7 +36,7 @@ public class NPC : MonoBehaviour
     public Color progress_color_exitting_mad = Color.red;
     public Color progress_color_exitting_happy = Color.green;
 
-    public float progress_entering_wait_time = 30f;//Random.Range(20f, 30f);
+    public float progress_entering_wait_time = 5f;//Random.Range(20f, 30f);
     public float progress_ordering_wait_time = 25f;// Random.Range(15f, 25f);
     public float progress_standing_wait_time = 20f;// Random.Range(10f, 20f);
 
@@ -125,7 +125,10 @@ public class NPC : MonoBehaviour
         else if (progressDone) //  and orders.Count == 0 ???
         {
             //TODO: AND they didn't receive an order, then leave!
-            prepareForExitting();
+            if (current_state != (int)NPC.State.exitting)
+            {
+                prepareForExitting();
+            }
         }
     }
 

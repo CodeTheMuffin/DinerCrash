@@ -6487,7 +6487,7 @@ MonoBehaviour:
   DyingNPCs: []
   max_NPCs_allowed: 7
   spawning_timer: {fileID: 1674047823}
-  max_spawning_time: 5
+  max_spawning_time: 7
   text_system: {fileID: 1442281601}
   NPC_Sprites:
   - {fileID: -2352264988476575153, guid: bb7c27a6da7b6094ca7aeb1fb73febda, type: 3}
