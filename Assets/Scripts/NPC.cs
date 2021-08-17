@@ -29,7 +29,18 @@ public class NPC : MonoBehaviour
     public string request_text = "";// should already be formatted to textbox
     public List<string> request_text_box = new List<string>();
 
+    public ProgressBar progress_bar;
+    public Color progress_color_entering = Color.green;
+    public Color progress_color_ordering = Color.blue;
+    public Color progress_color_standing = Color.yellow;
+    public Color progress_color_exitting_mad = Color.red;
+    public Color progress_color_exitting_happy = Color.green;
 
+    public float progress_entering_wait_time = 5f;//Random.Range(20f, 30f);
+    public float progress_ordering_wait_time = 25f;// Random.Range(15f, 25f);
+    public float progress_standing_wait_time = 20f;// Random.Range(10f, 20f);
+
+    float success_rate = 0f; // 0- 1.0 as 100%
 
     Color deselectedColor = new Color(1f, 1f, 1f, 0.9f);
     Color selectedColor = new Color(1f, 1f, 1f, 1f);
@@ -50,6 +61,20 @@ public class NPC : MonoBehaviour
         current_state = (int)State.entering;
 
         request_text = text_decider.generateRequestsAndFormat();
+
+        progress_entering_wait_time = (float)System.Math.Round(Random.Range(45f, 60f));
+        progress_ordering_wait_time = (float)System.Math.Round(Random.Range(15f, 25f));
+        progress_standing_wait_time = (float)System.Math.Round(Random.Range(10f, 20f));
+
+        progress_bar.calculateAndSetPPB();
+        progress_bar.setProgessMaxTime(progress_entering_wait_time);
+        progress_bar.progress_timer.timer_stopped = true;
+        progress_bar.bar_color = progress_color_entering;
+        progress_bar.resetProgress();
+
+        //hide progress bar until reached first entering way point!
+        progress_bar.gameObject.SetActive(false);
+
         //print(request_text);
     }
 
@@ -77,13 +102,34 @@ public class NPC : MonoBehaviour
          */
         Dictionary<string, object> rating_info = OrderForm.rateOrderReceived(expectedOrder, order);
 
-        text_decider.updateSystemText($"Weighted Rating:{System.Math.Round((float)rating_info["weighted_rating"] * 100)}%");
-        //print($"Weighted rating: {(float)rating_info["weighted_rating"]*100}%");
+        success_rate = (float)rating_info["weighted_rating"];
+        print($"Success rate: {success_rate}");
+
+        text_decider.updateSystemText($"Weighted Rating:{System.Math.Round(success_rate * 100)}%");
+        print($"Weighted rating: {success_rate*100}%");
     }
 
     public void updateTimer()
     {
         walkingTimer.max_time_in_seconds = UnityEngine.Random.Range(0.05f, 0.2f); // the amount of time to move 0.125 units (1 pixel)
+    }
+
+    public void updateProgressbar(float delta_time)
+    {
+        bool progressDone = progress_bar.progress_timer.isTimerDone();
+
+        if (progress_bar.gameObject.activeSelf && !progressDone && current_state != (int)NPC.State.exitting)
+        {
+            progress_bar.updateProgress(delta_time);
+        }
+        else if (progressDone) //  and orders.Count == 0 ???
+        {
+            //TODO: AND they didn't receive an order, then leave!
+            if (current_state != (int)NPC.State.exitting)
+            {
+                prepareForExitting();
+            }
+        }
     }
 
     public void updateTimerForEntering()
@@ -176,13 +222,36 @@ public class NPC : MonoBehaviour
         need_new_standing_point = true;
         ready_to_order = true;// maybe set to false??
         wasOrderPlaced = true;
+
+        progress_bar.setProgessMaxTime(progress_standing_wait_time);
+        progress_bar.bar_color = progress_color_standing;
+        progress_bar.resetProgress();
     }
 
     public void prepareForExitting()
     { 
         current_state = (int)NPC.State.exitting;
         ready_for_next_point = true;
-        print("Preparing for exitting");
+
+        if (success_rate >= 0.8f)
+        {
+            print("great job!");
+            progress_bar.bar_color = progress_color_exitting_happy;
+        }
+        else if (success_rate >= 0.4f)
+        {
+            print("ok job!");
+            progress_bar.bar_color = progress_color_standing;
+        }
+        else
+        {
+            print("wtf man");
+            progress_bar.bar_color = progress_color_exitting_mad;
+        }
+
+        progress_bar.resetProgress();
+        progress_bar.progress_timer.forceTimerStop();
+        //print("Preparing for exitting");
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -197,6 +266,13 @@ public class NPC : MonoBehaviour
 
             if (collidedWayPoint == nextWayPoint)
             {
+                //unhide progress bar now that it reached (persumably) the first entering way point!
+                if (!progress_bar.gameObject.activeSelf)
+                {
+                    progress_bar.gameObject.SetActive(true);
+                    progress_bar.progress_timer.reset_timer();
+                }
+
                 collidedWayPoint.isFree = false;
                 if (collidedWayPoint != orderingWayPoint && collidedWayPoint != standingWayPoint)
                 {

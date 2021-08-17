@@ -46,4 +46,10 @@ public class Timer : MonoBehaviour
     {
         return timer_stopped;
     }
+
+    public void forceTimerStop()
+    {
+        timer_stopped = true;
+        time = 0;
+    }
 }

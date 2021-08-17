@@ -78,6 +78,8 @@ public class NPC_Manager : MonoBehaviour
                 continue;
             }
 
+            robot.updateProgressbar(Time.deltaTime);
+
             if (robot.ready_for_next_point)
             {
                 robot.currentWayPoint = robot.nextWayPoint;

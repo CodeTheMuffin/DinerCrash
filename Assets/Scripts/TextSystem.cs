@@ -11,7 +11,7 @@ using System.Linq;
 
 public class TextSystem : MonoBehaviour
 {
-    const int MAX_CHARS_PER_ROW = 11; // The max number of chars per row;       was 10
+    const int MAX_CHARS_PER_ROW = 12; // The max number of chars per row;       was 10
     const int MAX_ROWS = 2; // X rows to show on screen at a time
 
     public TMPro.TextMeshProUGUI chat_box_text;
@@ -44,7 +44,7 @@ public class TextSystem : MonoBehaviour
         textBox = new List<string>();
 
         //string xx = "Quick test\nfun!";
-        NPC_string = "Welcome!! I hope you have fun!";
+        NPC_string = "Welcome to Diner Crash!";
         NPC_string = adjustTextRegex(NPC_string).Item1;
 
         //Tuple<string,List<string>> result = adjustTextRegex(xx);

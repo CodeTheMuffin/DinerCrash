@@ -62,6 +62,7 @@
 	"ISSUES":{
 		"ISSUE_01"		: {"RAW_TEXT" : "That isn't what I ordered!"},
 		"ISSUE_02"		: {"RAW_TEXT" : "Ughhh I'm missing something!\n{0}"},
+		"ISSUE_03"		: {"RAW_TEXT" : "You're missing so much!\n{0}"},
 	},
 	"EXIT_TEXTS":{
 		"EXIT_TEXT_01"	:  {"RAW_TEXT" : "Thanks!"},
