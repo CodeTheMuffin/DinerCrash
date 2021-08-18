@@ -118,7 +118,7 @@ public class NPC : MonoBehaviour
         if (success_rate >= 1f)
         { color = "#72d6ce"; phrase = "SWEET"; }// cyan
         else if (success_rate >= 0.8f)
-        { color = "#3d734f"; phrase = "NICE!"; }//dark green for contrast
+        { color = "#97da3f"; phrase = "NICE!"; }//light green
         else if (success_rate >= 0.4f)
         { color = "#facb3e"; phrase = "OK!"; }//yellow
         else

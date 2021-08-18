@@ -195,7 +195,7 @@ public class OrderForm
 
     public override string ToString()
     {
-        return $"This order: {cholocate_cookie_counter} cholocate chips, {oatmeal_raisin_cookie_counter} oatmeals, " +
-            $"{normal_milk_counter} milks and {warm_milk_counter} warm milks.";
+        return $"{cholocate_cookie_counter} cholocate chips cookies, {oatmeal_raisin_cookie_counter} oatmeal raisin cookies, " +
+            $"{normal_milk_counter} cold milks and {warm_milk_counter} warm milks.";
     }
 }

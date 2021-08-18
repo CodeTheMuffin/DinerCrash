@@ -5198,6 +5198,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 1287379971}
+  txtSys: {fileID: 1442281601}
   PixelsPerUnit: 8
   runSpeed: 1
   playerTransform: {fileID: 1287379973}
@@ -9137,7 +9138,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '<color="red">STOP</color>
+  m_text: '<color=#97da3f>STOP</color>
 
     Diner CraSH'
   m_isRightToLeft: 0
