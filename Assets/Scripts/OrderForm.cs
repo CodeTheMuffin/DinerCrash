@@ -193,9 +193,10 @@ public class OrderForm
         prepare_time = get_estimated_prepare_time();
     }
 
+    // hardcoded b/c Im running out of time
     public override string ToString()
     {
         return $"{cholocate_cookie_counter} cholocate chips cookies, {oatmeal_raisin_cookie_counter} oatmeal raisin cookies, " +
-            $"{normal_milk_counter} cold milks and {warm_milk_counter} warm milks.";
+            $"{normal_milk_counter} cold milks , and {warm_milk_counter} warm milks.";
     }
 }

@@ -135,7 +135,7 @@ public class NPC : MonoBehaviour
             }
             else if ((int)rating_info["missing_total"] > 0)
             {
-                string unformatted_missing_text = text_decider.getMissingText((int[])rating_info["missing"]);
+                string unformatted_missing_text = text_decider.getMissingText((int[])rating_info["missing"], order.counters, order.getTotalOptionsSelected());
                 NPC_response_text = text_decider.getIssuesText(unformatted_missing_text);
             }
         }
@@ -145,7 +145,7 @@ public class NPC : MonoBehaviour
         text_decider.updateSystemText($"<color={color}>{System.Math.Round(success_rate * 100)}%</color> {phrase}");
         //print($"Weighted rating: {success_rate*100}%");
 
-        print($"Missed items: {text_decider.getMissingText( (int[])rating_info["missing"] )}");
+        //print($"Missed items: {text_decider.getMissingText( (int[])rating_info["missing"] )}");
     }
 
     public void updateTimer()
@@ -298,6 +298,13 @@ public class NPC : MonoBehaviour
         progress_bar.resetProgress();
         progress_bar.progress_timer.forceTimerStop();
         //print("Preparing for exitting");
+    }
+
+    //repeat the existing order
+    public void repeatOrder()
+    {
+        string formatted_text = text_decider.getRepeatText();
+        text_decider.updateNPCtext(formatted_text);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

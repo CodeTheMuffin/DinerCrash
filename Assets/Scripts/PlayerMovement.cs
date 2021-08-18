@@ -227,8 +227,9 @@ public class PlayerMovement : MonoBehaviour
                             selectedNPC.prepareForStanding();
                         }
                         else // order was placed
-                        { 
+                        {
                             // maybe show what they want/ asked for again in text box??
+                            selectedNPC.repeatOrder();
                         }
                     }
                 }
@@ -289,6 +290,7 @@ public class PlayerMovement : MonoBehaviour
 
                 if (orderboxBeingHeld)
                 {
+                    showWhatImHolding();
                     audio_manager.playPlayerPickOrderUp();
                 }
             }
@@ -384,7 +386,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (temp_form.getTotalQuantity() == 0)
             {
-                holding_text += "An empty boxy.";
+                holding_text += "An empty box.";
             }
             else
             {

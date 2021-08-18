@@ -14,6 +14,7 @@ public class NPC_TextDecider : MonoBehaviour
     public static List<string> option_keys = new List<string>();
     public static List<string> request_keys = new List<string>();
     public static List<string> nothing_keys = new List<string>();
+    public static List<string> repeats_keys = new List<string>();
     public static List<string> issues_keys = new List<string>();
     public static List<string> empty_keys = new List<string>();
     public static List<string> exit_keys = new List<string>();
@@ -21,6 +22,7 @@ public class NPC_TextDecider : MonoBehaviour
     public static Dictionary<string, string> optionDict = new Dictionary<string, string>();
     public static Dictionary<string, string> requestDict = new Dictionary<string, string>();
     public static Dictionary<string, string> nothingDict = new Dictionary<string, string>();
+    public static Dictionary<string, string> repeatsDict = new Dictionary<string, string>();
     public static Dictionary<string, string> issuesDict = new Dictionary<string, string>();
     public static Dictionary<string, string> emptyDict = new Dictionary<string, string>();
     public static Dictionary<string, string> exitDict = new Dictionary<string, string>();
@@ -28,6 +30,7 @@ public class NPC_TextDecider : MonoBehaviour
     public const string OPTIONS  = "OPTIONS";
     public const string REQUESTS = "REQUESTS";
     public const string NOTHINGS = "NOTHINGS";
+    public const string REPEATS  = "REPEATS";
     public const string ISSUES   = "ISSUES";
     public const string EMPTY    = "EMPTY"; // for receiving an empty order box
     public const string EXIT_TEXTS= "EXIT_TEXTS"; // for receiving an satisfied order box
@@ -59,6 +62,7 @@ public class NPC_TextDecider : MonoBehaviour
         SUB_setKeysListsAndDicts(OPTIONS    ,option_keys   ,optionDict);
         SUB_setKeysListsAndDicts(REQUESTS   ,request_keys  ,requestDict);
         SUB_setKeysListsAndDicts(NOTHINGS   ,nothing_keys  ,nothingDict);
+        SUB_setKeysListsAndDicts(REPEATS    ,repeats_keys  ,repeatsDict);
         SUB_setKeysListsAndDicts(ISSUES     ,issues_keys   ,issuesDict);
         SUB_setKeysListsAndDicts(EMPTY      ,empty_keys    ,emptyDict);
         SUB_setKeysListsAndDicts(EXIT_TEXTS ,exit_keys     ,exitDict);
@@ -94,43 +98,23 @@ public class NPC_TextDecider : MonoBehaviour
         }
 
 
-        int random_request_choice = Random.Range(0, request_keys.Count);
-        string random_request_key = request_keys[random_request_choice];
+        //int random_request_choice = Random.Range(0, request_keys.Count);
+        //string random_request_key = request_keys[random_request_choice];
         //print(random_reqeuest_key);
         //print($"Total quantity: {total_quantity}\t Total Selected: {total_selected}");
 
+
         // The starting text will contain {0} for quantity} {1} for the option
-        string starting_request_text = requestDict[random_request_key];
-        string request_text = "";
+        //string starting_request_text = requestDict[random_request_key];
+        //formatted_text_pattern was called starting_request_text
+        string formatted_text_pattern = getRandomText(request_keys, requestDict);
+
+
+        /*string request_text = "";
 
         int selected = 0;
 
         string option_key = "";
-
-
-        /*      
-        //cholocate_cookie
-        option_key = option_keys[(int)OrderOptions.Options.cholocate_cookie];
-        request_text = get_request_with_option(expectedOrder.cholocate_cookie_counter, option_key, starting_request_text);
-
-
-
-        // see if text needs to be adjusted
-        if (request_text.Length> 0)
-        {
-            selected++;
-
-            // last selected
-            if (selected + 1 == total_selected) {   starting_request_text = ", and {0} {1}";   }
-            // if there are more options
-            else {   starting_request_text = ", {0} {1}";    }
-        }
-
-        //oatmeal_raisin_cookie
-        option_key = option_keys[(int)OrderOptions.Options.oatmeal_raisin_cookie];
-        request_text = get_request_with_option(expectedOrder.oatmeal_raisin_cookie_counter, option_key, starting_request_text);
-        */
-
 
 
         // option and expectedOrder.counters are tied to the OrderOptions.Options enum
@@ -155,10 +139,49 @@ public class NPC_TextDecider : MonoBehaviour
                 if (selected == total_selected)
                 { break; }
             }
-        }
+        }*/
+
+        string request_text = get_substituted_text_with_pattern(formatted_text_pattern);
 
         return request_text + ".";
     }
+
+    // requires formatted_text_pattern to be in {0} {1} format.
+    // probably should rename function, but it returns the selected order items (aka non Zero quantity) from expected Order
+    // method should probably be in the OrderForm class TBH, but not enough time!
+    string get_substituted_text_with_pattern(string formatted_text_pattern)
+    {
+        string formatted_text = "";
+        int total_selected = expectedOrder.getTotalOptionsSelected();
+        int selected = 0;
+
+        // option and expectedOrder.counters are tied to the OrderOptions.Options enum
+        for (int option = 0; option < expectedOrder.counters.Length; option++)
+        {
+            //option should represent values in OrderOption.Options enum.  example: (int)OrderOptions.Options.cholocate_cookie
+            // and OrderForm's counter, which is also associated to OrderOption.Options enum
+            string option_key = option_keys[option];
+            string request_formatted = get_request_with_option(expectedOrder.counters[option], option_key, formatted_text_pattern);
+            formatted_text += request_formatted;
+
+            // see if text needs to be adjusted
+            if (request_formatted.Length > 0)
+            {
+                selected++;
+
+                // last selected
+                if (selected + 1 == total_selected) { formatted_text_pattern = ", and {0} {1}"; }
+                // if there are more options
+                else { formatted_text_pattern = ", {0} {1}"; }
+
+                if (selected == total_selected)
+                { break; }
+            }
+        }
+
+        return formatted_text;
+    }
+
 
     //for when the NPC super rare, doesn't want anything.
     public string generateNothingText()
@@ -180,19 +203,25 @@ public class NPC_TextDecider : MonoBehaviour
         return req_text;
     }
 
-    public string get_request_with_option(int quantity, string option_key, string formatted_text)
+    // formatted_text_pattern MUST contain {0} and {1}
+    public string get_request_with_option(int quantity, string option_key, string formatted_text_pattern)
     {
         string s = "";
 
         if (quantity > 0)
         {
-            s = System.String.Format(formatted_text, quantity, optionDict[option_key]);
+            s = System.String.Format(formatted_text_pattern, quantity, optionDict[option_key]);
 
             if (quantity > 1) // make plural
             { s += "s"; }
         }
 
         return s;
+    }
+
+    public void updateNPCtext_unformatted(string unformatted_text)
+    {
+        textSYS.updateNPCtext_unformatted(unformatted_text);
     }
 
     public void updateNPCtext(string formatted_text)
@@ -206,7 +235,7 @@ public class NPC_TextDecider : MonoBehaviour
     }
 
     // MissedItems closely follows OrderOptions.Options enum and correlates to {lang}-npc_text.json's "OPTIONS" values
-    public string getMissingText(int[] missedItems)
+    public string getMissingText(int[] missedItems, int[] form_counters, int total_selected)
     {
         // xx and forloop are for lazy debugging. remove later.
         string xx = "";
@@ -219,15 +248,20 @@ public class NPC_TextDecider : MonoBehaviour
         string missing_text = "";
         string format = "{0} {1}";
         string option_key = "";
+        int selected = 0;
 
         for (int index = 0; index < missedItems.Length; index++)
         {
-            if (missedItems[index] > 0)//if its is missed
+            if (form_counters[index] > 0)
+            { selected++; }
+
+            if (missedItems[index] > 0 )//if its is missed
             {
                 option_key = option_keys[index];
                 missing_text += get_request_with_option(missedItems[index], option_key, format);
 
-                if (index + 1 == missedItems.Length) // if last item
+                //if (index + 1 == missedItems.Length) // if last item
+                if (selected + 1 == total_selected) // if last item
                 {format = ", and {0} {1}";}
                 else
                 { format = ", {0} {1}"; }
@@ -251,6 +285,20 @@ public class NPC_TextDecider : MonoBehaviour
     {
         return textSYS.adjustTextRegex(getRandomText(empty_keys, emptyDict)).Item1;
     }
+
+    //for when the player hands them an order that isn't right...
+    public string getRepeatText()
+    {
+        string random_text = getRandomText(repeats_keys, repeatsDict); // this should contian only {0}
+        string simple_format = "{0} {1}";
+
+        string format_text_pattern = get_substituted_text_with_pattern(simple_format);//this requires {0} and {1}
+
+        string semi_formatted_text = System.String.Format(random_text, format_text_pattern);//now combine them!
+
+        return textSYS.adjustTextRegex(semi_formatted_text).Item1;
+    }
+
 
     //for when the player hands them an order that isn't right...
     public string getIssuesText(string missing_text)// missing_text is what was missing from the order
