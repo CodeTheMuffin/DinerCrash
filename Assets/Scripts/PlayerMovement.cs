@@ -77,7 +77,7 @@ public class PlayerMovement : MonoBehaviour
     {
         //animator.SetFloat("Speed", Mathf.Abs(horizontalMove));
 
-
+        //debug
         if (Input.GetKeyDown(KeyCode.R))
         {
             Reset();
@@ -220,6 +220,8 @@ public class PlayerMovement : MonoBehaviour
                         {
                             // get order
                             print("Order received.");
+                            print(selectedNPC.getExpectedForm());
+                            print(selectedNPC.request_text.Replace("\n"," "));
                             selectedNPC.tellPlayerOrder();
                             selectedNPC.prepareForStanding();
                         }
@@ -281,6 +283,8 @@ public class PlayerMovement : MonoBehaviour
                 holdingOrder = (newOrderBox != null);
                 canPickUpOrder = !holdingOrder;
                 orderboxBeingHeld = holdingOrder ? newOrderBox.transform : null;
+
+                print($"Holding order with: {newOrderBox.GetComponent<OrderBox>().orderForm}");
 
                 if (orderboxBeingHeld)
                 {

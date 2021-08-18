@@ -14,14 +14,23 @@ public class NPC_TextDecider : MonoBehaviour
     public static List<string> option_keys = new List<string>();
     public static List<string> request_keys = new List<string>();
     public static List<string> nothing_keys = new List<string>();
+    public static List<string> issues_keys = new List<string>();
+    public static List<string> empty_keys = new List<string>();
+    public static List<string> exit_keys = new List<string>();
 
     public static Dictionary<string, string> optionDict = new Dictionary<string, string>();
     public static Dictionary<string, string> requestDict = new Dictionary<string, string>();
     public static Dictionary<string, string> nothingDict = new Dictionary<string, string>();
+    public static Dictionary<string, string> issuesDict = new Dictionary<string, string>();
+    public static Dictionary<string, string> emptyDict = new Dictionary<string, string>();
+    public static Dictionary<string, string> exitDict = new Dictionary<string, string>();
 
     public const string OPTIONS  = "OPTIONS";
     public const string REQUESTS = "REQUESTS";
     public const string NOTHINGS = "NOTHINGS";
+    public const string ISSUES   = "ISSUES";
+    public const string EMPTY    = "EMPTY"; // for receiving an empty order box
+    public const string EXIT_TEXTS= "EXIT_TEXTS"; // for receiving an satisfied order box
     public const string RAW_TEXT = "RAW_TEXT";
 
 
@@ -40,48 +49,33 @@ public class NPC_TextDecider : MonoBehaviour
             "NOTHINGS",     // On the super rare case, the NPC orders nothing.
             "UPDATES",      // Optional. How the NPC may correct themselves on their requests. Does not have to be used
             "ISSUSES",      // Optional. Text used if the NPC has any issues, such as long wait time or wrong order.
-            "EXIT_TEXTS"    // Optional. What the NPC says once they get their order and are leaving. 
+            "EMPTY",        // Optional. What the NPC says once they get an empty order and wasn't expecting it. 
+            "EXIT_TEXTS"    // Optional. What the NPC says once they get their order and are leaving satisfied. 
         };
 
     //if not set, then set ! 
     public void setKeysListsAndDicts()
     {
-        if (option_keys.Count == 0)
+        SUB_setKeysListsAndDicts(OPTIONS    ,option_keys   ,optionDict);
+        SUB_setKeysListsAndDicts(REQUESTS   ,request_keys  ,requestDict);
+        SUB_setKeysListsAndDicts(NOTHINGS   ,nothing_keys  ,nothingDict);
+        SUB_setKeysListsAndDicts(ISSUES     ,issues_keys   ,issuesDict);
+        SUB_setKeysListsAndDicts(EMPTY      ,empty_keys    ,emptyDict);
+        SUB_setKeysListsAndDicts(EXIT_TEXTS ,exit_keys     ,exitDict);
+    }
+
+    void SUB_setKeysListsAndDicts(string key_node, List<string> key_list, Dictionary<string, string> key_dict)
+    {
+        if (key_list.Count == 0)
         {
-            optionDict.Clear();
-            JSONNode.KeyEnumerator keys = NPC_JSON_node[OPTIONS].Keys;
+            key_dict.Clear();
+            JSONNode.KeyEnumerator keys = NPC_JSON_node[key_node].Keys;
 
             foreach (JSONNode key in keys)
             {
                 string str_key = key;
-                option_keys.Add(str_key);
-                optionDict.Add(str_key, NPC_JSON_node[OPTIONS][str_key][RAW_TEXT]);
-            }
-        }
-
-        if (request_keys.Count == 0)
-        {
-            requestDict.Clear();
-            JSONNode.KeyEnumerator keys = NPC_JSON_node[REQUESTS].Keys;
-
-            foreach (JSONNode key in keys)
-            {
-                string str_key = key;
-                request_keys.Add(str_key);
-                requestDict.Add(str_key, NPC_JSON_node[REQUESTS][str_key][RAW_TEXT]);
-            }
-        }
-
-        if (nothing_keys.Count == 0)
-        {
-            nothingDict.Clear();
-            JSONNode.KeyEnumerator keys = NPC_JSON_node[NOTHINGS].Keys;
-
-            foreach (JSONNode key in keys)
-            {
-                string str_key = key;
-                nothing_keys.Add(str_key);
-                nothingDict.Add(str_key, NPC_JSON_node[NOTHINGS][str_key][RAW_TEXT]);
+                key_list.Add(str_key);
+                key_dict.Add(str_key, NPC_JSON_node[key_node][str_key][RAW_TEXT]);
             }
         }
     }
@@ -101,12 +95,12 @@ public class NPC_TextDecider : MonoBehaviour
 
 
         int random_request_choice = Random.Range(0, request_keys.Count);
-        string random_reqeuest_key = request_keys[random_request_choice];
+        string random_request_key = request_keys[random_request_choice];
         //print(random_reqeuest_key);
         //print($"Total quantity: {total_quantity}\t Total Selected: {total_selected}");
 
         // The starting text will contain {0} for quantity} {1} for the option
-        string starting_request_text = requestDict[random_reqeuest_key];
+        string starting_request_text = requestDict[random_request_key];
         string request_text = "";
 
         int selected = 0;
@@ -145,10 +139,11 @@ public class NPC_TextDecider : MonoBehaviour
             //option should represent values in OrderOption.Options enum.  example: (int)OrderOptions.Options.cholocate_cookie
             // and OrderForm's counter, which is also associated to OrderOption.Options enum
             option_key = option_keys[option];
-            request_text += get_request_with_option(expectedOrder.counters[option], option_key, starting_request_text);
+            string request_formatted = get_request_with_option(expectedOrder.counters[option], option_key, starting_request_text);
+            request_text += request_formatted;
 
             // see if text needs to be adjusted
-            if (request_text.Length > 0)
+            if (request_formatted.Length > 0)
             {
                 selected++;
 
@@ -209,6 +204,69 @@ public class NPC_TextDecider : MonoBehaviour
     {
         textSYS.updateSystemText(text);
     }
+
+    // MissedItems closely follows OrderOptions.Options enum and correlates to {lang}-npc_text.json's "OPTIONS" values
+    public string getMissingText(int[] missedItems)
+    {
+        // xx and forloop are for lazy debugging. remove later.
+        string xx = "";
+        foreach (int x in missedItems)
+        {
+            xx += $"{x}, ";
+        }
+        print($"Inputted missedItems: {xx}");
+        
+        string missing_text = "";
+        string format = "{0} {1}";
+        string option_key = "";
+
+        for (int index = 0; index < missedItems.Length; index++)
+        {
+            if (missedItems[index] > 0)//if its is missed
+            {
+                option_key = option_keys[index];
+                missing_text += get_request_with_option(missedItems[index], option_key, format);
+
+                if (index + 1 == missedItems.Length) // if last item
+                {format = ", and {0} {1}";}
+                else
+                { format = ", {0} {1}"; }
+            }
+        }
+
+        return missing_text;
+    }
+
+    public string getRandomText(List<string> key_list, Dictionary<string, string> key_dict)
+    {
+        int random_choice = Random.Range(0, key_list.Count);
+        string random_key = key_list[random_choice];
+
+        string response_text = key_dict[random_key];
+        return response_text;//unformatted
+    }
+
+    //for when the player hands them an empty box...
+    public string getEmptyText()
+    {
+        return textSYS.adjustTextRegex(getRandomText(empty_keys, emptyDict)).Item1;
+    }
+
+    //for when the player hands them an order that isn't right...
+    public string getIssuesText(string missing_text)// missing_text is what was missing from the order
+    {
+        string random_issues_text = getRandomText(issues_keys, issuesDict);
+        string semi_formatted_text = System.String.Format(random_issues_text, missing_text);
+
+        return textSYS.adjustTextRegex(semi_formatted_text).Item1;
+    }
+
+    //for when the player hands them the correct order or better!
+    public string getExitTexts()
+    {
+        return textSYS.adjustTextRegex(getRandomText(exit_keys, exitDict)).Item1;
+    }
+
     /*// BELOW FOR DEBUGGING      COMMENT OUT
     // Need to stop spawning or limit to 1
     public int index = 0;
