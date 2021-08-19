@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
 {
     //public CharacterController2D controller;
     public Animator animator;
+    public TextSystem txtSys;
 
     public float PixelsPerUnit = 8f;
     public float runSpeed = 40f;
@@ -77,7 +78,7 @@ public class PlayerMovement : MonoBehaviour
     {
         //animator.SetFloat("Speed", Mathf.Abs(horizontalMove));
 
-
+        //debug
         if (Input.GetKeyDown(KeyCode.R))
         {
             Reset();
@@ -220,12 +221,15 @@ public class PlayerMovement : MonoBehaviour
                         {
                             // get order
                             print("Order received.");
+                            print(selectedNPC.getExpectedForm());
+                            print(selectedNPC.request_text.Replace("\n"," "));
                             selectedNPC.tellPlayerOrder();
                             selectedNPC.prepareForStanding();
                         }
                         else // order was placed
-                        { 
+                        {
                             // maybe show what they want/ asked for again in text box??
+                            selectedNPC.repeatOrder();
                         }
                     }
                 }
@@ -282,8 +286,11 @@ public class PlayerMovement : MonoBehaviour
                 canPickUpOrder = !holdingOrder;
                 orderboxBeingHeld = holdingOrder ? newOrderBox.transform : null;
 
+                print($"Holding order with: {newOrderBox.GetComponent<OrderBox>().orderForm}");
+
                 if (orderboxBeingHeld)
                 {
+                    showWhatImHolding();
                     audio_manager.playPlayerPickOrderUp();
                 }
             }
@@ -370,6 +377,27 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    void showWhatImHolding()
+    {
+        if (orderboxBeingHeld)
+        {
+            OrderForm temp_form = orderboxBeingHeld.GetComponent<OrderBox>().orderForm;
+            string holding_text= "Holding: ";
+
+            if (temp_form.getTotalQuantity() == 0)
+            {
+                holding_text += "An empty box.";
+            }
+            else
+            {
+                holding_text += temp_form.ToString();
+            }
+
+            txtSys.updateNPCtext_unformatted(holding_text);
+            //string formatted_holding_text = txtSys.adjustTextRegex(holding_text).Item1;
+            //txtSys.updateNPCtext(formatted_holding_text);
+        }
+    }
 
     // Determines which parent box gets animated.
     void UpdateOrderSelection()
@@ -452,6 +480,7 @@ public class PlayerMovement : MonoBehaviour
         if (canThrowAwayOrder && holdingOrder && orderboxBeingHeld && !selectedNPC && Input.GetKeyDown(KeyCode.E))
         {
             audio_manager.playPlayerThrowOrderAway();
+            txtSys.updateNPCtext_unformatted("Trashed order.");
             emptyHands();
         }
     }

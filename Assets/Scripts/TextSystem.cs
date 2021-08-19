@@ -334,7 +334,8 @@ public class TextSystem : MonoBehaviour
     //public static List<string> breakDownWordWithRegex(string text)
     public static List<Tuple<string, int>> breakDownWordWithRegex(string text)
     {
-        string[] colorRegexTextToIgnore = new string[] { "<color=\".*\">(.*)</color>", "<color=\".*\">", "</color>" };
+        //string[] colorRegexTextToIgnore = new string[] { "<color=\".*\">(.*)</color>", "<color=\".*\">", "</color>" };
+        string[] colorRegexTextToIgnore = new string[] { "<color=.*>(.*)</color>", "<color=\".*\">", "</color>" };
         string subword = text;
         List<string> breakDown = new List<string>();
 
@@ -1107,7 +1108,12 @@ public class TextSystem : MonoBehaviour
         }
     }
 
-    public void updateNPCtext(string formatted_text)
+    public void updateNPCtext_unformatted(string unformatted_text)//expected to be formatter with \n
+    {
+        updateNPCtext(adjustTextRegex(unformatted_text).Item1);
+    }
+
+    public void updateNPCtext(string formatted_text)//expected to be formatter with \n
     {
         warning_string = "";
         system_string = "";

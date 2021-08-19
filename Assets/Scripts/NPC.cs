@@ -6,6 +6,7 @@ public class NPC : MonoBehaviour
 {
     public NPC_TextDecider text_decider;
     OrderForm expectedOrder;
+    OrderForm receivedOrders = new OrderForm();//start out empty
     public aWayPoint currentWayPoint;
     public aWayPoint nextWayPoint;
     public aWayPoint orderingWayPoint;
@@ -13,6 +14,7 @@ public class NPC : MonoBehaviour
 
     public Timer walkingTimer;
     float walking_step;
+    public bool DEBUG_canWalk = true;//for debug testing
 
     const float UPP = 0.125f; // unit per pixel
     public int current_state;
@@ -62,9 +64,9 @@ public class NPC : MonoBehaviour
 
         request_text = text_decider.generateRequestsAndFormat();
 
-        progress_entering_wait_time = (float)System.Math.Round(Random.Range(45f, 60f));
-        progress_ordering_wait_time = (float)System.Math.Round(Random.Range(15f, 25f));
-        progress_standing_wait_time = (float)System.Math.Round(Random.Range(10f, 20f));
+        progress_entering_wait_time = (float)System.Math.Round(Random.Range(45f, 60f));//(45f, 60f));
+        progress_ordering_wait_time = (float)System.Math.Round(Random.Range(30f, 40f));//(15f, 25f));
+        progress_standing_wait_time = (float)System.Math.Round(Random.Range(50f, 60f));//(10f, 20f));
 
         progress_bar.calculateAndSetPPB();
         progress_bar.setProgessMaxTime(progress_entering_wait_time);
@@ -76,6 +78,11 @@ public class NPC : MonoBehaviour
         progress_bar.gameObject.SetActive(false);
 
         //print(request_text);
+    }
+
+    public OrderForm getExpectedForm()
+    {
+        return expectedOrder;
     }
 
     public void tellPlayerOrder()
@@ -92,6 +99,7 @@ public class NPC : MonoBehaviour
     public void receiveOrderFromPlayer(OrderForm order)
     {
         orders.Add(order);
+        receivedOrders.addToOrder(order);
 
         /*
          KEYS:
@@ -100,13 +108,44 @@ public class NPC : MonoBehaviour
         "missing_total"
         "weighted_rating"
          */
-        Dictionary<string, object> rating_info = OrderForm.rateOrderReceived(expectedOrder, order);
+        Dictionary<string, object> rating_info = OrderForm.rateOrderReceived(expectedOrder, receivedOrders);
 
         success_rate = (float)rating_info["weighted_rating"];
-        print($"Success rate: {success_rate}");
 
-        text_decider.updateSystemText($"Weighted Rating:{System.Math.Round(success_rate * 100)}%");
-        print($"Weighted rating: {success_rate*100}%");
+        string color = "white";
+        string phrase = "NO!";
+
+        if (success_rate >= 1f)
+        { color = "#72d6ce"; phrase = "SWEET"; }// cyan
+        else if (success_rate >= 0.8f)
+        { color = "#97da3f"; phrase = "NICE!"; }//light green
+        else if (success_rate >= 0.4f)
+        { color = "#facb3e"; phrase = "OK!"; }//yellow
+        else
+        { color = "#da4e38"; phrase = ". . ."; }//red
+
+        string NPC_response_text = text_decider.getExitTexts(); // defaults to good exits texts
+
+        //print($"Success rate: {success_rate} %");
+        if (expectedOrder.getTotalQuantity() > 0)
+        {
+            if (receivedOrders.getTotalQuantity() == 0)
+            {
+                NPC_response_text = text_decider.getEmptyText();
+            }
+            else if ((int)rating_info["missing_total"] > 0)
+            {
+                string unformatted_missing_text = text_decider.getMissingText((int[])rating_info["missing"], order.counters, order.getTotalOptionsSelected());
+                NPC_response_text = text_decider.getIssuesText(unformatted_missing_text);
+            }
+        }
+
+        text_decider.updateNPCtext(NPC_response_text);
+        //text_decider.updateSystemText($"<color=#da4e38>Weighted Rating:</color>{System.Math.Round(success_rate * 100)}%");
+        text_decider.updateSystemText($"<color={color}>{System.Math.Round(success_rate * 100)}%</color> {phrase}");
+        //print($"Weighted rating: {success_rate*100}%");
+
+        //print($"Missed items: {text_decider.getMissingText( (int[])rating_info["missing"] )}");
     }
 
     public void updateTimer()
@@ -158,7 +197,14 @@ public class NPC : MonoBehaviour
 
     void FixedUpdate()
     {
-        updateMovement(Time.deltaTime);
+        //for DEBUGGING
+        if (Input.GetKeyDown(KeyCode.P))
+        { DEBUG_canWalk = !DEBUG_canWalk; }
+
+        if (DEBUG_canWalk)
+        {
+            updateMovement(Time.deltaTime);
+        }
     }
 
     void calculateWalkingStep()
@@ -252,6 +298,13 @@ public class NPC : MonoBehaviour
         progress_bar.resetProgress();
         progress_bar.progress_timer.forceTimerStop();
         //print("Preparing for exitting");
+    }
+
+    //repeat the existing order
+    public void repeatOrder()
+    {
+        string formatted_text = text_decider.getRepeatText();
+        text_decider.updateNPCtext(formatted_text);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

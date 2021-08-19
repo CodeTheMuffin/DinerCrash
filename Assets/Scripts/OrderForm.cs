@@ -23,6 +23,9 @@ public class OrderForm
     public const float prepare_time_for_warm_milk = 0.65f;  // max time 5.85 seconds
     // absolute max: 15.75 seconds
 
+    public OrderForm()
+    { }
+
     // Start is called before the first frame update
     public OrderForm(int cholocate_counter, int oatmeal_counter, int milk_counter, int w_milk_counter, int total, bool discount)
     {
@@ -31,15 +34,14 @@ public class OrderForm
         normal_milk_counter = milk_counter;
         warm_milk_counter = w_milk_counter;
 
-        counters[(int)OrderOptions.Options.cholocate_cookie] = cholocate_cookie_counter;
-        counters[(int)OrderOptions.Options.oatmeal_raisin_cookie] = oatmeal_raisin_cookie_counter;
-        counters[(int)OrderOptions.Options.normal_milk] = normal_milk_counter;
-        counters[(int)OrderOptions.Options.warm_milk] = warm_milk_counter;
-
+        UpdateCounters();
 
         total_amount = total;
-        discount_applied = discount;
-        prepare_time = get_estimated_prepare_time( cholocate_counter,  oatmeal_counter,  milk_counter,  w_milk_counter);
+        if (getTotalQuantity() > 0)
+        {
+            discount_applied = discount;
+        }
+        prepare_time = get_estimated_prepare_time();
     }
 
     public int getTotalQuantity()
@@ -47,6 +49,13 @@ public class OrderForm
         return cholocate_cookie_counter + oatmeal_raisin_cookie_counter + normal_milk_counter + warm_milk_counter;
     }
 
+    public void UpdateCounters()
+    {
+        counters[(int)OrderOptions.Options.cholocate_cookie] = cholocate_cookie_counter;
+        counters[(int)OrderOptions.Options.oatmeal_raisin_cookie] = oatmeal_raisin_cookie_counter;
+        counters[(int)OrderOptions.Options.normal_milk] = normal_milk_counter;
+        counters[(int)OrderOptions.Options.warm_milk] = warm_milk_counter;
+    }
 
     // if a counter > 0, then count it as 1. 
     public int getTotalOptionsSelected()
@@ -60,6 +69,10 @@ public class OrderForm
         return totalSelected;
     }
 
+    public float get_estimated_prepare_time()
+    {
+        return get_estimated_prepare_time(cholocate_cookie_counter, oatmeal_raisin_cookie_counter, normal_milk_counter, warm_milk_counter);
+    }
 
     public static float get_estimated_prepare_time(int cholocate_counter, int oatmeal_counter, int milk_counter, int w_milk_counter)
     {
@@ -150,6 +163,7 @@ public class OrderForm
         }
 
         float weighted_rating = (received_weighted_rating - missing_weighted_rating)/ expected_weighted_rating;
+        weighted_rating += 1f; // so that if missed everything, it show 0% rather than -100%
         
         Dictionary<string, object> rating_info = new Dictionary<string, object>();
 
@@ -161,4 +175,28 @@ public class OrderForm
         return rating_info;
     }
 
+    public void addToOrder(OrderForm receivedOrder)
+    {
+        cholocate_cookie_counter += receivedOrder.cholocate_cookie_counter;
+        oatmeal_raisin_cookie_counter += receivedOrder.oatmeal_raisin_cookie_counter;
+        normal_milk_counter += receivedOrder.normal_milk_counter;
+        warm_milk_counter += receivedOrder.warm_milk_counter;
+
+        UpdateCounters();
+
+        total_amount += receivedOrder.total_amount;
+
+        if (receivedOrder.getTotalQuantity() > 0)
+        {
+            discount_applied = discount_applied? discount_applied : receivedOrder.discount_applied;
+        }
+        prepare_time = get_estimated_prepare_time();
+    }
+
+    // hardcoded b/c Im running out of time
+    public override string ToString()
+    {
+        return $"{cholocate_cookie_counter} cholocate chips cookies, {oatmeal_raisin_cookie_counter} oatmeal raisin cookies, " +
+            $"{normal_milk_counter} cold milks , and {warm_milk_counter} warm milks.";
+    }
 }
