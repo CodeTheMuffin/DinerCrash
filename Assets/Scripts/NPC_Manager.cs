@@ -11,7 +11,8 @@ public class NPC_Manager : MonoBehaviour
     public GameObject NPC_prefab;
     public List<NPC> NPCs = new List<NPC>();
     public List<NPC> DyingNPCs = new List<NPC>();
-    public int max_NPCs_allowed = 7;
+    public int max_NPCs_allowed = 7; // this at a time in a room.
+    public int total_NPCs = 0;//total number of NPCs during a game run
 
     public Timer spawning_timer;
     public float max_spawning_time = 7f;
