@@ -45,4 +45,13 @@ public class Stats : MonoBehaviour
         }
     }
 
+    public void updateBudget(float value) // 0 to 1f
+    {
+        BudgetPB.updateProgressByValue(value);
+    }
+
+    public void updateSuccess(float value) // 0 to 1f
+    {
+        SuccessPB.updateProgressByValue(value);
+    }
 }
