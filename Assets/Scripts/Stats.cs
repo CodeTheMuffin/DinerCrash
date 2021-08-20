@@ -106,7 +106,7 @@ public class Stats : MonoBehaviour
 
     public void updateBudgetActual(int actual)
     {
-        total_actual_budget += actual;
+        total_actual_budget += (float)actual;
 
         budget_rating = total_actual_budget / total_expected_budget;
 
