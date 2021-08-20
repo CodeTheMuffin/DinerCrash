@@ -32,9 +32,12 @@ public class Stats : MonoBehaviour
     public float total_actual_points = 0f;
     public float rating = 0f;
 
+    public float total_expected_budget = 800f;
+    public float total_actual_budget = 0f;
+    public float budget_rating = 0f;
 
     //debug
-    public float DEBUG_TIMER_VALUE = 0f;
+    public float DEBUG_VALUE = 0f;
 
     public void Start()
     {
@@ -42,7 +45,7 @@ public class Stats : MonoBehaviour
         gameTimer.reset_timer();
 
         BudgetPB.progress = 0f;
-        SuccessPB.progress = 1f;
+        SuccessPB.progress = 0f;
         TimePB.progress = 1f;
 
         BudgetPB.updateProgress();
@@ -60,7 +63,7 @@ public class Stats : MonoBehaviour
 
             if (isGameOver)
             {
-                Debug.Log("Time ran out!");
+                Debug.Log("Time ran out!");//use Debug.Log whenever GameOver() is called.
                 GameOver();
             }
             else
@@ -98,6 +101,18 @@ public class Stats : MonoBehaviour
         updateSuccess(rating);
     }
 
+    public void updateBudgetActual(int actual)
+    {
+        total_actual_budget += actual;
+
+        budget_rating = total_actual_budget / total_actual_budget;
+
+        Debug.Log($"new actual: {actual}");
+        Debug.Log($"total actual: {total_actual_budget} total expected: {total_actual_budget} new budget rating: {budget_rating}");
+
+        updateBudget(budget_rating);
+    }
+
     public void GameOver()
     {
         Debug.Log("GAMEOVER");
@@ -105,11 +120,15 @@ public class Stats : MonoBehaviour
         MenuUI.SetActive(false);
         ExitUI.SetActive(true);
 
+        // UPDATING BUDGET TEXT
+        budget_text.text = $"{budget_text_start}{Mathf.RoundToInt(total_actual_budget)}";
+
+
         // UPDATING RATING TEXT
-        rating_text.text = $"{rating_text_start}{rating * 100}%";
+        rating_text.text = $"{rating_text_start}{Mathf.RoundToInt(rating* 100)}%";
 
         // UPDATING TIME TEXT
-        string time_string = BuffTime(gameTimer.time);   //BuffTime(DEBUG_TIMER_VALUE);//DEBUG
+        string time_string = BuffTime(gameTimer.time);   //BuffTime(DEBUG_VALUE);//DEBUG
         time_text.text = $"{time_text_start}{time_string}";
 
     }

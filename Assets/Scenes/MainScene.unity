@@ -8788,7 +8788,13 @@ MonoBehaviour:
   TimePB: {fileID: 1004721078}
   max_gametime_seconds: 100
   isGameOver: 0
-  DEBUG_TIMER_VALUE: 61
+  total_expected_points: 0
+  total_actual_points: 0
+  rating: 0
+  total_expected_budget: 0
+  total_actual_budget: 0
+  budget_rating: 0
+  DEBUG_VALUE: 0
 --- !u!4 &1409209617
 Transform:
   m_ObjectHideFlags: 0
@@ -10787,7 +10793,7 @@ MonoBehaviour:
   NPCs: []
   DyingNPCs: []
   max_NPCs_allowed: 7
-  total_NPCs: 50
+  total_NPCs_allowed_in_game: 50
   spawning_timer: {fileID: 1674047823}
   max_spawning_time: 7
   spawn_counter: 0
@@ -12508,6 +12514,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 519f2c3a902e41b4a9d41c43e8bc31e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GameStat: {fileID: 1409209616}
   OrderingMenu: {fileID: 155613611}
   orderManager: {fileID: 1710291595}
   cholocate_cookie_text: {fileID: 208017527}

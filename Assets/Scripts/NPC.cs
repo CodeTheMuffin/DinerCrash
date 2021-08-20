@@ -179,7 +179,14 @@ public class NPC : MonoBehaviour
             //TODO: AND they didn't receive an order, then leave!
             if (current_state != (int)NPC.State.exitting)
             {
-                updateRating(0, expectedOrder.get_estimated_prepare_time());
+                if (expectedOrder.getTotalQuantity() == 0)
+                {
+                    updateRating(0, 0.05f);//if they didn't expect anything then only subtract a very small amount
+                }
+                else 
+                { 
+                    updateRating(0, expectedOrder.get_estimated_prepare_time());
+                }
                 prepareForExitting();
             }
         }

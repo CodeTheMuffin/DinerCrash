@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class UI_Manger : MonoBehaviour
 {
+    public Stats GameStat;
     public GameObject OrderingMenu;
     public OrderManager orderManager;
 
