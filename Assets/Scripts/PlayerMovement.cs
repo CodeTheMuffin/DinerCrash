@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public Stats GameStats;
     //public CharacterController2D controller;
     public Animator animator;
     public TextSystem txtSys;
@@ -79,25 +80,32 @@ public class PlayerMovement : MonoBehaviour
         //animator.SetFloat("Speed", Mathf.Abs(horizontalMove));
 
         //debug
-        if (Input.GetKeyDown(KeyCode.R))
+        /*if (Input.GetKeyDown(KeyCode.R))
         {
             Reset();
-        }
+        }*/
 
         //ESC
         if (Input.GetKey("escape"))
         {
             Application.Quit();
         }
-        UpdateNPCSelection();
-        AccessNPC();
-        AccessOrder();
-        AccessPC();
+
+        if (!GameStats.isGameOver)
+        {
+            UpdateNPCSelection();
+            AccessNPC();
+            AccessOrder();
+            AccessPC();
+        }
     }
 
     private void FixedUpdate()
     {
-        Move();
+        if (!GameStats.isGameOver)
+        {
+            Move();
+        }
     }
 
 
@@ -220,9 +228,9 @@ public class PlayerMovement : MonoBehaviour
                         if (!selectedNPC.wasOrderPlaced)
                         {
                             // get order
-                            print("Order received.");
-                            print(selectedNPC.getExpectedForm());
-                            print(selectedNPC.request_text.Replace("\n"," "));
+                            //print("Order received.");
+                            //print(selectedNPC.getExpectedForm());
+                            //print(selectedNPC.request_text.Replace("\n"," "));
                             selectedNPC.tellPlayerOrder();
                             selectedNPC.prepareForStanding();
                         }
@@ -286,7 +294,7 @@ public class PlayerMovement : MonoBehaviour
                 canPickUpOrder = !holdingOrder;
                 orderboxBeingHeld = holdingOrder ? newOrderBox.transform : null;
 
-                print($"Holding order with: {newOrderBox.GetComponent<OrderBox>().orderForm}");
+                //print($"Holding order with: {newOrderBox.GetComponent<OrderBox>().orderForm}");
 
                 if (orderboxBeingHeld)
                 {

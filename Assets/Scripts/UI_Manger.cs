@@ -5,20 +5,29 @@ using UnityEngine.UI;
 
 public class UI_Manger : MonoBehaviour
 {
+    public Stats GameStat;
     public GameObject OrderingMenu;
     public OrderManager orderManager;
 
-    public const int MAX_AMOUNT = 10;
+    public const int MAX_AMOUNT = 10;// to use modulus on; actual max value is 9
 
     int cholocate_cookie_counter = 0;
     int oatmeal_raisin_cookie_counter = 0;
     int normal_milk_counter = 0;
     int warm_milk_counter = 0;
 
-    int cost_cholocate_cookie = 1;
-    int cost_oatmeal_raisin_cookie = 2;
+    //prices the NPC will pay
+    int cost_cholocate_cookie = 3;
+    int cost_oatmeal_raisin_cookie = 4;
     int cost_normal_milk = 2;
-    int cost_warm_milk = 4;
+    int cost_warm_milk = 6;
+
+    //supply cost
+    const int supply_cost_of_box = 1;
+    const int supply_cost_cholocate_cookie = 1;
+    const int supply_cost_oatmeal_raisin_cookie = 1;
+    const int supply_cost_normal_milk = 1;
+    const int supply_cost_warm_milk = 1;
 
     int total_amount = 0;
     float discount_percentage = 0.5f;
@@ -101,14 +110,22 @@ public class UI_Manger : MonoBehaviour
     }
     public void update_total_amount_text()
     {
-        // To create a buffer and always show 2 digits
+        // To create a buffer and always show 3 digits
         string total_amount_str = "0";
 
-        if (total_amount < 10 && total_amount >= 0)
+        if (total_amount == 0)
         {
-            total_amount_str += total_amount.ToString();
+            total_amount_str = "000";
         }
-        else
+        else if (total_amount < 10 && total_amount > 0)
+        {
+            total_amount_str = "00" + total_amount.ToString();
+        }
+        else if (total_amount < 100 && total_amount > 0)
+        {
+            total_amount_str = "0" + total_amount.ToString();
+        }
+        else //100+ and <0 values
         {
             total_amount_str = total_amount.ToString();
         }
@@ -116,7 +133,16 @@ public class UI_Manger : MonoBehaviour
         total_amount_text.text = total_amount_str;
     }
 
+    public int getSupplyCost()
+    {
+        int supply_cost = supply_cost_of_box + 
+            (cholocate_cookie_counter * supply_cost_cholocate_cookie) +
+            (oatmeal_raisin_cookie_counter * supply_cost_oatmeal_raisin_cookie) +
+            (normal_milk_counter * supply_cost_normal_milk) +
+            (warm_milk_counter * supply_cost_warm_milk);
 
+        return supply_cost * -1;//want to be a negative value
+    }
 
     public void clearMenu()
     {
@@ -195,6 +221,11 @@ public class UI_Manger : MonoBehaviour
             total_amount, discount_applied);
 
         orders.Add(newOrderForm);
+        int supply_cost = getSupplyCost();
+        GameStat.updateBudgetActual(supply_cost);
+        //hacky way to do it...
+        GameStat.txtSys.updateSystemText($"Supply Cost: <color=#da4e38>${supply_cost}</color>");//price turns red
+
 
         clearMenu();
         closeOrderingMenu();

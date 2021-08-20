@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class NPC : MonoBehaviour
 {
+    public Stats GameStats;
     public NPC_TextDecider text_decider;
     OrderForm expectedOrder;
     OrderForm receivedOrders = new OrderForm();//start out empty
@@ -16,7 +17,7 @@ public class NPC : MonoBehaviour
     float walking_step;
     public bool DEBUG_canWalk = true;//for debug testing
 
-    const float UPP = 0.125f; // unit per pixel
+    const float UPP = 0.125f; // units per pixel
     public int current_state;
     public int node_index = 0;
     public bool ready_for_next_point = false; //for when the NPC reached the nextWayPoint
@@ -140,12 +141,29 @@ public class NPC : MonoBehaviour
             }
         }
 
+        float expected_rating = (float)rating_info["expected_weighted_rating"];
+        updateRating(success_rate, expected_rating);
+        updateBudget(receivedOrders.total_amount);
+
         text_decider.updateNPCtext(NPC_response_text);
         //text_decider.updateSystemText($"<color=#da4e38>Weighted Rating:</color>{System.Math.Round(success_rate * 100)}%");
         text_decider.updateSystemText($"<color={color}>{System.Math.Round(success_rate * 100)}%</color> {phrase}");
         //print($"Weighted rating: {success_rate*100}%");
 
         //print($"Missed items: {text_decider.getMissingText( (int[])rating_info["missing"] )}");
+    }
+
+    public void updateBudget(int amount_paid)
+    {
+        GameStats.updateBudgetActual(amount_paid);
+    }
+
+    public void updateRating(float weighted_success_rating, float expected_rating) // 0 is 0%, 1 is 100%; weighted rating
+    {
+        int expected_rating_int = (int)(Mathf.Ceil(expected_rating));
+        int actual_rating_int = (int)(expected_rating_int * weighted_success_rating);
+
+        GameStats.updateRatingActual_VS_Expected(actual_rating_int, expected_rating_int);
     }
 
     public void updateTimer()
@@ -159,13 +177,21 @@ public class NPC : MonoBehaviour
 
         if (progress_bar.gameObject.activeSelf && !progressDone && current_state != (int)NPC.State.exitting)
         {
-            progress_bar.updateProgress(delta_time);
+            progress_bar.updateOneDirectionalProgress(delta_time);
         }
         else if (progressDone) //  and orders.Count == 0 ???
         {
             //TODO: AND they didn't receive an order, then leave!
             if (current_state != (int)NPC.State.exitting)
             {
+                if (expectedOrder.getTotalQuantity() == 0)
+                {
+                    updateRating(0, 0.05f);//if they didn't expect anything then only subtract a very small amount
+                }
+                else 
+                { 
+                    updateRating(0, expectedOrder.get_estimated_prepare_time());
+                }
                 prepareForExitting();
             }
         }
@@ -197,11 +223,16 @@ public class NPC : MonoBehaviour
 
     void FixedUpdate()
     {
-        //for DEBUGGING
+       /* //for DEBUGGING
         if (Input.GetKeyDown(KeyCode.P))
         { DEBUG_canWalk = !DEBUG_canWalk; }
 
         if (DEBUG_canWalk)
+        {
+            updateMovement(Time.deltaTime);
+        }*/
+
+        if (!GameStats.isGameOver)
         {
             updateMovement(Time.deltaTime);
         }
@@ -281,17 +312,17 @@ public class NPC : MonoBehaviour
 
         if (success_rate >= 0.8f)
         {
-            print("great job!");
+            //print("great job!");
             progress_bar.bar_color = progress_color_exitting_happy;
         }
         else if (success_rate >= 0.4f)
         {
-            print("ok job!");
+            //print("ok job!");
             progress_bar.bar_color = progress_color_standing;
         }
         else
         {
-            print("wtf man");
+            //print("wtf man");
             progress_bar.bar_color = progress_color_exitting_mad;
         }
 
