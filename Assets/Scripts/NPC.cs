@@ -17,7 +17,7 @@ public class NPC : MonoBehaviour
     float walking_step;
     public bool DEBUG_canWalk = true;//for debug testing
 
-    const float UPP = 0.125f; // unit per pixel
+    const float UPP = 0.125f; // units per pixel
     public int current_state;
     public int node_index = 0;
     public bool ready_for_next_point = false; //for when the NPC reached the nextWayPoint

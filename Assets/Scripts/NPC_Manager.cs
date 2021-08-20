@@ -150,7 +150,7 @@ public class NPC_Manager : MonoBehaviour
 
         foreach (string key in keys)
         {
-            int quantity = UnityEngine.Random.Range(0, 1);//UI_Manger.MAX_AMOUNT);
+            int quantity = UnityEngine.Random.Range(0, 2);//UI_Manger.MAX_AMOUNT);
             order_options_quantity[key] = quantity;
             //print($"Key: {key} amount: {quantity.ToString()}");
         }

@@ -105,10 +105,10 @@ public class Stats : MonoBehaviour
     {
         total_actual_budget += actual;
 
-        budget_rating = total_actual_budget / total_actual_budget;
+        budget_rating = total_actual_budget / total_expected_budget;
 
         Debug.Log($"new actual: {actual}");
-        Debug.Log($"total actual: {total_actual_budget} total expected: {total_actual_budget} new budget rating: {budget_rating}");
+        Debug.Log($"total actual: {total_actual_budget} total expected: {total_expected_budget} new budget rating: {budget_rating}");
 
         updateBudget(budget_rating);
     }

@@ -1220,7 +1220,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: dbe4d698416d8fd4fa7be93fab12bc58, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 31a5b5dc4f769784f9d5ef2d8be1a447, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5600,8 +5600,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 24, y: -3}
-  m_SizeDelta: {x: 12, y: 8}
+  m_AnchoredPosition: {x: 20, y: -3}
+  m_SizeDelta: {x: 18, y: 8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &730301428
 MonoBehaviour:
@@ -5623,7 +5623,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 99
+  m_text: 999
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c4a56546bd028f042b506702e04e3a76, type: 2}
   m_sharedMaterial: {fileID: -4455937426182792983, guid: c4a56546bd028f042b506702e04e3a76, type: 2}
@@ -8791,7 +8791,7 @@ MonoBehaviour:
   total_expected_points: 0
   total_actual_points: 0
   rating: 0
-  total_expected_budget: 0
+  total_expected_budget: 800
   total_actual_budget: 0
   budget_rating: 0
   DEBUG_VALUE: 0
