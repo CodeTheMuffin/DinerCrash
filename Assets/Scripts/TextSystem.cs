@@ -1100,6 +1100,7 @@ public class TextSystem : MonoBehaviour
             else
             {
                 Debug.LogError("ERROR>> The warning key: { " + warningKey + " } does not exist.");
+                
             }
         }
         else 
@@ -1128,7 +1129,7 @@ public class TextSystem : MonoBehaviour
     }
 
     // For debugging purposes
-    void print_text_boxes()
+    /*void print_text_boxes()
     {
         Debug.Log("total: " + textBox.Count.ToString());
         foreach (string s in textBox)
@@ -1138,5 +1139,5 @@ public class TextSystem : MonoBehaviour
         }
         Debug.Log("");
     
-    }
+    }*/
 }

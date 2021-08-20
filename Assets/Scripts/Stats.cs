@@ -44,6 +44,7 @@ public class Stats : MonoBehaviour
 
     public void Start()
     {
+        Debug.Log($"Inside Stat's Start(): {this.name}");
         gameTimer.max_time_in_seconds = max_gametime_seconds;
         gameTimer.reset_timer();
 
@@ -56,6 +57,7 @@ public class Stats : MonoBehaviour
         TimePB.updateProgress();
 
         ExitUI.SetActive(false);
+        Debug.Log($"End of Stat's Start(): {this.name}");
     }
 
     private void Update()
@@ -85,7 +87,7 @@ public class Stats : MonoBehaviour
     {
         if (value > 1f)
         { value = 1f; }
-        else if (value < 0)
+        else if (value < 0f)
         { value = 0f; }
 
         SuccessPB.updateProgressByValue(value);

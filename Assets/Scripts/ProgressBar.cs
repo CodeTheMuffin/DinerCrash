@@ -17,10 +17,11 @@ public class ProgressBar : MonoBehaviour
     [Range(0f,1f)]
     public float progress = 0f; //from 0 to 100%  == 0.0f to 1.0f
 
-    public void Start()
+    public void Awake()
     {
         if (bar_colors.Count > 0 && bars.Count > 0)
         {
+            Debug.Log($"Inside Progress Bar's Awake(): {this.name}");
             calculateAndSetPBC();
             calculateAndSetPPB();
 
@@ -34,6 +35,7 @@ public class ProgressBar : MonoBehaviour
             //DEBUG
             if (progress_timer)
             { progress_timer.reset_timer(); }*/
+            Debug.Log($"Exitting Progress Bar's Awake(): {this.name}");
         }
     }
 
@@ -74,6 +76,7 @@ public class ProgressBar : MonoBehaviour
     //uses the progress value itself
     public void updateProgress()
     {
+        Debug.Log($"Inside updateprogress(): {this.name}");
         updateProgressByValue(progress);
     }
 
@@ -97,13 +100,14 @@ public class ProgressBar : MonoBehaviour
     //handles both LTR and RTL progression based on value
     public void updateProgressByValue(float value)// progress goes left to right: 0% -> 100%
     {
+        Debug.Log($"Inside updateProgressByValue(): {this.name} value: {value} value type: {value.GetType()}");
         progress = value; // 0.0 to 1.0 as 100%
 
         // For right now, I don't want to show that the any overpercentage shows a different color
         if (value > 1f)
             value = 1f;
         else if (value < 0f)
-            value = 0;
+            value = 0f;
 
         // this returns at which the bar index should focus on the varying alpha to show current progress level
         // any index below this index, should be full alpha (1f or 255)
@@ -146,8 +150,8 @@ public class ProgressBar : MonoBehaviour
                 if (left_to_right_progression)
                 {
                     //set the previous bar's alpha to zero, so doesn't appear. Again using range 0-1f. Not 0-255.
-                    Color current_bar_color = bars[bar_index].color;
-                    bars[bar_index].color = new Color(current_bar_color.r, current_bar_color.g, current_bar_color.b, 1f);
+                    //Color current_bar_color = bars[bar_index].color;
+                    //bars[bar_index].color = new Color(current_bar_color.r, current_bar_color.g, current_bar_color.b, 1f);
                     bars[bar_index].color = setBarAlpha(bars[bar_index].color, 1f); //full alpha
                 }
                 else // RTL 
@@ -244,6 +248,8 @@ public class ProgressBar : MonoBehaviour
                 }
             }
         }
+
+        Debug.Log($"End of updateProgressByValue(): {this.name} value: {value}");
     }
 
     Color setBarAlpha(Color a_bar_color, float alpha_value_at_index) // alpha_value_at_index is 0.0f to 1.0f
@@ -264,7 +270,7 @@ public class ProgressBar : MonoBehaviour
 
         if (!isDone)
         { 
-            bar_index = (int)Mathf.Ceil(progress / percentage_per_bar) - 1;
+            bar_index = (int)(Mathf.Ceil(progress / percentage_per_bar)) - 1;
         }
 
         // only multipling by 1f to show that you need to multiply by the max alpha range. 

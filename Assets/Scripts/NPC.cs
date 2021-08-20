@@ -160,7 +160,7 @@ public class NPC : MonoBehaviour
 
     public void updateRating(float weighted_success_rating, float expected_rating) // 0 is 0%, 1 is 100%; weighted rating
     {
-        int expected_rating_int = (int)Mathf.Ceil(expected_rating);
+        int expected_rating_int = (int)(Mathf.Ceil(expected_rating));
         int actual_rating_int = (int)(expected_rating_int * weighted_success_rating);
 
         GameStats.updateRatingActual_VS_Expected(actual_rating_int, expected_rating_int);
