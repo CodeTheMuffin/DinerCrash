@@ -143,7 +143,7 @@ public class NPC : MonoBehaviour
 
         float expected_rating = (float)rating_info["expected_weighted_rating"];
         updateRating(success_rate, expected_rating);
-
+        updateBudget(receivedOrders.total_amount);
 
         text_decider.updateNPCtext(NPC_response_text);
         //text_decider.updateSystemText($"<color=#da4e38>Weighted Rating:</color>{System.Math.Round(success_rate * 100)}%");
@@ -151,6 +151,11 @@ public class NPC : MonoBehaviour
         //print($"Weighted rating: {success_rate*100}%");
 
         //print($"Missed items: {text_decider.getMissingText( (int[])rating_info["missing"] )}");
+    }
+
+    public void updateBudget(int amount_paid)
+    {
+        GameStats.updateBudgetActual(amount_paid);
     }
 
     public void updateRating(float weighted_success_rating, float expected_rating) // 0 is 0%, 1 is 100%; weighted rating

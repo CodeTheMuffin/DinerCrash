@@ -8786,12 +8786,12 @@ MonoBehaviour:
   BudgetPB: {fileID: 2065304310}
   SuccessPB: {fileID: 747570843}
   TimePB: {fileID: 1004721078}
-  max_gametime_seconds: 100
+  max_gametime_seconds: 300
   isGameOver: 0
   total_expected_points: 0
   total_actual_points: 0
   rating: 0
-  total_expected_budget: 800
+  total_expected_budget: 200
   total_actual_budget: 0
   budget_rating: 0
   DEBUG_VALUE: 0
