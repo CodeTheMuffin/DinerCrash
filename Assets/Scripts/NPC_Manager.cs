@@ -8,14 +8,16 @@ using System;
  */
 public class NPC_Manager : MonoBehaviour
 {
+    public Stats GameStats;
     public GameObject NPC_prefab;
     public List<NPC> NPCs = new List<NPC>();
     public List<NPC> DyingNPCs = new List<NPC>();
     public int max_NPCs_allowed = 7; // this at a time in a room.
-    public int total_NPCs = 0;//total number of NPCs during a game run
+    public int total_NPCs = 50;//total number of allowed NPCs during a game run
 
     public Timer spawning_timer;
     public float max_spawning_time = 7f;
+    public int spawn_counter = 0;
 
     public TextSystem text_system;
 
@@ -59,63 +61,72 @@ public class NPC_Manager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(CountNPCs() < max_NPCs_allowed)
+        if (!GameStats.isGameOver)
         {
-            bool isTimerDone = spawning_timer.tick_n_check(Time.deltaTime);
-            if (isTimerDone)
+            if (spawn_counter >= total_NPCs)
             {
-                spawnNPC();
-            }
-        }
-
-        //handling robots NPCs
-        foreach (NPC robot in NPCs)
-        {
-            if (robot.current_state == (int)NPC.State.dying)
-            {
-                DyingNPCs.Add(robot);
-                //Repositioned so it can get out of last WayPoint collider and be removed from memory
-                robot.transform.position = AreaToDie.position; 
-                continue;
+                GameStats.isGameOver = true;
+                return;
             }
 
-            robot.updateProgressbar(Time.deltaTime);
-
-            if (robot.ready_for_next_point)
+            if (CountNPCs() < max_NPCs_allowed)
             {
-                robot.currentWayPoint = robot.nextWayPoint;
-                Tuple<int, aWayPoint> newPoint = SuperManager.getNextStateAndWayPoint(robot.current_state, robot.currentWayPoint);
-                int new_state = newPoint.Item1;
-
-                if (new_state == (int)NPC.State.standing)
+                bool isTimerDone = spawning_timer.tick_n_check(Time.deltaTime);
+                if (isTimerDone)
                 {
-                   robot.standingWayPoint = newPoint.Item2;
+                    spawnNPC();
+                }
+            }
+
+            //handling robots NPCs
+            foreach (NPC robot in NPCs)
+            {
+                if (robot.current_state == (int)NPC.State.dying)
+                {
+                    DyingNPCs.Add(robot);
+                    //Repositioned so it can get out of last WayPoint collider and be removed from memory
+                    robot.transform.position = AreaToDie.position;
+                    continue;
                 }
 
-                robot.current_state = new_state;
-                robot.nextWayPoint = newPoint.Item2;
-                robot.ready_for_next_point = false;
-            }
-            else if (robot.need_new_standing_point)
-            {
-                aWayPoint newPoint = SuperManager.getRandomStandingWayPoint();
-                if (newPoint != null)
-                {
-                    robot.nextWayPoint = newPoint;
-                }
-                robot.need_new_standing_point = false;
-                robot.standingWayPoint = newPoint;
-            }
-        }
+                robot.updateProgressbar(Time.deltaTime);
 
-        if (DyingNPCs.Count > 0)
-        {
-            foreach (NPC deadNPC in DyingNPCs)
-            {
-                NPCs.Remove(deadNPC);
-                Destroy(deadNPC.gameObject, 2f);//Destroy in 2 seconds
+                if (robot.ready_for_next_point)
+                {
+                    robot.currentWayPoint = robot.nextWayPoint;
+                    Tuple<int, aWayPoint> newPoint = SuperManager.getNextStateAndWayPoint(robot.current_state, robot.currentWayPoint);
+                    int new_state = newPoint.Item1;
+
+                    if (new_state == (int)NPC.State.standing)
+                    {
+                        robot.standingWayPoint = newPoint.Item2;
+                    }
+
+                    robot.current_state = new_state;
+                    robot.nextWayPoint = newPoint.Item2;
+                    robot.ready_for_next_point = false;
+                }
+                else if (robot.need_new_standing_point)
+                {
+                    aWayPoint newPoint = SuperManager.getRandomStandingWayPoint();
+                    if (newPoint != null)
+                    {
+                        robot.nextWayPoint = newPoint;
+                    }
+                    robot.need_new_standing_point = false;
+                    robot.standingWayPoint = newPoint;
+                }
             }
-            DyingNPCs.Clear();
+
+            if (DyingNPCs.Count > 0)
+            {
+                foreach (NPC deadNPC in DyingNPCs)
+                {
+                    NPCs.Remove(deadNPC);
+                    Destroy(deadNPC.gameObject, 2f);//Destroy in 2 seconds
+                }
+                DyingNPCs.Clear();
+            }
         }
     }
 
@@ -181,8 +192,10 @@ public class NPC_Manager : MonoBehaviour
         npc_obj.setSprite(npc_sprite);
         npc_obj.setOrderForm(expectedOrderForm);
         npc_obj.text_decider.SetValues(textSYS, expectedOrderForm);
+        npc_obj.GameStats = GameStats;
         npc_obj.justSpawnedHandler();
 
         NPCs.Add(npc_obj);
+        spawn_counter++;
     }
 }

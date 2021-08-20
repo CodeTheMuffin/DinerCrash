@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class NPC : MonoBehaviour
 {
+    public Stats GameStats;
     public NPC_TextDecider text_decider;
     OrderForm expectedOrder;
     OrderForm receivedOrders = new OrderForm();//start out empty
@@ -197,11 +198,16 @@ public class NPC : MonoBehaviour
 
     void FixedUpdate()
     {
-        //for DEBUGGING
+       /* //for DEBUGGING
         if (Input.GetKeyDown(KeyCode.P))
         { DEBUG_canWalk = !DEBUG_canWalk; }
 
         if (DEBUG_canWalk)
+        {
+            updateMovement(Time.deltaTime);
+        }*/
+
+        if (!GameStats.isGameOver)
         {
             updateMovement(Time.deltaTime);
         }
