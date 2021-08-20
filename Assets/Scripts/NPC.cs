@@ -159,7 +159,7 @@ public class NPC : MonoBehaviour
 
         if (progress_bar.gameObject.activeSelf && !progressDone && current_state != (int)NPC.State.exitting)
         {
-            progress_bar.updateProgress(delta_time);
+            progress_bar.updateOneDirectionalProgress(delta_time);
         }
         else if (progressDone) //  and orders.Count == 0 ???
         {

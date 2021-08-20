@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// TODO: Think about implementing a stopper which stops the timer from counting down.
+// And have a hard_reset_timer() where it clear the stop. Normal reset_timer() would just reset the other values, not the stopper
+// OORRRR just set timer_stopped = true ?? LOL
 public class Timer : MonoBehaviour
 {
     public float max_time_in_seconds = 2f;
