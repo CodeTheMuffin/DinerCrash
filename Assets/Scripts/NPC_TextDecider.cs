@@ -243,7 +243,7 @@ public class NPC_TextDecider : MonoBehaviour
         {
             xx += $"{x}, ";
         }
-        print($"Inputted missedItems: {xx}");
+        //print($"Inputted missedItems: {xx}");
         
         string missing_text = "";
         string format = "{0} {1}";
