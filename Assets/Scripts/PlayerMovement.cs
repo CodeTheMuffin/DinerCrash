@@ -228,9 +228,9 @@ public class PlayerMovement : MonoBehaviour
                         if (!selectedNPC.wasOrderPlaced)
                         {
                             // get order
-                            print("Order received.");
-                            print(selectedNPC.getExpectedForm());
-                            print(selectedNPC.request_text.Replace("\n"," "));
+                            //print("Order received.");
+                            //print(selectedNPC.getExpectedForm());
+                            //print(selectedNPC.request_text.Replace("\n"," "));
                             selectedNPC.tellPlayerOrder();
                             selectedNPC.prepareForStanding();
                         }
@@ -294,7 +294,7 @@ public class PlayerMovement : MonoBehaviour
                 canPickUpOrder = !holdingOrder;
                 orderboxBeingHeld = holdingOrder ? newOrderBox.transform : null;
 
-                print($"Holding order with: {newOrderBox.GetComponent<OrderBox>().orderForm}");
+                //print($"Holding order with: {newOrderBox.GetComponent<OrderBox>().orderForm}");
 
                 if (orderboxBeingHeld)
                 {

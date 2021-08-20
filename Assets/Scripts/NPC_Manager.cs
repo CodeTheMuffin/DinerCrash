@@ -75,6 +75,7 @@ public class NPC_Manager : MonoBehaviour
             }
             else if (CountNPCs() == 0 && spawn_counter >= total_NPCs_allowed_in_game)
             {
+                textSYS.updateSystemText($"Max NPC counter of {total_NPCs_allowed_in_game} reached.");
                 Debug.Log("MAX NPCS allowed in game reached. Ending game.");
                 GameStats.isGameOver = true;
                 GameStats.GameOver();
@@ -150,7 +151,8 @@ public class NPC_Manager : MonoBehaviour
 
         foreach (string key in keys)
         {
-            int quantity = UnityEngine.Random.Range(0, 2);//UI_Manger.MAX_AMOUNT);
+            int max_value = UnityEngine.Random.Range(3, UI_Manger.MAX_AMOUNT);
+            int quantity = UnityEngine.Random.Range(0, max_value);//UI_Manger.MAX_AMOUNT);
             order_options_quantity[key] = quantity;
             //print($"Key: {key} amount: {quantity.ToString()}");
         }

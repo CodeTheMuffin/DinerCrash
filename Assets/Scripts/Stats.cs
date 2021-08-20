@@ -30,14 +30,17 @@ public class Stats : MonoBehaviour
 
     public float total_expected_points = 0f;
     public float total_actual_points = 0f;
-    public float rating = 0f;
+    public float success_rating = 0f;
 
     public float total_expected_budget = 800f;
     public float total_actual_budget = 0f;
     public float budget_rating = 0f;
 
+    public SpriteRenderer player_reaction;
+    public List<Sprite> player_faces;
+
     //debug
-    public float DEBUG_VALUE = 0f;
+    //public float DEBUG_VALUE = 0f;
 
     public void Start()
     {
@@ -93,12 +96,12 @@ public class Stats : MonoBehaviour
         total_actual_points += actual;
         total_expected_points += expected;
 
-        rating = total_actual_points / total_expected_points;
+        success_rating = total_actual_points / total_expected_points;
 
-        Debug.Log($"new actual: {actual} new expected: {expected}");
-        Debug.Log($"total actual: {total_actual_points} total expected: {total_expected_points}");
+        //Debug.Log($"new actual: {actual} new expected: {expected}");
+        //Debug.Log($"total actual: {total_actual_points} total expected: {total_expected_points}");
 
-        updateSuccess(rating);
+        updateSuccess(success_rating);
     }
 
     public void updateBudgetActual(int actual)
@@ -107,11 +110,33 @@ public class Stats : MonoBehaviour
 
         budget_rating = total_actual_budget / total_expected_budget;
 
-        Debug.Log($"new actual: {actual}");
-        Debug.Log($"total actual: {total_actual_budget} total expected: {total_expected_budget} new budget rating: {budget_rating}");
+        //Debug.Log($"new actual: {actual}");
+        //Debug.Log($"total actual: {total_actual_budget} total expected: {total_expected_budget} new budget rating: {budget_rating}");
 
         updateBudget(budget_rating);
     }
+
+    void updatePlayerReactionFaces()
+    {
+        /*
+         0 = neutral
+         1 = great!
+         2 = bad
+         */
+
+        int face_index = 0;
+
+        if (budget_rating >= 0.8f && success_rating >= 0.8f)
+        {
+            face_index = 1;
+        }
+        else if (budget_rating <0.3f && success_rating < 0.3f)
+        {
+            face_index = 2;
+        }
+
+        player_reaction.sprite = player_faces[face_index];
+    }    
 
     public void GameOver()
     {
@@ -123,14 +148,14 @@ public class Stats : MonoBehaviour
         // UPDATING BUDGET TEXT
         budget_text.text = $"{budget_text_start}{Mathf.RoundToInt(total_actual_budget)}";
 
-
         // UPDATING RATING TEXT
-        rating_text.text = $"{rating_text_start}{Mathf.RoundToInt(rating* 100)}%";
+        rating_text.text = $"{rating_text_start}{Mathf.RoundToInt(success_rating * 100)}%";
 
         // UPDATING TIME TEXT
         string time_string = BuffTime(gameTimer.time);   //BuffTime(DEBUG_VALUE);//DEBUG
         time_text.text = $"{time_text_start}{time_string}";
 
+        updatePlayerReactionFaces();
     }
 
     string BuffTime(float ending_time)// in seconds

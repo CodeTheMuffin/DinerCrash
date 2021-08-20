@@ -312,17 +312,17 @@ public class NPC : MonoBehaviour
 
         if (success_rate >= 0.8f)
         {
-            print("great job!");
+            //print("great job!");
             progress_bar.bar_color = progress_color_exitting_happy;
         }
         else if (success_rate >= 0.4f)
         {
-            print("ok job!");
+            //print("ok job!");
             progress_bar.bar_color = progress_color_standing;
         }
         else
         {
-            print("wtf man");
+            //print("wtf man");
             progress_bar.bar_color = progress_color_exitting_mad;
         }
 
