@@ -8786,7 +8786,7 @@ MonoBehaviour:
   BudgetPB: {fileID: 2065304310}
   SuccessPB: {fileID: 747570843}
   TimePB: {fileID: 1004721078}
-  max_gametime_seconds: 10
+  max_gametime_seconds: 100
   isGameOver: 0
   DEBUG_TIMER_VALUE: 61
 --- !u!4 &1409209617

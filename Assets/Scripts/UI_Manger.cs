@@ -8,17 +8,17 @@ public class UI_Manger : MonoBehaviour
     public GameObject OrderingMenu;
     public OrderManager orderManager;
 
-    public const int MAX_AMOUNT = 10;
+    public const int MAX_AMOUNT = 10;// to use modulus on; actual max value is 9
 
     int cholocate_cookie_counter = 0;
     int oatmeal_raisin_cookie_counter = 0;
     int normal_milk_counter = 0;
     int warm_milk_counter = 0;
 
-    int cost_cholocate_cookie = 1;
-    int cost_oatmeal_raisin_cookie = 2;
-    int cost_normal_milk = 2;
-    int cost_warm_milk = 4;
+    int cost_cholocate_cookie = 2;
+    int cost_oatmeal_raisin_cookie = 3;
+    int cost_normal_milk = 1;
+    int cost_warm_milk = 5;
 
     int total_amount = 0;
     float discount_percentage = 0.5f;

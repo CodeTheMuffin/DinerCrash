@@ -141,12 +141,24 @@ public class NPC : MonoBehaviour
             }
         }
 
+        float expected_rating = (float)rating_info["expected_weighted_rating"];
+        updateRating(success_rate, expected_rating);
+
+
         text_decider.updateNPCtext(NPC_response_text);
         //text_decider.updateSystemText($"<color=#da4e38>Weighted Rating:</color>{System.Math.Round(success_rate * 100)}%");
         text_decider.updateSystemText($"<color={color}>{System.Math.Round(success_rate * 100)}%</color> {phrase}");
         //print($"Weighted rating: {success_rate*100}%");
 
         //print($"Missed items: {text_decider.getMissingText( (int[])rating_info["missing"] )}");
+    }
+
+    public void updateRating(float weighted_success_rating, float expected_rating) // 0 is 0%, 1 is 100%; weighted rating
+    {
+        int expected_rating_int = (int)Mathf.Ceil(expected_rating);
+        int actual_rating_int = (int)(expected_rating_int * weighted_success_rating);
+
+        GameStats.updateRatingActual_VS_Expected(actual_rating_int, expected_rating_int);
     }
 
     public void updateTimer()
@@ -167,6 +179,7 @@ public class NPC : MonoBehaviour
             //TODO: AND they didn't receive an order, then leave!
             if (current_state != (int)NPC.State.exitting)
             {
+                updateRating(0, expectedOrder.get_estimated_prepare_time());
                 prepareForExitting();
             }
         }

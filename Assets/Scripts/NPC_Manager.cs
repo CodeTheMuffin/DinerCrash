@@ -13,7 +13,7 @@ public class NPC_Manager : MonoBehaviour
     public List<NPC> NPCs = new List<NPC>();
     public List<NPC> DyingNPCs = new List<NPC>();
     public int max_NPCs_allowed = 7; // this at a time in a room.
-    public int total_NPCs = 50;//total number of allowed NPCs during a game run
+    public int total_NPCs_allowed_in_game = 50;//total number of allowed NPCs during a game run
 
     public Timer spawning_timer;
     public float max_spawning_time = 7f;
@@ -63,19 +63,22 @@ public class NPC_Manager : MonoBehaviour
     {
         if (!GameStats.isGameOver)
         {
-            if (spawn_counter >= total_NPCs)
-            {
-                GameStats.isGameOver = true;
-                return;
-            }
 
-            if (CountNPCs() < max_NPCs_allowed)
+
+            if (CountNPCs() < max_NPCs_allowed && spawn_counter < total_NPCs_allowed_in_game)
             {
                 bool isTimerDone = spawning_timer.tick_n_check(Time.deltaTime);
                 if (isTimerDone)
                 {
                     spawnNPC();
                 }
+            }
+            else if (CountNPCs() == 0 && spawn_counter >= total_NPCs_allowed_in_game)
+            {
+                Debug.Log("MAX NPCS allowed in game reached. Ending game.");
+                GameStats.isGameOver = true;
+                GameStats.GameOver();
+                return;
             }
 
             //handling robots NPCs
@@ -147,7 +150,7 @@ public class NPC_Manager : MonoBehaviour
 
         foreach (string key in keys)
         {
-            int quantity = UnityEngine.Random.Range(0, UI_Manger.MAX_AMOUNT);
+            int quantity = UnityEngine.Random.Range(0, 1);//UI_Manger.MAX_AMOUNT);
             order_options_quantity[key] = quantity;
             //print($"Key: {key} amount: {quantity.ToString()}");
         }

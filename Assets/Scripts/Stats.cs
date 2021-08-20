@@ -28,6 +28,11 @@ public class Stats : MonoBehaviour
 
     public bool isGameOver = false;
 
+    public float total_expected_points = 0f;
+    public float total_actual_points = 0f;
+    public float rating = 0f;
+
+
     //debug
     public float DEBUG_TIMER_VALUE = 0f;
 
@@ -37,7 +42,7 @@ public class Stats : MonoBehaviour
         gameTimer.reset_timer();
 
         BudgetPB.progress = 0f;
-        SuccessPB.progress = 0f;
+        SuccessPB.progress = 1f;
         TimePB.progress = 1f;
 
         BudgetPB.updateProgress();
@@ -55,6 +60,7 @@ public class Stats : MonoBehaviour
 
             if (isGameOver)
             {
+                Debug.Log("Time ran out!");
                 GameOver();
             }
             else
@@ -71,21 +77,41 @@ public class Stats : MonoBehaviour
 
     public void updateSuccess(float value) // 0 to 1f
     {
+        if (value > 1f)
+        { value = 1f; }
+        else if (value < 0)
+        { value = 0f; }
+
         SuccessPB.updateProgressByValue(value);
     }
 
-    void GameOver()
+    public void updateRatingActual_VS_Expected(int actual, int expected)
+    {
+        total_actual_points += actual;
+        total_expected_points += expected;
+
+        rating = total_actual_points / total_expected_points;
+
+        Debug.Log($"new actual: {actual} new expected: {expected}");
+        Debug.Log($"total actual: {total_actual_points} total expected: {total_expected_points}");
+
+        updateSuccess(rating);
+    }
+
+    public void GameOver()
     {
         Debug.Log("GAMEOVER");
 
         MenuUI.SetActive(false);
         ExitUI.SetActive(true);
 
-        //update text
+        // UPDATING RATING TEXT
+        rating_text.text = $"{rating_text_start}{rating * 100}%";
 
-        string time_string = BuffTime(DEBUG_TIMER_VALUE);
-
+        // UPDATING TIME TEXT
+        string time_string = BuffTime(gameTimer.time);   //BuffTime(DEBUG_TIMER_VALUE);//DEBUG
         time_text.text = $"{time_text_start}{time_string}";
+
     }
 
     string BuffTime(float ending_time)// in seconds

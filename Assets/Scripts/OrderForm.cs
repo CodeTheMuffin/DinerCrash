@@ -12,15 +12,15 @@ public class OrderForm
     //since there are 4 counters; to be accessed through loops
     public int[] counters = new int[4];
 
-    public int total_amount = 0;
+    public int total_amount = 0;//this is actually total price
     public bool discount_applied = false;
     public float prepare_time = 0f;
 
     // how much time it takes to prepare one cholocate cookie in seconds (ie 0.5f is a half a second)
-    public const float prepare_time_for_cholocate_cookie = 0.35f; // max time (ie. 9* 0.35f) = 3.15 seconds
+    public const float prepare_time_for_cholocate_cookie = 0.40f; // max time (ie. 9* 0.40f) = 3.60 seconds
     public const float prepare_time_for_oatmeal_raisin_cookie = 0.50f; // max time 4.5 seconds
     public const float prepare_time_for_normal_milk = 0.25f;    // max time 2.25 seconds
-    public const float prepare_time_for_warm_milk = 0.65f;  // max time 5.85 seconds
+    public const float prepare_time_for_warm_milk = 0.75f;  // max time 6.75 seconds
     // absolute max: 15.75 seconds
 
     public OrderForm()
@@ -95,6 +95,9 @@ public class OrderForm
         float expected_weighted_rating = 0f;
         float received_weighted_rating = 0f;
         float missing_weighted_rating  = 0f;
+        float weighted_rating = 0f;
+
+        int total_quantity_expected = expected.getTotalQuantity();
 
         /*
             Basic formuala rating
@@ -132,38 +135,59 @@ public class OrderForm
             If nothing was received: it should give a (-)100%
          */
 
-
-        for (int index = 0; index < expected.counters.Length; index++)
+        if (total_quantity_expected > 0)
         {
-            int expected_val = expected.counters[index];
-            int received_val = received.counters[index];
-            int diff = expected_val - received_val;
-
-            if (diff > 0) // missing expecting {diff} more 
+            for (int index = 0; index < expected.counters.Length; index++)
             {
-                missing_total += diff;
-                missing[index] = diff;
-                rating-= diff;
+                int expected_val = expected.counters[index];
+                int received_val = received.counters[index];
+                int diff = expected_val - received_val;
+
+                if (diff > 0) // missing expecting {diff} more 
+                {
+                    missing_total += diff;
+                    missing[index] = diff;
+                    rating -= diff;
+                }
+                else if (diff < 0) // received more than expected
+                {
+                    rating += (diff * -1);
+                }
+
+                float current_weight = weight[index];
+
+                expected_weighted_rating += (expected_val * current_weight);
+                received_weighted_rating += (received_val * current_weight);
+                missing_weighted_rating += (missing[index] * current_weight);
             }
-            else if (diff < 0) // received more than expected
+
+            if (received.discount_applied)
             {
-                rating += (diff * -1);
+                missing_weighted_rating *= 0.5f;
             }
 
-            float current_weight = weight[index];
-
-            expected_weighted_rating += (expected_val   * current_weight);
-            received_weighted_rating += (received_val   * current_weight);
-            missing_weighted_rating  += (missing[index] * current_weight);
+            weighted_rating = (received_weighted_rating - missing_weighted_rating) / expected_weighted_rating;
+            weighted_rating += 1f; // so that if missed everything, it show 0% rather than -100%
         }
-
-        if (received.discount_applied)
+        else // when expected quantity is 0
         {
-            missing_weighted_rating *= 0.5f;
-        }
+            int total_quantity_received = received.getTotalQuantity();
+            float received_prep_time = received.get_estimated_prepare_time();
 
-        float weighted_rating = (received_weighted_rating - missing_weighted_rating)/ expected_weighted_rating;
-        weighted_rating += 1f; // so that if missed everything, it show 0% rather than -100%
+            if (total_quantity_received == 0)
+            {
+                weighted_rating = 1f; // 100%
+            }
+            else
+            {
+                if (received_prep_time >1f)
+                {
+                    received_prep_time = 1f;
+                }
+                weighted_rating = received_prep_time + 1f;// max 200%
+            }
+            expected_weighted_rating = weighted_rating;
+        }
         
         Dictionary<string, object> rating_info = new Dictionary<string, object>();
 
@@ -171,6 +195,7 @@ public class OrderForm
         rating_info.Add("missing", missing);
         rating_info.Add("missing_total", missing_total);
         rating_info.Add("weighted_rating", weighted_rating);
+        rating_info.Add("expected_weighted_rating", expected_weighted_rating);
 
         return rating_info;
     }
