@@ -7,6 +7,7 @@ https://itch.io/b/520/bundle-for-racial-justice-and-equality
 From 8-bit-sfx-pack
 Link: https://beepyeah.itch.io/8-bit-sfx-pack
 By: Beep Yeah!
+Purchased. DO NOT USE until you purchased a copy.
 License: Personal or Commerical. Royalty Free.
 =================================================
 * cancel-1_deny_pc_access 		(originally 'cancel-1.wav')  	// Denying PC access to place order if player has hands full or no room to place order
@@ -24,6 +25,25 @@ License: Free License (https://mixkit.co/license/#sfxFree)
 * mixkit_order_ready.wav (originally 'mixkit-video-game-treasure-2066.wav') // when order is ready for pickup
 **** https://assets.mixkit.co/sfx/preview/mixkit-video-game-treasure-2066.mp3
 
+
+MUST Credit:
+EX: "Sound from Zapsplat.com"
+Game sound, bright and warm synth, complete, success tone 3
+https://www.zapsplat.com/music/game-sound-bright-and-warm-synth-complete-success-tone-3/
+(download filename: zapsplat_multimedia_game_sound_finish_complete_success_bright_warm_synth_003_60690.mp3)
+renamed: success.mp3
+
+
+I made these using beepbox.co (free to use)
+=============================
+- nice_door_entrance_with_music_box2_shortened.wav
+- ready to order.wav
+- wow_okay_order.wav
+- bad dog.wav
+- entrance_door_shortened.wav
+- wow2.wav
+- disappointment.wav
+- disappointment_closer.wav
 
 
 

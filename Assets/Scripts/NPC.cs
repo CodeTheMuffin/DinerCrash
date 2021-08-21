@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class NPC : MonoBehaviour
 {
+    public AudioManager audio_src;
     public Stats GameStats;
     public NPC_TextDecider text_decider;
     OrderForm expectedOrder;
@@ -117,13 +118,25 @@ public class NPC : MonoBehaviour
         string phrase = "NO!";
 
         if (success_rate >= 1f)
-        { color = "#72d6ce"; phrase = "SWEET"; }// cyan
+        {
+            color = "#72d6ce"; phrase = "SWEET"; // cyan
+            audio_src.playGoodOrder();
+        }
         else if (success_rate >= 0.8f)
-        { color = "#97da3f"; phrase = "NICE!"; }//light green
+        { 
+            color = "#97da3f"; phrase = "NICE!";// light green
+            audio_src.playGoodOrder();
+        }
         else if (success_rate >= 0.4f)
-        { color = "#facb3e"; phrase = "OK!"; }//yellow
+        { 
+            color = "#facb3e"; phrase = "OK!"; //yellow
+            audio_src.playOkayOrder();
+        }
         else
-        { color = "#da4e38"; phrase = ". . ."; }//red
+        { 
+            color = "#da4e38"; phrase = ". . .";//red
+            audio_src.playBadOrder();
+        }
 
         string NPC_response_text = text_decider.getExitTexts(); // defaults to good exits texts
 
@@ -192,6 +205,7 @@ public class NPC : MonoBehaviour
                 { 
                     updateRating(0, expectedOrder.get_estimated_prepare_time());
                 }
+                audio_src.playMissedOrder();
                 prepareForExitting();
             }
         }
@@ -353,6 +367,7 @@ public class NPC : MonoBehaviour
                 //unhide progress bar now that it reached (persumably) the first entering way point!
                 if (!progress_bar.gameObject.activeSelf)
                 {
+                    audio_src.playNPCwalkingInside();
                     progress_bar.gameObject.SetActive(true);
                     progress_bar.progress_timer.reset_timer();
                 }
@@ -364,6 +379,11 @@ public class NPC : MonoBehaviour
                 }
                 else
                 {
+                    if (collidedWayPoint == orderingWayPoint && !ready_to_order) // play sound when ready to order
+                    {
+                        audio_src.playNPCreadyToOrder();
+                    }
+
                     ready_for_next_point = false;
                     ready_to_order = true;
                 }
