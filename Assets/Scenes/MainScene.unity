@@ -3780,6 +3780,7 @@ GameObject:
   - component: {fileID: 586040245}
   - component: {fileID: 586040247}
   - component: {fileID: 586040246}
+  - component: {fileID: 586040248}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -3883,7 +3884,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -3980,11 +3981,114 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21a5fdfd14c0b194d9953a82ec4d88d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BackgroundMusic: {fileID: 8300000, guid: bf20396822ecc4f43a17f53ddd82e3c5, type: 3}
   deniedUIClip: {fileID: 8300000, guid: 768de95e9cb709f41bbef7b4b97f7cec, type: 3}
   puttingOrderDown: {fileID: 8300000, guid: 733ad0f6a2663cd438e44c058c52f10d, type: 3}
   pickingOrderUp: {fileID: 8300000, guid: 6e3881c13f9f0234eaf6151644f76462, type: 3}
   throwOrderAway: {fileID: 8300000, guid: 07d0e9d8bec3c80438dd3b2b7503169d, type: 3}
   orderReadyForPickUp: {fileID: 8300000, guid: 501611e2b28e5c64aba42a78881856cb, type: 3}
+  NPCwalkingInside: {fileID: 8300000, guid: d28aa83b3777b9f44ad9e0c8a6b2c08d, type: 3}
+  NPCreadyToOrder: {fileID: 8300000, guid: 96342cf0dccf27b43b0c14b0b847f2fb, type: 3}
+  okayOrder: {fileID: 8300000, guid: 3e76a59a1a4c1db49a8eff51baf04925, type: 3}
+  badOrder: {fileID: 8300000, guid: e42f71f4c6891a041beb0bc9df9d3c8c, type: 3}
+  goodOrder: {fileID: 8300000, guid: 668cbbdc7effd854fb4f8632fa3875f8, type: 3}
+  missedOrder: {fileID: 8300000, guid: 26b176f2f07d27548b7d7334a580bc0e, type: 3}
+--- !u!82 &586040248
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 586040241}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &586946059
 GameObject:
   m_ObjectHideFlags: 0
@@ -8887,7 +8991,6 @@ MonoBehaviour:
   - {fileID: 6260416672947884631, guid: 4ec0261610301cf4db44634bb9c7ed55, type: 3}
   - {fileID: -6038276183411872024, guid: 4ec0261610301cf4db44634bb9c7ed55, type: 3}
   - {fileID: -7464388826522434780, guid: 4ec0261610301cf4db44634bb9c7ed55, type: 3}
-  DEBUG_VALUE: 0
 --- !u!4 &1409209617
 Transform:
   m_ObjectHideFlags: 0
@@ -10882,6 +10985,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GameStats: {fileID: 1409209616}
+  audio_manager: {fileID: 586040247}
   NPC_prefab: {fileID: 4381623448528815038, guid: c343def71a64d81439345500d2d69b3c, type: 3}
   NPCs: []
   DyingNPCs: []

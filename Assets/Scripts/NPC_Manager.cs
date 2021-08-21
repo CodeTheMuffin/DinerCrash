@@ -9,6 +9,7 @@ using System;
 public class NPC_Manager : MonoBehaviour
 {
     public Stats GameStats;
+    public AudioManager audio_manager;
     public GameObject NPC_prefab;
     public List<NPC> NPCs = new List<NPC>();
     public List<NPC> DyingNPCs = new List<NPC>();
@@ -199,6 +200,7 @@ public class NPC_Manager : MonoBehaviour
         npc_obj.setOrderForm(expectedOrderForm);
         npc_obj.text_decider.SetValues(textSYS, expectedOrderForm);
         npc_obj.GameStats = GameStats;
+        npc_obj.audio_src = audio_manager;
         npc_obj.justSpawnedHandler();
 
         NPCs.Add(npc_obj);

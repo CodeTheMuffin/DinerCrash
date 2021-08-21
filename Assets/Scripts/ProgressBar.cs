@@ -17,11 +17,13 @@ public class ProgressBar : MonoBehaviour
     [Range(0f,1f)]
     public float progress = 0f; //from 0 to 100%  == 0.0f to 1.0f
 
+    //This NEEDS to be Awake(), because the Start() in Stats runs before ProgressBar's Starts in WebGL build 
+    // and crashes at start.
     public void Awake()
     {
         if (bar_colors.Count > 0 && bars.Count > 0)
         {
-            Debug.Log($"Inside Progress Bar's Awake(): {this.name}");
+            //Debug.Log($"Inside Progress Bar's Awake(): {this.name}");
             calculateAndSetPBC();
             calculateAndSetPPB();
 
@@ -35,7 +37,7 @@ public class ProgressBar : MonoBehaviour
             //DEBUG
             if (progress_timer)
             { progress_timer.reset_timer(); }*/
-            Debug.Log($"Exitting Progress Bar's Awake(): {this.name}");
+            //Debug.Log($"Exitting Progress Bar's Awake(): {this.name}");
         }
     }
 
@@ -76,7 +78,7 @@ public class ProgressBar : MonoBehaviour
     //uses the progress value itself
     public void updateProgress()
     {
-        Debug.Log($"Inside updateprogress(): {this.name}");
+        //Debug.Log($"Inside updateprogress(): {this.name}");
         updateProgressByValue(progress);
     }
 
@@ -100,7 +102,7 @@ public class ProgressBar : MonoBehaviour
     //handles both LTR and RTL progression based on value
     public void updateProgressByValue(float value)// progress goes left to right: 0% -> 100%
     {
-        Debug.Log($"Inside updateProgressByValue(): {this.name} value: {value} value type: {value.GetType()}");
+        //Debug.Log($"Inside updateProgressByValue(): {this.name} value: {value} value type: {value.GetType()}");
         progress = value; // 0.0 to 1.0 as 100%
 
         // For right now, I don't want to show that the any overpercentage shows a different color
@@ -249,7 +251,7 @@ public class ProgressBar : MonoBehaviour
             }
         }
 
-        Debug.Log($"End of updateProgressByValue(): {this.name} value: {value}");
+        //Debug.Log($"End of updateProgressByValue(): {this.name} value: {value}");
     }
 
     Color setBarAlpha(Color a_bar_color, float alpha_value_at_index) // alpha_value_at_index is 0.0f to 1.0f
