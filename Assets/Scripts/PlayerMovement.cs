@@ -97,6 +97,7 @@ public class PlayerMovement : MonoBehaviour
             AccessNPC();
             AccessOrder();
             AccessPC();
+            checkIfScrolling();
         }
     }
 
@@ -508,6 +509,18 @@ public class PlayerMovement : MonoBehaviour
             //canOrderBePickedUp
         }
     }*/
+
+    void checkIfScrolling()
+    {
+        if (Input.GetButtonDown("Scroll_UP")) // R key
+        {
+            txtSys.scroll_up();
+        }
+        else if (Input.GetButtonDown("Scroll_DOWN")) // F key
+        {
+            txtSys.scroll_down();
+        }
+    }
 
     void turnAnimationOffForAllCollisions()
     {
