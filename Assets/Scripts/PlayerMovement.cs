@@ -186,11 +186,11 @@ public class PlayerMovement : MonoBehaviour
             // Ordering menu is open 
             else if (ui_manger.isOrderingMenuOpen())
             {
-                if (Input.GetKeyDown(KeyCode.Q)) //pressing Q to close menu
+                if (Input.GetButtonDown("Back"))//Input.GetKeyDown(KeyCode.Q)) //pressing Q to close menu
                 {
                     ui_manger.closeOrderingMenu();
                 }
-                else if (Input.GetButtonDown("Jump"))//space bar to process order
+                else if (Input.GetButtonDown("ProcessOrder"))//Input.GetButtonDown("Jump"))//space bar to process order
                 {
                     ui_manger.process_order();
                 }
