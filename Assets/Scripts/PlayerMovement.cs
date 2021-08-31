@@ -151,10 +151,20 @@ public class PlayerMovement : MonoBehaviour
 
     void AccessPC()
     {
+        /*if (Input.GetAxisRaw("Interact") > 0)
+        {
+            Debug.Log("Pressing interact button");
+        }
+
+        if (Input.GetButtonDown("Interact"))
+        {
+            Debug.Log("Pressing interact button from controller");
+        }*/
+
         if (canAccessMenu)
         {
             // Going to the computer and pressing E to open ordering menu
-            if (!ui_manger.isOrderingMenuOpen() && !selectedNPC && Input.GetKeyDown(KeyCode.E))
+            if (!ui_manger.isOrderingMenuOpen() && !selectedNPC && Input.GetButtonDown("Interact"))//&& Input.GetKeyDown(KeyCode.E))
             {
                 bool capacityToOrder = ui_manger.haveCapacityToOrder();
 
@@ -210,7 +220,7 @@ public class PlayerMovement : MonoBehaviour
         //selected NPC should only have ready_to_order as true
         if (selectedNPC) // TODO: prepare ordering for NPC
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetButtonDown("Interact"))//Input.GetKeyDown(KeyCode.E))
             {
                 if (holdingOrder)
                 {
@@ -285,7 +295,7 @@ public class PlayerMovement : MonoBehaviour
         //bool successfullyPickedUp = false;
         // If Im within range to pick up order and not already holding an order and press E
         // then pick up order
-        if (canPickUpOrder && !holdingOrder && orderBoxInRange && !selectedNPC && Input.GetKeyDown(KeyCode.E))
+        if (canPickUpOrder && !holdingOrder && orderBoxInRange && !selectedNPC && Input.GetButtonDown("Interact"))//Input.GetKeyDown(KeyCode.E))
         {
             if (orderBoxInRange.canOrderBePickedUp())
             {
@@ -311,7 +321,7 @@ public class PlayerMovement : MonoBehaviour
         // If Im within range to pick up order and already holding an order and press E
         // then put down order
 
-        if (holdingOrder && orderboxBeingHeld && orderboxParent && orderBoxInRange && !selectedNPC && Input.GetKeyDown(KeyCode.E))
+        if (holdingOrder && orderboxBeingHeld && orderboxParent && orderBoxInRange && !selectedNPC && Input.GetButtonDown("Interact"))// Input.GetKeyDown(KeyCode.E))
         {
             if (orderBoxInRange.isOrderAvailable())
             {
@@ -486,7 +496,7 @@ public class PlayerMovement : MonoBehaviour
 
     void AttemptToThrowAwayOrder()
     {
-        if (canThrowAwayOrder && holdingOrder && orderboxBeingHeld && !selectedNPC && Input.GetKeyDown(KeyCode.E))
+        if (canThrowAwayOrder && holdingOrder && orderboxBeingHeld && !selectedNPC && Input.GetButtonDown("Interact"))//Input.GetKeyDown(KeyCode.E))
         {
             audio_manager.playPlayerThrowOrderAway();
             txtSys.updateNPCtext_unformatted("Trashed order.");
