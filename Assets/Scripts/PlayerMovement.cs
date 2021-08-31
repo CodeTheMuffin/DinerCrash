@@ -520,16 +520,73 @@ public class PlayerMovement : MonoBehaviour
         }
     }*/
 
+    // all for scrolling
+    private bool isScrolling = false;
+    private bool isRightTriggered = false;
+    private bool isLeftTriggered = false;
+    private float scrollingValue = 0f;
+    private float scrollingLeftTriggerValue = 0f;
+    private float scrollingRightTriggerValue = 0f;
+
     void checkIfScrolling()
     {
-        if (Input.GetButtonDown("Scroll_UP")) // R key
+        /*
+        // THE OLD WAY OF DOING IT. too sensitive 
+        if (Input.GetAxis("Scrolling") > 0 || Input.GetKeyDown("Scroll_Up_Trigger") )// R key or up on right stick OR right trigger on controller
         {
             txtSys.scroll_up();
         }
-        else if (Input.GetButtonDown("Scroll_DOWN")) // F key
+        else if (Input.GetAxis("Scrolling") < 0 || Input.GetKeyDown("Scroll_Down_Trigger"))// f key or down on right stick OR left trigger on controller
         {
             txtSys.scroll_down();
+        }*/
+
+        scrollingValue = Input.GetAxis("Scrolling");
+        scrollingLeftTriggerValue = Input.GetAxis("Scroll_Up_Trigger");
+        scrollingRightTriggerValue = Input.GetAxis("Scroll_Down_Trigger");
+
+        /*
+         Done this way so when you use right stick or left/right triggers it will mimic getbuttondown and register once and not continuously 
+         */
+        if (scrollingValue != 0f) // IF using right stick
+        {
+            if (!isScrolling)
+            { 
+                isScrolling = true;
+                
+                if (scrollingValue > 0f)
+                { txtSys.scroll_up(); }
+                else if (scrollingValue < 0f)
+                { txtSys.scroll_down(); }
+            }
         }
+        else if (scrollingRightTriggerValue != 0f) //if using right trigger
+        {
+            if (!isRightTriggered)
+            {
+                isRightTriggered = true;
+                txtSys.scroll_up();
+            }
+        }
+        else if (scrollingLeftTriggerValue != 0f) //if using left trigger
+        {
+            if (!isLeftTriggered)
+            { 
+                isLeftTriggered = true;
+                txtSys.scroll_down();
+            }
+        }
+        
+
+
+        // Resetting bool values
+        if (scrollingValue == 0f)
+        { isScrolling = false; }
+        if (scrollingLeftTriggerValue == 0f)
+        { isLeftTriggered = false; }
+        if (scrollingRightTriggerValue == 0f)
+        { isRightTriggered = false; }
+
     }
 
     void turnAnimationOffForAllCollisions()
