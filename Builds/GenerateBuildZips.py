@@ -103,11 +103,12 @@ def get_build_folder_selections() -> list:
     # )
     # args = parser.parse_args()
     # print(f"Arguments passed: {args}")
-    overwritten_msg = "(Overwritten)" if overwrite_project_name else ""
+    missing_version_msg = "(missing)" if version == "" else ""
+    overwritten_project_msg = "(Overwritten)" if overwrite_project_name else ""
 
     msg = f"Please select the build folders that you wish to zip.\n\n" \
-          f"Project name: {project_name} {overwritten_msg}\n" \
-          f"Using version: {version}"
+          f"Project name: {project_name} {overwritten_project_msg}\n" \
+          f"Using version: {version}{missing_version_msg}"
 
     # Would like to default preselect to be all options rather than none, but doesn't seem possible at the moment.
     choices = multchoicebox(msg=msg, title=title, choices=folders,preselect= None, )
@@ -208,7 +209,7 @@ def zip_build_folder(choices: list) -> dict:
     return build_statuses
 
 def generate_zip_filename(build_folder_name : str) -> str:
-    return project_name + "_" + build_folder_name + "_Build_" + version + ".zip"
+    return project_name + "_" + build_folder_name + "_Build" + ("_" if version != "" else "") + version + ".zip"
 
 def display_success(build_statuses : dict) -> None:
     msg = "No successful builds."
@@ -229,7 +230,7 @@ def main():
     version = get_version()
 
     if version is None:
-        return
+        version = ""
 
     if not overwrite_project_name:
         global project_name
