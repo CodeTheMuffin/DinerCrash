@@ -5,9 +5,15 @@ from zipfile import ZipFile
 from easygui import multchoicebox, ynbox, msgbox
 
 '''
-Description: A simple script to zip my builds for me.
+Description: A simple script to zip my builds for me. 
+Just run script, select what Build folders you want in the GUI, 
+then it will generate the .zip files for you with a formatted name.
+If the .zip file already exists, it will ask you if you want to overwrite it.
 
-In directory where this folder is found, run command:
+
+If you would like to play around with the code, 
+in directory where this folder is found (should be the "Builds"folder), 
+run command:
 pip install -r requirement.txt
 
 Used python 3.6.4
@@ -16,7 +22,8 @@ Used python 3.6.4
 current_folder = os.getcwd()
 asset_folder_name = "Assets"
 version_file_name = "version.txt"
-project_name = "Diner_Crash"
+project_name = "Unity_Project"
+overwrite_project_name = False #Change this to True and 'project_name' if you want to give a different name for zip files
 version = None
 title = "Generate Build Zips"
 
@@ -54,6 +61,20 @@ def get_version() -> str:
 
     return None
 
+def get_project_name() -> str:
+    # assuming you are in builds folder
+    '''
+    Assumed folder structure:
+    ..\{parent project folder}\Builds\                  <--- Assumes currently In
+    ..\{parent project folder}\Assets\version.txt       <--- Where the version file is located
+
+    ASSUMES that the {parent project folder IS the Project name}
+    '''
+    parent_folder_name = os.path.basename(os.path.dirname(current_folder))
+
+    # Replace any spaces with underscore
+    return parent_folder_name.replace(" ","_")
+
 def get_build_folder_selections() -> list:
     global version
 
@@ -82,8 +103,11 @@ def get_build_folder_selections() -> list:
     # )
     # args = parser.parse_args()
     # print(f"Arguments passed: {args}")
+    overwritten_msg = "(Overwritten)" if overwrite_project_name else ""
 
-    msg = f"Please select the build folders that you wish to zip.\n\nUsing version: {version}"
+    msg = f"Please select the build folders that you wish to zip.\n\n" \
+          f"Project name: {project_name} {overwritten_msg}\n" \
+          f"Using version: {version}"
 
     # Would like to default preselect to be all options rather than none, but doesn't seem possible at the moment.
     choices = multchoicebox(msg=msg, title=title, choices=folders,preselect= None, )
@@ -97,6 +121,24 @@ def get_build_folder_selections() -> list:
         return None
 
     return choices
+
+# Taken directly from: https://www.geeksforgeeks.org/working-zip-files-python/
+# Slightly modified to return relative paths
+def get_all_file_paths(directory) -> list:
+    # initializing empty file paths list
+    file_paths = []
+
+    # crawling through directory and subdirectories
+    for root, directories, files in os.walk(directory):
+        for filename in files:
+            # join the two strings in order to form the full filepath.
+            if not filename.endswith(".zip"):
+                filepath = os.path.join(root, filename)
+                filepath = os.path.relpath(filepath) # make it a relative path; gets rid of the full path
+                file_paths.append(filepath)
+
+    # returning all file paths
+    return file_paths
 
 def zip_build_folder(choices: list) -> dict:
     build_statuses = dict()
@@ -139,13 +181,14 @@ def zip_build_folder(choices: list) -> dict:
         os.chdir(build_path) #changing working directory; doing this to prevent having the Build's folder name in the zip
         current_dir = os.getcwd()
         #print(f"Changed working directory: {current_dir}")
-        non_zip_paths = [non_zip for non_zip in os.listdir(current_dir) if not non_zip.endswith(".zip")]
+        #non_zip_paths = [non_zip for non_zip in os.listdir(current_dir) if not non_zip.endswith(".zip")]
+
+        non_zip_paths = get_all_file_paths(current_dir)
         #print(non_zip_paths)
 
         # Just a check to see that the paths are valid
         # for file in non_zip_paths:
         #     print(f"Does file path exist? {file} ::: {os.path.exists(file)}")
-
 
         # with ZipFile(generated_zip_path, 'w') as zipped_build:
         # #with ZipFile("test123.zip", 'w') as zipped_build:
@@ -153,7 +196,6 @@ def zip_build_folder(choices: list) -> dict:
         #         zipped_build.write(non_zip_path)
 
         with ZipFile(generated_zip_path, 'w') as zipped_build:
-            #with ZipFile("test123.zip", 'w') as zipped_build:
             for non_zip_path in non_zip_paths:
                 zipped_build.write(non_zip_path)
 
@@ -189,6 +231,13 @@ def main():
     if version is None:
         return
 
+    if not overwrite_project_name:
+        global project_name
+        temp_project_name = get_project_name()
+
+        if project_name is not None:
+            project_name = temp_project_name
+
     choices = get_build_folder_selections()
 
     if choices is None:
@@ -202,3 +251,8 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+"""
+TODO: Fix issue where its not zipping contents inside folders
+"""
