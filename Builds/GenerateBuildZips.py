@@ -251,8 +251,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-"""
-TODO: Fix issue where its not zipping contents inside folders
-"""
