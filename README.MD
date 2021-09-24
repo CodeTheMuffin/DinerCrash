@@ -87,7 +87,7 @@ It will even process empty orders!
   - **Hint:** Make sure things are in order!
 
 
-See for more details:
+### More details here: ###
 - https://code-the-muffin.itch.io/diner-crash
 
 ## Run GenerateBuildZips.py ##
